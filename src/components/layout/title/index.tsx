@@ -2,6 +2,8 @@ import { TitleProps, useRouterContext } from "@pankod/refine-core";
 import { Button } from "@pankod/refine-mui";
 import React from "react";
 
+import { logo } from "assets";
+
 export const Title: React.FC<TitleProps> = ({ collapsed }) => {
   const { Link } = useRouterContext();
 
@@ -9,7 +11,7 @@ export const Title: React.FC<TitleProps> = ({ collapsed }) => {
     <Button fullWidth variant="text" disableRipple>
       <Link to="/">
         {collapsed ? (
-          <img src="/refine-collapsed.svg" alt="Refine" width="28px" />
+          <img src={logo} alt="Bailarina Preparada Logo" width="28px" />
         ) : (
           <img src="/refine.svg" alt="Refine" width="140px" />
         )}
