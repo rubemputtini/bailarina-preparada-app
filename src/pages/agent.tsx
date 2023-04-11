@@ -1,9 +1,47 @@
-import React from 'react'
+import { useList } from "@pankod/refine-core"
+import { Box, Typography } from "@pankod/refine-mui"
 
-const agent = () => {
+import { AgentCard } from "components"
+
+const Agents = () => {
+  const { data, isLoading, isError } = useList({
+    resource: "users"
+  });
+  
+  const allAgents = data?.data ?? [];
+
+  if(isLoading) return <div>loading...</div>
+  if(isError) return <div>error</div>
+
   return (
-    <div>agent</div>
+    <Box>
+      <Typography fontSize={25} fontWeight={700} color="#11142D">
+        Agents List
+      </Typography>
+
+      <Box
+        mt="20px"
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "20px",
+          backgroundColor: "#FCFCFC"
+        }}
+      >
+        {allAgents.map((agent) => (
+          <AgentCard 
+            key={agent._id}
+            id={agent._id}
+            name={agent.name}
+            email={agent.email}
+            avatar={agent.avatar}
+            noOfProperties={agent.allProperties.length}
+          />
+
+        ))}
+      </Box>
+    </Box>
   )
 }
 
-export default agent
+export default Agents
