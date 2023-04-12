@@ -1,53 +1,36 @@
-# client
+# Bailarina Preparada App
 
-<div align="center" style="margin: 30px;">
-    <a href="https://refine.dev">
-    <img src="https://refine.ams3.cdn.digitaloceanspaces.com/refine_logo.png"  align="center" />
-    </a>
-</div>
-<br/>
+O Bailarina Preparada App é um aplicativo web para gerenciamento de clientes e treinos do Clube da Bailarina Preparada. O objetivo deste projeto é oferecer uma plataforma seja possível visualizar informações sobre treinos, pontuações, posts de comunidade interna e outras funcionalidades importantes.
 
-This [refine](https://github.com/pankod/refine) project was generated with [superplate](https://github.com/pankod/refine).
+## Tecnologias Utilizadas
 
-## Getting Started
+- MongoDB
+- Express
+- React
+- Node
+- TypeScript
+- Refine
 
-**refine** is a React-based framework for building data-intensive applications in no time ✨
+## Funcionalidades
 
-Refine offers lots of out-of-the box functionality for rapid development, without compromising extreme customizability. Use-cases include, but are not limited to admin panels, B2B applications and dashboards.
+Menu: exibe a página inicial do aplicativo e mostra um resumo de todas as funcionalidades disponíveis para os clientes.
 
-## Available Scripts
+Calendário: exibe um calendário com os dias e horários dos treinos. É possível visualizar os treinos passados, presentes e futuros.
 
-### Running the development server.
+Comunidade: permite criar novos posts, comentar em posts existentes e dar "likes" nas publicações que você mais gostar. Essa funcionalidade promove a interação e colaboração entre os alunos.
 
-```bash
-    npm run dev
-```
+Planilha: exibe o histórico de todos os treinos realizados, incluindo a data e outras informações relevantes.
 
-### Building for production.
+Pontuação: exibe o ranking das alunas com base nas pontuações obtidas nos treinos. É possível visualizar a pontuação de cada aluna, seu ranking geral e o histórico de pontuações ao longo do tempo.
 
-```bash
-    npm run build
-```
+Perfil: exibe os detalhes do perfil do usuário no aplicativo.
 
-### Running the production server.
+Outras Funcionalidades: o aplicativo também oferece outras funcionalidades importantes, como acesso a materiais de apoio e contato direto com a equipe da Bailarina Preparada.
 
-```bash
-    npm run start
-```
+## Como acessar
 
-## Learn More
+Este projeto ainda está em desenvolvimento e não há uma versão disponível para acesso público. No entanto, caso você tenha interesse em contribuir com o desenvolvimento ou saber mais sobre o projeto, sinta-se livre para entrar em contato comigo através do email: rubem.staciariniputtini@gmail.com
 
-To learn more about **refine**, please check out the [Documentation](https://refine.dev/docs)
+## Autor
 
-- **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
-- **Material UI** [Docs](https://refine.dev/docs/ui-frameworks/mui/tutorial/)
-- **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
-- **Material UI Light/Dark Mode** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-theme/)
-- **Material UI Custom Theme** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-theme/)
-- **Custom Layout** [Docs](https://refine.dev/docs/ui-frameworks/mui/customization/mui-custom-layout/)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
-- **Google Auth Provider** [Docs](https://refine.dev/docs/core/providers/auth-provider/)
-
-## License
-
-MIT
+Rubem Puttini

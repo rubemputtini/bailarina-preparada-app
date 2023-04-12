@@ -18,7 +18,7 @@ import { ColorModeContextProvider } from "contexts";
 import { CredentialResponse } from "interfaces/google";
 import { parseJwt } from "utils/parse-jwt";
 
-import { Login, Home, Agents, MyProfile, PropertyDetails, AllProperties, CreateProperty, AgentProfile, EditProperty, } from "pages";
+import { Login, Home, CalendarPage, Agents, MyProfile, PropertyDetails, AllProperties, CreateProperty, AgentProfile, EditProperty, } from "pages";
 
 const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use((request: AxiosRequestConfig) => {
@@ -130,7 +130,7 @@ function App() {
             },
             {
               name: "planilha",
-              list: Home,
+              list: CalendarPage,
               icon: <ChecklistRtlOutlined />,
             },
             {
