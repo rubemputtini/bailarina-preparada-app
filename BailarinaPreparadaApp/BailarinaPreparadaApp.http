@@ -1,0 +1,6 @@
+@BailarinaPreparadaApp_HostAddress = http://localhost:5103
+
+GET {{BailarinaPreparadaApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
