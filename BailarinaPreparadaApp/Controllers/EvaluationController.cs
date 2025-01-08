@@ -9,7 +9,7 @@ namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class EvaluationController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -19,14 +19,40 @@ namespace BailarinaPreparadaApp.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetEvaluations()
         {
             try
             {
-                var evaluations = await _context.Evaluations.ToListAsync();
+                var evaluations = await _context.Evaluations
+                    .Include(e => e.Admin)
+                    .Include(e => e.User)
+                    .Include(e => e.Exercises)
+                        .ThenInclude(ee => ee.Exercise)
+                    .ToListAsync();
 
-                return Ok(evaluations);
+                var response = evaluations.Select(e => new EvaluationResponse
+                {
+                    EvaluationId = e.EvaluationId,
+                    AdminName = e.Admin.Name,
+                    UserName = e.User.Name,
+                    Date = e.Date,
+                    Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
+                    {
+                        Exercise = new ExerciseResponse
+                        {
+                            ExerciseId = ex.ExerciseId,
+                            Name = ex.Exercise.Name,
+                            Category = ex.Exercise.ExerciseCategory.ToString(),
+                            PhotoUrl = ex.Exercise.PhotoUrl,
+                            VideoUrl = ex.Exercise.VideoUrl
+                        },
+                        Score = ex.Score
+                    }).ToList()
+                });
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -39,7 +65,31 @@ namespace BailarinaPreparadaApp.Controllers
         {
             try
             {
-                var evaluation = await _context.Evaluations.FindAsync(id);
+                var evaluation = await _context.Evaluations
+                    .Include(e => e.Admin)
+                    .Include(e => e.User)
+                    .Include(e => e.Exercises)
+                    .Where(e => e.EvaluationId == id)
+                    .Select(e => new EvaluationResponse
+                    {
+                        EvaluationId = e.EvaluationId,
+                        AdminName = e.Admin.Name,
+                        UserName = e.User.Name,
+                        Date = e.Date,
+                        Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
+                        {
+                            Exercise = new ExerciseResponse
+                            {
+                                ExerciseId = ex.ExerciseId,
+                                Name = ex.Exercise.Name,
+                                Category = ex.Exercise.ExerciseCategory.ToString(),
+                                PhotoUrl = ex.Exercise.PhotoUrl,
+                                VideoUrl = ex.Exercise.VideoUrl
+                            },
+                            Score = ex.Score
+                        }).ToList()
+                    })
+                    .FirstOrDefaultAsync();
 
                 if (evaluation == null)
                 {
@@ -54,6 +104,7 @@ namespace BailarinaPreparadaApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> CreateEvaluation([FromBody] CreateEvaluationRequest request)
         {
@@ -79,18 +130,34 @@ namespace BailarinaPreparadaApp.Controllers
                     Date = request.Date,
                     Admin = admin,
                     User = user,
-                    Exercises = request.Exercises.Select(e => new EvaluationExercise
-                    {
-                        ExerciseName = e.Name,
-                        ExerciseCategory = Enum.Parse<ExerciseCategory>(e.ExerciseCategory),
-                        Score = e.Score
-                    }).ToList()
+                    Exercises = new List<EvaluationExercise>()
                 };
+
+                foreach (var exerciseRequest in request.Exercises)
+                {
+                    var exercise = await _context.Exercises.FindAsync(exerciseRequest.ExerciseId);
+
+                    if (exercise == null)
+                    {
+                        return BadRequest(new { message = $"Exercício com ID {exerciseRequest.ExerciseId} não encontrado." });
+                    }
+
+                    evaluation.Exercises.Add(new EvaluationExercise
+                    {
+                        ExerciseId = exerciseRequest.ExerciseId,
+                        Exercise = exercise,
+                        Score = exerciseRequest.Score
+                    });
+                }
 
                 _context.Evaluations.Add(evaluation);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetEvaluationById), new { id = evaluation.EvaluationId }, evaluation);
+                return CreatedAtAction(nameof(GetEvaluationById), new { id = evaluation.EvaluationId }, new
+                {
+                    message = "Avaliação criada com sucesso.",
+                    evaluationId = evaluation.EvaluationId
+                });
             }
             catch (DbUpdateException ex)
             {
@@ -102,39 +169,50 @@ namespace BailarinaPreparadaApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEvaluation(int id, [FromBody] Evaluation evaluation)
+        public async Task<IActionResult> UpdateEvaluation(int id, [FromBody] List<EvaluationExerciseRequest> updatedExercises)
         {
-            if (id != evaluation.EvaluationId)
+            if (updatedExercises == null || updatedExercises.Count == 0)
             {
-                return BadRequest(new { message = "Avaliação não corresponde com id informado." });
+                return BadRequest(new { message = "A lista de exercícios atualizados não pode estar vazia." });
             }
-
-            _context.Entry(evaluation).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EvaluationExists(id))
+                var evaluation = await _context.Evaluations
+                    .Include(e => e.Exercises)
+                    .FirstOrDefaultAsync(e => e.EvaluationId == id);
+
+                if (evaluation == null)
                 {
                     return NotFound(new { message = "Avaliação não encontrada." });
                 }
-                else
+
+                foreach (var exerciseUpdate in  updatedExercises)
                 {
-                    throw;
+                    var existingExercise = evaluation.Exercises
+                        .FirstOrDefault(e => e.ExerciseId == exerciseUpdate.ExerciseId);
+
+                    if (existingExercise == null)
+                    {
+                        return BadRequest(new { message = $"Exercício com ID {exerciseUpdate.ExerciseId} não encontrado na avaliação." });
+                    }
+
+                    existingExercise.Score = exerciseUpdate.Score;
                 }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Avaliação atualizada com sucesso." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Erro inesperado ao atualizar avaliação.", details = ex.Message });
+                return StatusCode(500, new { message = "Erro inesperado ao atualizar a avaliação.", details = ex.Message });
             }
-
-            return NoContent();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvaluation(int id)
         {

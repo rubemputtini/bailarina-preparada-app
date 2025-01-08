@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.DTOs;
 using BailarinaPreparadaApp.Models;
 using BailarinaPreparadaApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -103,6 +104,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(new { message = "Usuário registrado com sucesso.", token });
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("delete-user")]
         public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request)
         {

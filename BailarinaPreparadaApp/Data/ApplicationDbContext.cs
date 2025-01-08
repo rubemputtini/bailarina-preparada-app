@@ -9,9 +9,13 @@ namespace BailarinaPreparadaApp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Evaluation> Evaluations { get; set; }
+        public DbSet<EvaluationExercise> EvaluationExercises { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<ClassEvent> ClassEvents { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<ScheduleTask> ScheduleTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,6 +32,19 @@ namespace BailarinaPreparadaApp.Data
                 .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Evaluation>()
+                .HasMany(e => e.Exercises)
+                .WithOne(ee => ee.Evaluation)
+                .HasForeignKey(ee => ee.EvaluationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Schedule>()
+                .HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
