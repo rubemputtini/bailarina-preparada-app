@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-b from-black to-gray-900;
   margin: 3vh;
+
+  background: linear-gradient(
+    144.39deg,
+    #ffffff -278.56%,
+    #403b4d -78.47%,
+    #302539 91.61%
+  );
 }
 
 button {

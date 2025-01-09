@@ -28,13 +28,13 @@ export const socialMedia = [
     },
   ];
 
-  export const errorMessages = {
-    "Passwords must be at least 6 characters.": "A senha deve ter pelo menos 6 caracteres.",
-    "Passwords must have at least one non alphanumeric character.": "A senha deve conter pelo menos um caractere não alfanumérico.",
-    "Passwords must have at least one digit ('0'-'9').": "A senha deve conter pelo menos um dígito.",
-    "Passwords must have at least one lowercase ('a'-'z').": "A senha deve conter pelo menos uma letra minúscula.",
-    "Passwords must have at least one uppercase ('A'-'Z').": "A senha deve conter pelo menos uma letra maiúscula."
-};
+export const passwordRules = [
+  { id: "length", text: "Pelo menos 6 caracteres" },
+  { id: "uppercase", text: "Uma letra maiúscula" },
+  { id: "lowercase", text: "Uma letra minúscula" },
+  { id: "number", text: "Um número" },
+  { id: "specialChar", text: "Um caractere especial" },
+  ];
 
 export const exerciseCategory = {
     FMS: "FMS",
