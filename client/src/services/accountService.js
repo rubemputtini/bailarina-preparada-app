@@ -8,9 +8,10 @@ export const login = async (email, password) => {
       return response.data;
 
     } catch (error) {
-        console.error("Erro ao fazer login: ", error.response?.data || error.message);
+        const errorMessage = error.response?.data || error.message || "Erro desconhecido.";
+        console.error("Erro ao fazer login:", errorMessage);
 
-        throw error;
+        throw new Error(errorMessage);
     }
 };
 

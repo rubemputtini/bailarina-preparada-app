@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { passwordRules } from "../../utils/constants";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -18,6 +18,7 @@ const SignupForm = ({
     setConfirmPassword,
     onLoginRedirect,
     disableSubmit,
+    error
 }) => {
     const [passwordRequisites, setPasswordRequisites] = useState({
         length: false,
@@ -54,9 +55,7 @@ const SignupForm = ({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
                 padding: "1rem",
-                background: "linear-gradient(144.39deg, #ffffff -278.56%, #403b4d -78.47%, #302539 91.61%)",
             }}
         >
             <Box
@@ -74,6 +73,7 @@ const SignupForm = ({
                     sx={{
                         fontWeight: 600,
                         marginBottom: "1rem",
+                        fontFamily: "'Montserrat', sans-serif",
                         color: "#403b4d",
                     }}
                 >
@@ -90,6 +90,9 @@ const SignupForm = ({
                                 variant="outlined"
                                 size="small"
                                 required
+                                sx={{
+                                    fontFamily: "'Montserrat', sans-serif",
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -162,6 +165,7 @@ const SignupForm = ({
                                     color: "#fff",
                                     textTransform: "none",
                                     fontWeight: 600,
+                                    fontFamily: "'Montserrat', sans-serif",
                                     "&:hover": { backgroundColor: "#5b4c6c" },
                                     padding: "0.5rem 1.5rem",
                                 }}
@@ -169,6 +173,15 @@ const SignupForm = ({
                                 {buttonText}
                             </Button>
                         </Grid>
+                        {error && (
+                            <Grid item xs={12} display="flex" justifyContent="center">
+                                <Alert severity="error"
+                                    sx={{
+                                        fontFamily: "'Montserrat', sans-serif",
+                                    }}
+                                >{error}</Alert>
+                            </Grid>
+                        )}
                     </Grid>
                 </form>
                 <Typography

@@ -1,26 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 3vh;
+:root {
+  --primary-font: "Montserrat", sans-serif;
+  --secondary-font: "Inter", sans-serif;
+}
 
+body {
+  font-family: var(--primary-font);
   background: linear-gradient(
     144.39deg,
     #ffffff -278.56%,
     #403b4d -78.47%,
     #302539 91.61%
   );
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 button {
   @apply font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2;
+  font-family: var(--secondary-font);
 }
 
-h1 {
+h1,
+h2,
+h3 {
   @apply text-white;
-}
-
-img {
-  @apply shadow-lg rounded-lg;
+  font-family: var(--primary-font);
 }

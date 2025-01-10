@@ -36,7 +36,7 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col justify-between">
             <Header />
             {loading ? (
                 <Box my={22} display="flex" flexDirection="column" alignItems="center">
@@ -57,9 +57,9 @@ const SignupPage = () => {
                     setConfirmPassword={setConfirmPassword}
                     onLoginRedirect={handleLoginRedirect}
                     disableSubmit={loading}
+                    error={error}
                 />
             )}
-            {error && <div className="text-red-500 text-center mt-4">{error}</div>}
             <Footer />
         </div>
     );
