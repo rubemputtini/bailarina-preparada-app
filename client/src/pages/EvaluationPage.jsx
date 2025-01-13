@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
     Tabs,
     Tab,
@@ -18,6 +17,8 @@ import { getExercises } from "../services/exerciseService";
 import { createEvaluation } from "../services/evaluationService";
 import dayjs from "dayjs";
 import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import { getUserId } from "../services/auth";
 
 const EvaluationPage = () => {
     const [users, setUsers] = useState([]);
@@ -30,7 +31,6 @@ const EvaluationPage = () => {
         dayjs().add(6, "month").format("YYYY-MM-DD")
     );
     const [selectedCategory, setSelectedCategory] = useState(0);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,8 +43,20 @@ const EvaluationPage = () => {
     }, []);
 
     const handleSave = async () => {
-        await createEvaluation(selectedUser, date, exerciseScores, observations);
-        navigate("/success");
+        const exercisesPayload = exercises.map((exercise) => ({
+            ExerciseId: String(exercise.exerciseId),
+            Score: parseInt(exerciseScores[exercise.id], 10),
+            Observation: observations[exercise.id]
+        }));
+
+        const payload = {
+            AdminId: getUserId(),
+            UserId: selectedUser,
+            Date: date,
+            Exercises: exercisesPayload,
+        };
+
+        await createEvaluation(payload);
     };
 
     const handleDateChange = (newDate) => {
@@ -138,7 +150,7 @@ const EvaluationPage = () => {
                                 sm={6}
                                 md={4}
                                 lg={3}
-                                key={exercise.id}
+                                key={exercise.exerciseId}
                                 sx={{
                                     display: "flex",
                                     justifyContent: "center",
@@ -202,6 +214,7 @@ const EvaluationPage = () => {
                 </div>
 
             </Box>
+            <Footer />
         </>
     );
 };

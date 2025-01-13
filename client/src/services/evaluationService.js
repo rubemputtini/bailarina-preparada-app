@@ -24,16 +24,10 @@ export const getEvaluationById = async (evaluationId) => {
     }
 };
 
-export const createEvaluation = async (adminId, userId, date, exercises) => {
-    const evaluation = {
-        AdminId: adminId,
-        UserId: userId,
-        Date: date,
-        Exercises: exercises
-    };
+export const createEvaluation = async (payload) => {
     
     try {
-        await api.post('/api/v1/Evaluation/create-evaluation', evaluation);
+        await api.post('/api/v1/Evaluation', payload);
     } catch (error) {
         console.error('Erro ao criar avaliação:', error);
 

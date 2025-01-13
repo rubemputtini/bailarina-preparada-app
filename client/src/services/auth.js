@@ -20,3 +20,8 @@ export const getUserRole = () => {
     const decodedToken = jwtDecode(getToken());
     return decodedToken.role;
 };
+
+export const getUserId = () => {
+    const decodedToken = jwtDecode(getToken());
+    return decodedToken.nameid;
+}

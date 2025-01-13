@@ -146,7 +146,8 @@ namespace BailarinaPreparadaApp.Controllers
                     {
                         ExerciseId = exerciseRequest.ExerciseId,
                         Exercise = exercise,
-                        Score = exerciseRequest.Score
+                        Score = exerciseRequest.Score,
+                        Observation = exerciseRequest.Observation ?? string.Empty
                     });
                 }
 

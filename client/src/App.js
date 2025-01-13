@@ -16,18 +16,18 @@ function App() {
           <Route path="/" element={<Navigate to="/signup" replace />} />
 
           <Route 
-              path="/login" 
-              element={
-                  <ProtectedRoute publicRoute>
-                      <LoginPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
               path="/signup" 
               element={
                   <ProtectedRoute publicRoute>
                       <SignupPage />
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/login" 
+              element={
+                  <ProtectedRoute publicRoute>
+                      <LoginPage />
                   </ProtectedRoute>
               } 
           />
