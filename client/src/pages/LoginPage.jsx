@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import LoginForm from "../components/forms/LoginForm";
 import { Box, CircularProgress } from "@mui/material";
+import { setToken } from "../services/auth";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -21,9 +22,8 @@ const LoginPage = () => {
         try {
             const { token } = await login(email, password);
 
-            if (token) {
-                navigate("/home");
-            }
+            setToken(token);
+            navigate("/avaliacao");
         } catch (error) {
             setError(error.message);
         } finally {
