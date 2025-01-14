@@ -8,6 +8,8 @@ import RankingPage from './pages/RankingPage';
 import SchedulePage from './pages/SchedulePage';
 import TrainingPage from './pages/TrainingPage';
 import CalendarPage from './pages/CalendarPage';
+import AccountPage from './pages/AccountPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -76,6 +78,22 @@ function App() {
               element={
                   <ProtectedRoute>
                       <TrainingPage />
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/conta" 
+              element={
+                  <ProtectedRoute>
+                      <AccountPage />
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/admin" 
+              element={
+                  <ProtectedRoute>
+                      <AdminPage />
                   </ProtectedRoute>
               } 
           />

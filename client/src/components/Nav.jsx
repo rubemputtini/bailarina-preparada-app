@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Drawer, IconButton, List, ListItem, ListItemText, ListItemIcon, Menu, MenuItem, Divider } from '@mui/material';
 import { Menu as MenuIcon, AccountCircle, Home, Star, EmojiEvents, Settings, ExitToApp, SportsGymnastics, CalendarMonth, Description, Person } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
+import { logout } from "../services/accountService";
 
 const Navbar = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
         setOpenDrawer(!openDrawer);
@@ -18,6 +20,21 @@ const Navbar = () => {
 
     const handleCloseAccountMenu = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
+    const handleAccountClick = () => {
+        handleCloseAccountMenu();
+        navigate("/conta");
+    };
+
+    const handleSettingsClick = () => {
+        handleCloseAccountMenu();
+        navigate("/admin");
     };
 
     return (
@@ -101,15 +118,15 @@ const Navbar = () => {
                     },
                 }}
             >
-                <MenuItem onClick={handleCloseAccountMenu}>
+                <MenuItem onClick={handleAccountClick}>
                     <ListItemIcon><Person /></ListItemIcon>
                     Conta
                 </MenuItem>
-                <MenuItem onClick={handleCloseAccountMenu}>
+                <MenuItem onClick={handleSettingsClick}>
                     <ListItemIcon><Settings /></ListItemIcon>
                     Configurações
                 </MenuItem>
-                <MenuItem onClick={handleCloseAccountMenu}>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon><ExitToApp /></ListItemIcon>
                     Sair
                 </MenuItem>
