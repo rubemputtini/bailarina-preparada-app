@@ -190,17 +190,20 @@ namespace BailarinaPreparadaApp.Controllers
                     return NotFound(new { message = "Avaliação não encontrada." });
                 }
 
-                foreach (var exerciseUpdate in  updatedExercises)
-                {
-                    var existingExercise = evaluation.Exercises
-                        .FirstOrDefault(e => e.ExerciseId == exerciseUpdate.ExerciseId);
+                var exerciseIds = updatedExercises.Select(ue => ue.ExerciseId).ToList();
+                var existingExercises = evaluation.Exercises
+                    .Where(e => exerciseIds.Contains(e.ExerciseId))
+                    .ToDictionary(e => e.ExerciseId);
 
-                    if (existingExercise == null)
+                foreach (var exerciseUpdate in updatedExercises)
+                {                 
+
+                    if (!existingExercises.ContainsKey(exerciseUpdate.ExerciseId))
                     {
                         return BadRequest(new { message = $"Exercício com ID {exerciseUpdate.ExerciseId} não encontrado na avaliação." });
                     }
 
-                    existingExercise.Score = exerciseUpdate.Score;
+                    existingExercises[exerciseUpdate.ExerciseId].Score = exerciseUpdate.Score;
                 }
 
                 await _context.SaveChangesAsync();
