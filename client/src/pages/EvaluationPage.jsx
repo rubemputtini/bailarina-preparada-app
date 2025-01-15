@@ -108,7 +108,7 @@ const EvaluationPage = () => {
             <Nav />
             <section className="p-6 min-h-screen max-w-5xl mx-auto">
                 <div className="bg-white p-4 rounded-lg shadow-lg mb-6">
-                    <h2 className="text-center text-purple-900 font-bold text-3xl md:text-4xl mb-6">Criar Avaliação</h2>
+                    <h2 className="text-center text-[#302539] font-bold text-3xl md:text-4xl mb-6">Criar Avaliação</h2>
                     <Grid container spacing={3} className="mb-6">
                         <Grid item xs={12} sm={6} md={4}>
                             <Autocomplete
@@ -131,20 +131,20 @@ const EvaluationPage = () => {
                                 sx={{
                                     "& .MuiOutlinedInput-root": {
                                         "& fieldset": {
-                                            borderColor: "#4A148C",
+                                            borderColor: "#916AAF",
                                         },
                                         "&:hover fieldset": {
-                                            borderColor: "#6A1B9A",
+                                            borderColor: "#916AAF",
                                         },
                                         "&.Mui-focused fieldset": {
-                                            borderColor: "#8E24AA",
+                                            borderColor: "#916AAF",
                                         },
                                     },
                                     "& .MuiInputLabel-root": {
-                                        color: "#4A148C",
+                                        color: "#916AAF",
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#8E24AA",
+                                        color: "#916AAF",
                                     },
                                 }}
                             />
@@ -164,26 +164,26 @@ const EvaluationPage = () => {
                                 sx={{
                                     "& .MuiOutlinedInput-root": {
                                         "& fieldset": {
-                                            borderColor: "#4A148C",
+                                            borderColor: "#916AAF",
                                         },
                                         "&:hover fieldset": {
-                                            borderColor: "#6A1B9A",
+                                            borderColor: "#916AAF",
                                         },
                                         "&.Mui-focused fieldset": {
-                                            borderColor: "#8E24AA",
+                                            borderColor: "#916AAF",
                                         },
                                     },
                                     "& .MuiInputLabel-root": {
-                                        color: "#4A148C",
+                                        color: "#916AAF",
                                     },
                                     "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#8E24AA",
+                                        color: "#916AAF",
                                     },
                                     "& input": {
-                                        color: "#4A148C",
+                                        color: "#916AAF",
                                     },
                                     "& input::-webkit-calendar-picker-indicator": {
-                                        color: "#4A148C",
+                                        color: "#916AAF",
                                         cursor: "pointer",
                                     },
                                 }}

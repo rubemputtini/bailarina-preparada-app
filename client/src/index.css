@@ -35,3 +35,7 @@ h3 {
   @apply text-white;
   font-family: var(--primary-font);
 }
+
+.MuiTypography-root {
+  font-family: "Montserrat", sans-serif !important;
+}

@@ -10,6 +10,7 @@ import TrainingPage from './pages/TrainingPage';
 import CalendarPage from './pages/CalendarPage';
 import AccountPage from './pages/AccountPage';
 import AdminPage from './pages/AdminPage';
+import UserDetailsPage from './pages/UserDetailsPage';
 
 function App() {
   return (
@@ -97,6 +98,14 @@ function App() {
                   </ProtectedRoute>
               } 
           />
+          <Route
+                    path="/admin/users/:userId"
+                    element={
+                        <ProtectedRoute>
+                            <UserDetailsPage />
+                        </ProtectedRoute>
+                    }
+                />
           <Route path="*" element={<Navigate to="/" />} />    
       </Routes>
     </BrowserRouter>

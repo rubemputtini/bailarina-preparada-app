@@ -64,7 +64,7 @@ const Navbar = () => {
                 sx={{
                     '& .MuiDrawer-paper': {
                         width: 250,
-                        backgroundColor: '#f3e8ff',
+                        backgroundColor: '#c5e1e9',
                         paddingTop: '20px',
                         boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
                         borderRight: '2px solid #eee',
@@ -79,32 +79,32 @@ const Navbar = () => {
                     />
                 </div>
                 <List>
-                    <ListItem button component={Link} to="/home" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><Home /></ListItemIcon>
-                        <ListItemText primary="Home" />
+                    <ListItem button component={Link} to="/home" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><Home /></ListItemIcon>
+                        <ListItemText primary="Início" />
                     </ListItem>
-                    <ListItem button component={Link} to="/planejamento" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><SportsGymnastics /></ListItemIcon>
+                    <ListItem button component={Link} to="/planejamento" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><SportsGymnastics /></ListItemIcon>
                         <ListItemText primary="Planejamento" />
                     </ListItem>
-                    <ListItem button component={Link} to="/avaliacao" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><Star /></ListItemIcon>
+                    <ListItem button component={Link} to="/avaliacao" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><Star /></ListItemIcon>
                         <ListItemText primary="Avaliações" />
                     </ListItem>
-                    <ListItem button component={Link} to="/ranking" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><EmojiEvents /></ListItemIcon>
+                    <ListItem button component={Link} to="/ranking" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><EmojiEvents /></ListItemIcon>
                         <ListItemText primary="Ranking" />
                     </ListItem>
-                    <ListItem button component={Link} to="/calendario" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><CalendarMonth /></ListItemIcon>
+                    <ListItem button component={Link} to="/calendario" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><CalendarMonth /></ListItemIcon>
                         <ListItemText primary="Calendário" />
                     </ListItem>
-                    <ListItem button component={Link} to="/treinos" sx={{ '&:hover': { backgroundColor: '#D6A8E5' } }}>
-                        <ListItemIcon><Description /></ListItemIcon>
+                    <ListItem button component={Link} to="/treinos" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                        <ListItemIcon sx={{ color: "#302539" }}><Description /></ListItemIcon>
                         <ListItemText primary="Treinos" />
                     </ListItem>
                 </List>
-                <Divider />
+                <Divider sx={{ background: "#c5e1e9" }} />
             </Drawer>
 
             <Menu
@@ -127,7 +127,7 @@ const Navbar = () => {
                     Configurações
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
-                    <ListItemIcon><ExitToApp /></ListItemIcon>
+                    <ListItemIcon sx={{ color: "#302539" }}><ExitToApp /></ListItemIcon>
                     Sair
                 </MenuItem>
             </Menu>
