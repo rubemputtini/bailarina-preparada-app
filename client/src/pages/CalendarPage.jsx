@@ -1,8 +1,14 @@
 import React from 'react'
+import Nav from '../components/Nav'
+import Footer from '../components/Footer'
 
 const CalendarPage = () => {
     return (
-        <div>CalendarPage</div>
+        <div>
+            <Nav />
+            CalendarPage
+            <Footer />
+        </div>
     )
 }
 

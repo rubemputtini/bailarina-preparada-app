@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
 import { logout } from "../services/accountService";
 
-const Navbar = () => {
+const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
@@ -135,4 +135,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default Nav;
