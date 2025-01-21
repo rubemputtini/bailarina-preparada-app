@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, IconButton, List, ListItem, ListItemText, ListItemIcon, Menu, MenuItem, Divider } from '@mui/material';
-import { Menu as MenuIcon, AccountCircle, Home, Star, EmojiEvents, Settings, ExitToApp, SportsGymnastics, CalendarMonth, Description, Person } from '@mui/icons-material';
+import { Menu as MenuIcon, AccountCircle, Home, Star, EmojiEvents, Settings, ExitToApp, SportsGymnastics, CalendarMonth, Description, Person, EditNote } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
 import { logout } from "../services/accountService";
@@ -31,6 +31,11 @@ const Nav = () => {
         handleCloseAccountMenu();
         navigate("/conta");
     };
+
+    const handleEvaluationClick = () => {
+        handleCloseAccountMenu();
+        navigate("/criar-avaliacao");
+    }
 
     const handleSettingsClick = () => {
         handleCloseAccountMenu();
@@ -121,6 +126,10 @@ const Nav = () => {
                 <MenuItem onClick={handleAccountClick}>
                     <ListItemIcon><Person /></ListItemIcon>
                     Conta
+                </MenuItem>
+                <MenuItem onClick={handleEvaluationClick}>
+                    <ListItemIcon><EditNote /></ListItemIcon>
+                    Avaliação
                 </MenuItem>
                 <MenuItem onClick={handleSettingsClick}>
                     <ListItemIcon><Settings /></ListItemIcon>

@@ -11,6 +11,9 @@ import CalendarPage from './pages/CalendarPage';
 import AccountPage from './pages/AccountPage';
 import AdminPage from './pages/AdminPage';
 import UserDetailsPage from './pages/UserDetailsPage';
+import EvaluationReportPage from './pages/EvaluationListPage';
+import EvaluationDetailPage from './pages/EvaluationDetailPage';
+import EvaluationListPage from './pages/EvaluationListPage';
 
 function App() {
   return (
@@ -51,10 +54,34 @@ function App() {
               } 
           />
           <Route 
-              path="/avaliacao" 
+              path="/criar-avaliacao" 
               element={
                   <ProtectedRoute>
                       <EvaluationPage />
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/avaliacao" 
+              element={
+                  <ProtectedRoute>
+                      <EvaluationListPage />
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/avaliacao/:evaluationId" 
+              element={
+                  <ProtectedRoute>
+                      <EvaluationDetailPage /> 
+                  </ProtectedRoute>
+              } 
+          />
+          <Route 
+              path="/relatorio" 
+              element={
+                  <ProtectedRoute>
+                      <EvaluationReportPage />
                   </ProtectedRoute>
               } 
           />

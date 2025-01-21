@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import {
     Alert,
     Box,
-    Card,
     CardContent,
     CircularProgress,
     TextField,
-    Button,
     Grid,
+    IconButton,
+    Typography,
 } from "@mui/material";
+import { Edit, Check, Close } from "@mui/icons-material";
 import { getUserDetails, updateUserDetails } from "../services/userService";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -115,30 +116,99 @@ const AccountPage = () => {
     return (
         <>
             <Nav />
-            <section className="p-6 min-h-screen max-w-4xl mx-auto">
-                <Card className="shadow-lg rounded-lg">
+            <Box sx={{ padding: "24px", minHeight: "100vh", }}>
+                <Box
+                    sx={{
+                        maxWidth: "800px",
+                        margin: "0 auto",
+                        backgroundColor: "#FFFFFF",
+                        borderRadius: "12px",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        padding: "32px",
+                    }}
+                >
                     {loading ? (
                         <Box display="flex" justifyContent="center" my={22}>
                             <CircularProgress />
                         </Box>
                     ) : (
                         <CardContent>
-                            <h3
-                                className="text-[#302539] font-bold mb-6 text-center text-2xl md:text-3xl"
-                            >
-                                Minha Conta
-                            </h3>
-                            <Grid container spacing={3}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography
+                                    variant="h4"
+                                    sx={{
+                                        fontWeight: "bold",
+                                        color: "#4A148C",
+                                    }}
+                                >
+                                    Minha Conta
+                                </Typography>
+                                {editing ? (
+                                    <Box>
+                                        <IconButton
+                                            onClick={handleSave}
+                                            sx={{
+                                                color: "#4CAF50",
+                                                marginRight: 1,
+                                            }}
+                                        >
+                                            <Check />
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={handleCancel}
+                                            sx={{
+                                                color: "#F44336",
+                                            }}
+                                        >
+                                            <Close />
+                                        </IconButton>
+                                    </Box>
+                                ) : (
+                                    <IconButton
+                                        onClick={() => setEditing(true)}
+                                        sx={{
+                                            color: "#4A148C",
+                                        }}
+                                    >
+                                        <Edit />
+                                    </IconButton>
+                                )}
+                            </Box>
+                            <Grid container spacing={3} sx={{ marginTop: 3 }}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         label="Nome"
                                         value={formValues.name}
-                                        onChange={(e) =>
-                                            handleChange("name", e.target.value)
-                                        }
+                                        onChange={(e) => handleChange("name", e.target.value)}
                                         disabled={!editing}
                                         fullWidth
                                         required
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                                "&.Mui-disabled fieldset": {
+                                                    borderColor: "#CCCCCC",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                            },
+                                            "& input": {
+                                                color: editing ? "#000000" : "#6A6A6A",
+                                                backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: editing ? "#9C27B0" : "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-disabled": {
+                                                color: "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-focused": {
+                                                color: "#9C27B0",
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -146,98 +216,147 @@ const AccountPage = () => {
                                         label="Email"
                                         type="email"
                                         value={formValues.email}
-                                        onChange={(e) =>
-                                            handleChange("email", e.target.value)
-                                        }
+                                        onChange={(e) => handleChange("email", e.target.value)}
                                         disabled={!editing}
                                         fullWidth
                                         required
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                                "&.Mui-disabled fieldset": {
+                                                    borderColor: "#CCCCCC",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                            },
+                                            "& input": {
+                                                color: editing ? "#000000" : "#6A6A6A",
+                                                backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: editing ? "#9C27B0" : "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-disabled": {
+                                                color: "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-focused": {
+                                                color: "#9C27B0",
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         label="Cidade"
                                         value={formValues.city}
-                                        onChange={(e) =>
-                                            handleChange("city", e.target.value)
-                                        }
+                                        onChange={(e) => handleChange("city", e.target.value)}
                                         disabled={!editing}
                                         fullWidth
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                                "&.Mui-disabled fieldset": {
+                                                    borderColor: "#CCCCCC",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                            },
+                                            "& input": {
+                                                color: editing ? "#000000" : "#6A6A6A",
+                                                backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: editing ? "#9C27B0" : "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-disabled": {
+                                                color: "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-focused": {
+                                                color: "#9C27B0",
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         label="País"
                                         value={formValues.country}
-                                        onChange={(e) =>
-                                            handleChange("country", e.target.value)
-                                        }
+                                        onChange={(e) => handleChange("country", e.target.value)}
                                         disabled={!editing}
                                         fullWidth
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "& fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                                "&.Mui-disabled fieldset": {
+                                                    borderColor: "#CCCCCC",
+                                                },
+                                                "&:hover fieldset": {
+                                                    borderColor: editing ? "#9C27B0" : "#CCCCCC",
+                                                },
+                                            },
+                                            "& input": {
+                                                color: editing ? "#000000" : "#6A6A6A",
+                                                backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                color: editing ? "#9C27B0" : "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-disabled": {
+                                                color: "#6A6A6A",
+                                            },
+                                            "& .MuiInputLabel-root.Mui-focused": {
+                                                color: "#9C27B0",
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <PhoneInput
                                         country={"br"}
                                         value={formValues.phoneNumber}
-                                        onChange={(value) =>
-                                            handleChange("phoneNumber", value)
-                                        }
+                                        onChange={(value) => handleChange("phoneNumber", value)}
                                         disabled={!editing}
                                         inputStyle={{
                                             width: "100%",
-                                            borderRadius: "4px",
                                             height: "56px",
-                                            border: "1px solid #ccc",
+                                            borderRadius: "8px",
+                                            border: editing ? "1px solid #9C27B0" : "1px solid #CCCCCC",
+                                            fontSize: "16px",
+                                            paddingLeft: "50px",
+                                            color: editing ? "#000" : "#6A6A6A",
+                                            backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            boxSizing: "border-box",
                                         }}
                                         buttonStyle={{
+                                            backgroundColor: editing ? "#FFFFFF" : "#F5F5F5",
+                                            border: editing ? "1px solid #9C27B0" : "1px solid #CCCCCC",
                                             borderRadius: "8px 0 0 8px",
-                                            border: "1px solid #ccc",
+                                        }}
+                                        dropdownStyle={{
+                                            borderRadius: "8px",
+                                            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
                                         }}
                                     />
                                 </Grid>
                             </Grid>
+
                             {error && (
-                                <Alert severity="error" className="mt-4">
+                                <Alert severity="error" sx={{ marginTop: 3 }}>
                                     {error}
                                 </Alert>
                             )}
-                            <div className="flex justify-center mt-6 gap-4">
-                                {editing ? (
-                                    <>
-                                        <Button
-                                            variant="contained"
-                                            style={{
-                                                backgroundColor: "#302539",
-                                                color: "#fff",
-                                                marginRight: "10px",
-                                            }}
-                                            onClick={handleSave}
-                                            disabled={loading || !user}
-                                        >
-                                            Salvar
-                                        </Button>
-                                        <Button variant="outlined" onClick={handleCancel}>
-                                            Cancelar
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <Button
-                                        variant="contained"
-                                        style={{
-                                            backgroundColor: "#302539",
-                                            color: "#fff",
-                                        }}
-                                        onClick={() => setEditing(true)}
-                                    >
-                                        Editar
-                                    </Button>
-                                )}
-                            </div>
                         </CardContent>
                     )}
-                </Card>
-            </section>
+                </Box>
+            </Box>
             <Footer />
         </>
     );
