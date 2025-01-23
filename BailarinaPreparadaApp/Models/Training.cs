@@ -7,6 +7,7 @@
         public required User User { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public string Description { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
         public bool IsCompleted { get; set; } = false;
     }
 }

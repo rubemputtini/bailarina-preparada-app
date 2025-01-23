@@ -72,7 +72,8 @@ const RankingPage = () => {
                     variant="h4"
                     align="center"
                     gutterBottom
-                    className="font-bold text-[#c5e1e9]"
+                    className="text-[#c5e1e9]"
+                    sx={{ fontWeight: "bold" }}
                 >
                     Ranking CBP
                 </Typography>

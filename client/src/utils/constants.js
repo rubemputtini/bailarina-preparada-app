@@ -55,3 +55,15 @@ export const months = [
     { value: 11, label: "Novembro" },
     { value: 12, label: "Dezembro" },
 ];
+
+export const trainingCategories = [
+  "Alongamento",
+  "Ballet",
+  "Cardio",
+  "Contemporâneo",
+  "Jazz",
+  "Musculação",
+  "PBT",
+  "Potência",
+  "Outros"
+];
