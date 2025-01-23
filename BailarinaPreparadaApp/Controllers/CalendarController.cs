@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
-    public class CalendaryController : ControllerBase
+    public class CalendarController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public CalendaryController(ApplicationDbContext context, UserManager<User> userManager)
+        public CalendarController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -34,7 +34,7 @@ namespace BailarinaPreparadaApp.Controllers
                     return Unauthorized(new { message = "Usuário não autenticado." });
                 }
 
-                var summary = await _context.Trainings
+                var trainings = await _context.Trainings
                     .Where(t => t.UserId == user.Id && t.Date >= startDate && t.Date <= endDate)
                     .GroupBy(t => t.Date.Date)
                     .Select(g => new CalendarSummaryResponse
@@ -44,7 +44,7 @@ namespace BailarinaPreparadaApp.Controllers
                     })
                     .ToListAsync();
 
-                return Ok(summary);
+                return Ok(trainings);
             }
             catch (Exception ex)
             {

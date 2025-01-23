@@ -39,3 +39,81 @@ h3 {
 .MuiTypography-root {
   font-family: "Montserrat", sans-serif !important;
 }
+
+/* Estilo para os dias com treino */
+.training-day {
+  background-color: #6a1b9a !important;
+  color: white !important;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo geral do calendário */
+.react-calendar {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.react-calendar__tile {
+  height: 50px !important;
+  width: 50px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 50%;
+  margin: 4px;
+  transition: background-color 0.3s;
+  text-decoration: none !important;
+}
+
+/* Navegação do calendário */
+.react-calendar__navigation button {
+  color: #4a148c;
+  font-weight: bold;
+  background: none;
+  border: none;
+  padding: 8px;
+  margin: 4px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: #f0f0f0;
+}
+
+.react-calendar__navigation button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Ajuste de navegação para alinhar ano e mês */
+.react-calendar__navigation__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  cursor: default;
+  color: inherit;
+}
+
+.react-calendar__navigation__label > div {
+  margin: 0;
+  padding: 0;
+}
