@@ -8,6 +8,10 @@
 :root {
   --primary-font: "Montserrat", sans-serif;
   --secondary-font: "Inter", sans-serif;
+  --color-light-blue: #c5e1e9;
+  --color-blue: #9bb1ff;
+  --color-dark-purple: #6a1b9a;
+  --color-light-purple: #9575cd;
 }
 
 body {

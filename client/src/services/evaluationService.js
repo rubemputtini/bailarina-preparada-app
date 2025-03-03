@@ -24,8 +24,7 @@ export const getEvaluationById = async (evaluationId) => {
     }
 };
 
-export const createEvaluation = async (payload) => {
-    
+export const createEvaluation = async (payload) => {    
     try {
         await api.post('/api/v1/Evaluation', payload);
     } catch (error) {

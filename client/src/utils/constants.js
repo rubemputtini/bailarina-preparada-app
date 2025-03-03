@@ -56,6 +56,14 @@ export const months = [
     { value: 12, label: "Dezembro" },
 ];
 
+export const daysOfWeek = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+
+export const periods = [
+    { label: "Manhã" },
+    { label: "Tarde" },
+    { label: "Noite" },
+];
+
 export const trainingCategories = [
   "Alongamento",
   "Ballet",
@@ -67,3 +75,12 @@ export const trainingCategories = [
   "Potência",
   "Outros"
 ];
+
+export const tasksColors = {
+  lightBlue: "var(--color-light-blue)",
+  blue: "var(--color-blue)",
+  darkPurple: "var(--color-dark-purple)",
+  lightPurple: "var(--color-light-purple)",
+};
+
+export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";

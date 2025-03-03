@@ -1,15 +1,8 @@
-﻿using System.Text.Json.Serialization;
-
-namespace BailarinaPreparadaApp.Models
+﻿namespace BailarinaPreparadaApp.DTOs
 {
-    public class ScheduleTask
+    public class ScheduleTaskResponse
     {
         public int ScheduleTaskId { get; set; }
-        public int ScheduleEntryId { get; set; }
-        public int ScheduleId { get; set; }
-
-        [JsonIgnore]
-        public Schedule Schedule { get; set; } = null!;
         public DayOfWeek DayOfWeek { get; set; }
         public int Slot { get; set; }
         public string Period { get; set; } = string.Empty;
