@@ -23,11 +23,16 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        const status = error.response?.status;
+        const errorMessage = error.response?.data?.message || "Erro desconhecido.";
+
+        if (status === 401) {
             clearToken();
             console.error('Sessão expirada. Faça login novamente.');
         }
-        return Promise.reject(error);
+        console.error(`Erro na API (${status}): ${errorMessage}`);
+
+        return Promise.reject(new Error(errorMessage));
     }
 );
 

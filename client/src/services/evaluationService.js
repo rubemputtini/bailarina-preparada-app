@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getEvaluations = async () => {
     try {
@@ -6,9 +7,7 @@ export const getEvaluations = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar avaliações: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar avaliações.");
     }
 };
 
@@ -18,9 +17,7 @@ export const getEvaluationById = async (evaluationId) => {
 
         return response.data;
     } catch (error) {
-        console.error(`Erro ao buscar avaliação com ID ${evaluationId}: `, error);
-
-        throw error;
+        handleError(error, `Erro ao buscar avaliação com ID ${evaluationId}.`);
     }
 };
 
@@ -28,9 +25,7 @@ export const createEvaluation = async (payload) => {
     try {
         await api.post('/api/v1/Evaluation', payload);
     } catch (error) {
-        console.error('Erro ao criar avaliação:', error);
-
-        throw error;
+        handleError(error, "Erro ao criar avaliação.");
     }
 };
 
@@ -40,9 +35,7 @@ export const updateEvaluation = async (evaluationId, updatedExercises) => {
 
         return response.data;
     } catch (error) {
-        console.error(`Erro ao atualizar avaliação com ID ${evaluationId}:`, error);
-
-        throw error;
+        handleError(error, `Erro ao atualizar avaliação com ID ${evaluationId}.`);
     }
 };
 
@@ -50,8 +43,6 @@ export const deleteEvaluation = async (evaluationId) => {
     try {
         await api.delete(`/api/v1/Evaluation/${evaluationId}`);
     } catch (error) {
-        console.error(`Erro ao deletar avaliação com ID ${evaluationId}:`, error);
-
-        throw error;
+        handleError(error, `Erro ao apagar avaliação com ID ${evaluationId}.`);
     }
 }

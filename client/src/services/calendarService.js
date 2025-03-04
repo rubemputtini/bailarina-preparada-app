@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getCalendarSummary = async (startDate, endDate) => {
     try {
@@ -7,8 +8,6 @@ export const getCalendarSummary = async (startDate, endDate) => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar resumo do calendário: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar resumo do calendário.");
     }
 };

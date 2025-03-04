@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getUserSchedule = async (userId) => {
     try {
@@ -6,9 +7,7 @@ export const getUserSchedule = async (userId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar planejamento do usuário: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar planejamento do usuário.");
     }
 };
 
@@ -17,9 +16,7 @@ export const createSchedule = async (payload) => {
         await api.post("/api/v1/Schedule/create-schedule");
 
     } catch (error) {
-        console.error("Erro ao criar planejamento do usuário: ", error);
-
-        throw error;
+        handleError(error, "Erro ao criar planejamento do usuário.");
     }
 };
 
@@ -28,8 +25,7 @@ export const updateSchedule = async (scheduleId, payload) => {
         await api.put(`/api/v1/Schedule/update-schedule/${scheduleId}`, payload);
 
     } catch (error) {
-        console.error("Erro ao atualizar tarefa:", error);
-        throw error;
+        handleError(error, "Erro ao atualizar planejamento do usuário.");
     }
 };
 
@@ -38,7 +34,6 @@ export const deleteSchedule = async (scheduleId) => {
         await api.delete(`/api/v1/Schedule/delete-schedule/${scheduleId}`);
 
     } catch (error) {
-        console.error("Erro ao excluir planejamento:", error);
-        throw error;
+        handleError(error, "Erro ao excluir planejamento do usuário.");
     }
 };

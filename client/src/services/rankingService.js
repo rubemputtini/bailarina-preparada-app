@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getRanking = async (month, year) => {
     try {
@@ -8,8 +9,6 @@ export const getRanking = async (month, year) => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar ranking: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar ranking.");
     }
 }

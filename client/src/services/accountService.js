@@ -1,5 +1,6 @@
 import { clearToken, setToken} from './auth';
 import api from './api';
+import { handleError } from './handleError';
 
 export const login = async (email, password) => {
     try {
@@ -8,10 +9,7 @@ export const login = async (email, password) => {
       return response.data;
 
     } catch (error) {
-        const errorMessage = error.response?.data || error.message || "Erro desconhecido.";
-        console.error("Erro ao fazer login:", errorMessage);
-
-        throw new Error(errorMessage);
+        handleError(error, "Erro ao fazer login.");
     }
 };
 
@@ -32,15 +30,7 @@ export const register = async (name, email, password) => {
         return { token, message };
 
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Erro ao registrar usuário";
-      const details = error.response?.data?.details || [];
-
-      console.error("Erro ao registrar: ", errorMessage, details);
-        
-      const customError = new Error(errorMessage);
-      customError.details = details;
-
-      throw customError;
+        handleError(error, "Erro ao registrar usuário.");
     } 
 };
 
@@ -59,8 +49,6 @@ export const deleteUser = async (userId) => {
         return response.data;
 
     } catch (error) {
-        console.error("Erro ao excluir usuário: ", error.response?.data || error.message);
-
-        throw error;
+        handleError(error, "Erro ao excluir usuário.");
     }
 };

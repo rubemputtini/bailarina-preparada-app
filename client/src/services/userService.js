@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getUserDetails = async (userId = null) => {
     const url = userId ? `/User/details/${userId}` : `/User/details`;
@@ -8,9 +9,7 @@ export const getUserDetails = async (userId = null) => {
         return response.data;
         
     } catch (error) {
-        console.error("Erro ao buscar detalhes do usuário: ", error.response?.data || error.message);
-
-        throw error;
+        handleError(error, "Erro ao buscar detalhes do usuário.");
     }
 };
 
@@ -25,8 +24,6 @@ export const updateUserDetails = async (userId, userData) => {
         return response.data;
 
     } catch (error) {
-        console.error("Erro ao atualizar detalhes do usuário: ", error.response?.data || error.message);
-
-        throw error;
+        handleError(error, "Erro ao atualizar detalhes do usuário.");
     }
 };

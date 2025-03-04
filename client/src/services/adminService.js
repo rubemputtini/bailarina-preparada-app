@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getUsers = async () => {
     try {
@@ -6,9 +7,7 @@ export const getUsers = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar usuários: ", error);
-        
-        throw error;
+        handleError(error, "Erro ao buscar usuários.");
     }
 };
 
@@ -18,8 +17,6 @@ export const getUserEvaluations = async (userId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar avaliações do usuário: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar avaliações do usuário.");
     }
 }

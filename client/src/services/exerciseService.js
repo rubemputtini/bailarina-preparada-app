@@ -1,4 +1,5 @@
 import api from "./api";
+import { handleError } from "./handleError";
 
 export const getExercises = async () => {
     try {
@@ -6,8 +7,6 @@ export const getExercises = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar exercícios: ", error);
-
-        throw error;
+        handleError(error, "Erro ao buscar exercícios.");
     }
 }
