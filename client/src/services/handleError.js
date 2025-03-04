@@ -1,11 +1,14 @@
 export const handleError = (error, defaultMessage) => {
-    const errorMessage = error.response?.data?.message || defaultMessage;
-    const details = error.response?.data?.details || [];
-
-    console.error(`Erro: ${errorMessage}`, details);
+    let errorMessage = defaultMessage;
+    
+    if (error.response) {
+        errorMessage = error.response.data?.message || defaultMessage;
+    } else if (error.message) {
+        errorMessage = error.message;
+    }
 
     const customError = new Error(errorMessage);
-    customError.details = details;
-    
+    customError.details = error.response?.data?.details || [];
+
     throw customError;
 };
