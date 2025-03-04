@@ -11,11 +11,22 @@ namespace BailarinaPreparadaApp.Extensions
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<AccountService>();
+            services.AddScoped<AdminService>();
+            services.AddScoped<CalendarService>();
+            services.AddScoped<EvaluationService>();
+            services.AddScoped<ExerciseService>();
+            services.AddScoped<RankingService>();
+            services.AddScoped<ScheduleService>();
+            services.AddScoped<ScheduleTaskService>();
+            services.AddScoped<TrainingService>();
+            services.AddScoped<UserService>();
 
             services.AddTransient<TokenService>();
 

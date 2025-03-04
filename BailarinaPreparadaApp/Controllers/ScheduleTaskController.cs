@@ -1,4 +1,4 @@
-﻿using BailarinaPreparadaApp.Data;
+﻿using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,35 +9,19 @@ namespace BailarinaPreparadaApp.Controllers
     [Authorize(Roles = "admin")]
     public class ScheduleTaskController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ScheduleTaskService _scheduleTaskService;
 
-        public ScheduleTaskController(ApplicationDbContext context)
+        public ScheduleTaskController(ScheduleTaskService scheduleTaskService)
         {
-            _context = context;
+            _scheduleTaskService = scheduleTaskService;
         }
 
         [HttpDelete("delete-scheduleTask/{scheduleTaskId}")]
         public async Task<IActionResult> DeleteScheduleTask(int scheduleTaskId)
         {
-            var task = await _context.ScheduleTasks.FindAsync(scheduleTaskId);
+            await _scheduleTaskService.DeleteScheduleTaskAsync(scheduleTaskId);
 
-            if (task == null)
-            {
-                return NotFound(new { message = "Tarefa não encontrada." });
-            }
-
-            try
-            {
-                _context.ScheduleTasks.Remove(task);
-
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Tarefa removida com sucesso." });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Erro ao remover tarefa.", details = ex.Message });
-            }
+            return Ok(new { message = "Tarefa excluída com sucesso!" });
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using BailarinaPreparadaApp.Data;
-using BailarinaPreparadaApp.DTOs;
-using BailarinaPreparadaApp.Models;
+﻿using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
@@ -13,43 +10,31 @@ namespace BailarinaPreparadaApp.Controllers
     [Authorize]
     public class CalendarController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly CalendarService _calendarService;
 
-        public CalendarController(ApplicationDbContext context, UserManager<User> userManager)
+        public CalendarController(CalendarService calendarService)
         {
-            _context = context;
-            _userManager = userManager;
+            _calendarService = calendarService;
         }
 
         [HttpGet("calendar-summary")]
         public async Task<IActionResult> GetCalendarSummary([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
             {
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                {
-                    return Unauthorized(new { message = "Usuário não autenticado." });
-                }
-
-                var trainings = await _context.Trainings
-                    .Where(t => t.UserId == user.Id && t.Date >= startDate && t.Date <= endDate)
-                    .GroupBy(t => t.Date.Date)
-                    .Select(g => new CalendarSummaryResponse
-                    {
-                        Date = g.Key,
-                        TrainingCount = g.Count()
-                    })
-                    .ToListAsync();
-
-                return Ok(trainings);
+                return Unauthorized(new { message = "Usuário não autenticado." });
             }
-            catch (Exception ex)
+
+            var trainings = await _calendarService.GetCalendarSummaryAsync(userId, startDate, endDate);
+
+            if (trainings == null)
             {
-                return StatusCode(500, new { message = "Erro ao buscar resumo do calendário.", details = ex.Message });
+                return NotFound(new { message = "Nenhum treino encontrado no período especificado." });
             }
+
+            return Ok(trainings);
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using BailarinaPreparadaApp.Data;
-using BailarinaPreparadaApp.DTOs;
-using BailarinaPreparadaApp.Models;
+﻿using BailarinaPreparadaApp.DTOs.Training;
+using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
@@ -13,128 +12,56 @@ namespace BailarinaPreparadaApp.Controllers
     [Authorize]
     public class TrainingController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly TrainingService _trainingService;
 
-        public TrainingController(ApplicationDbContext context, UserManager<User> userManager)
+        public TrainingController(TrainingService trainingService)
         {
-            _context = context;
-            _userManager = userManager;
+            _trainingService = trainingService;
         }
 
         [HttpPost("create-training")]
         public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingRequest request)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
             {
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                {
-                    return Unauthorized(new { message = "Usuário não autenticado." });
-                }
-
-                var training = new Training
-                {
-                    User = user,
-                    UserId = user.Id,
-                    Date = request.Date,
-                    Category = request.Category,
-                    Description = request.Description,
-                    IsCompleted = true
-                };
-
-                _context.Trainings.Add(training);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Treino registrado com sucesso!" });
+                throw new UnauthorizedException("Usuário não autenticado.");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Erro ao registrar treino.", details = ex.Message });
-            }
+
+            await _trainingService.CreateTrainingAsync(userId, request);
+
+            return Ok(new { message = "Treino registrado com sucesso!" });
         }
 
         [HttpGet("completed-trainings")]
         public async Task<IActionResult> GetCompletedTrainingsByUser([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? category)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
             {
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                {
-                    return Unauthorized(new { message = "Usuário não autenticado." });
-                }
-
-                var trainings = _context.Trainings
-                    .Where(t => t.UserId == user.Id && t.IsCompleted)
-                    .AsQueryable();
-
-                if (startDate.HasValue)
-                {
-                    trainings = trainings.Where(t => t.Date >= startDate.Value);
-                }
-
-                if (endDate.HasValue)
-                {
-                    trainings = trainings.Where(t => t.Date <= endDate.Value);
-                }
-
-                if (!string.IsNullOrEmpty(category))
-                {
-                    trainings = trainings.Where(t => t.Category == category);
-                }
-
-                var response = await trainings
-                    .Select(t => new TrainingResponse
-                    {
-                        TrainingId = t.TrainingId,
-                        Date = t.Date,
-                        Description = t.Description,
-                        Category = t.Category
-                    })
-                    .OrderByDescending(t => t.Date)
-                    .ToListAsync();
-
-                return Ok(response);
+                throw new UnauthorizedException("Usuário não autenticado.");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Erro ao buscar treinos.", details = ex.Message });
-            }
+
+            var trainings = await _trainingService.GetCompletedTrainingsAsync(userId, startDate, endDate, category);
+
+            return Ok(trainings);
         }
 
         [HttpDelete("delete-training/{trainingId}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
             {
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                {
-                    return Unauthorized(new { message = "Usuário não autenticado." });
-                }
-
-                var training = await _context.Trainings.FirstOrDefaultAsync(
-                    t => t.TrainingId == trainingId && t.UserId == user.Id
-                    );
-
-                if (training == null)
-                {
-                    return NotFound(new { message = "Treino não encontrado." });
-                }
-
-                _context.Trainings.Remove(training);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Treino excluído com sucesso!" });
+                throw new UnauthorizedException("Usuário não autenticado.");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Erro ao excluir treino.", details = ex.Message });
-            }
+
+            await _trainingService.DeleteTrainingAsync(userId, trainingId);
+
+            return Ok(new { message = "Treino excluído com sucesso!" });
         }
     }
 }

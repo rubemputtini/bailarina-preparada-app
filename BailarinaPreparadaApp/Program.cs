@@ -1,4 +1,5 @@
 using BailarinaPreparadaApp.Extensions;
+using BailarinaPreparadaApp.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,5 +25,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.Run();

@@ -1,8 +1,6 @@
-﻿using BailarinaPreparadaApp.Data;
-using BailarinaPreparadaApp.DTOs;
+﻿using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Controllers
 {
@@ -11,36 +9,19 @@ namespace BailarinaPreparadaApp.Controllers
     [Authorize(Roles = "admin")]
     public class ExerciseController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ExerciseService _exerciseService;
 
-        public ExerciseController(ApplicationDbContext context)
+        public ExerciseController(ExerciseService exerciseService)
         {
-            _context = context;
+            _exerciseService = exerciseService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetExercises()
         {
-            try
-            {
-                var exercises = await _context.Exercises
-                    .ToListAsync();
+            var exercises = await _exerciseService.GetExercisesAsync();
 
-                var response = exercises.Select(e => new ExerciseResponse
-                {
-                    ExerciseId = e.ExerciseId,
-                    Name = e.Name,
-                    Category = e.ExerciseCategory.ToString(),
-                    PhotoUrl = e.PhotoUrl,
-                    VideoUrl = e.VideoUrl
-                }).ToList();
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Erro ao obter exercícios.", details = ex.Message });
-            }
+            return Ok(exercises);
         }
     }
 }
