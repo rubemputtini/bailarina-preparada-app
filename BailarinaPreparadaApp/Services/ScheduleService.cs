@@ -49,6 +49,34 @@ namespace BailarinaPreparadaApp.Services
             return response;
         }
 
+        public async Task<IEnumerable<ScheduleTaskResponse>> GetDailyScheduleAsync(string userId)
+        {
+            var currentDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
+
+            var dailySchedule = await _dbContext.ScheduleTasks
+                .Where(e => e.Schedule.UserId == userId && (int)e.DayOfWeek == currentDayOfWeek)
+                .Select(e => new ScheduleTaskResponse
+                {
+                    ScheduleTaskId = e.ScheduleTaskId,
+                    DayOfWeek = e.DayOfWeek,
+                    Slot = e.Slot,
+                    Period = e.Period,
+                    Activity = e.Activity,
+                    Notes = e.Notes,
+                    Color = e.Color
+                })
+                .OrderBy(e => e.Period == "Manhã" ? 1 : e.Period == "Tarde" ? 2 : e.Period == "Noite" ? 3 : 99)
+                .ThenBy(e => e.Slot)
+                .ToListAsync();
+
+            if (dailySchedule == null)
+            {
+                throw new NotFoundException("Planejamento diário não encontrado para o usuário.");
+            }
+
+            return dailySchedule;
+        }
+
         public async Task<ScheduleResponse> CreateScheduleAsync(CreateScheduleRequest request)
         {
             var user = await _dbContext.Users.FindAsync(request.UserId);

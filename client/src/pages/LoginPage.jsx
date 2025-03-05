@@ -23,7 +23,7 @@ const LoginPage = () => {
             const { token } = await login(email, password);
 
             setToken(token);
-            navigate("/avaliacao");
+            navigate("/dashboard");
         } catch (error) {
             setError(error.message);
         } finally {

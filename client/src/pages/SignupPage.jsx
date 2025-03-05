@@ -23,7 +23,7 @@ const SignupPage = () => {
         try {
             await register(userName, email, password);
 
-            navigate("/avaliacao");
+            navigate("/dashboard");
         } catch (error) {
             setError(error.message || 'Erro ao cadastrar, tente novamente.');
         } finally {

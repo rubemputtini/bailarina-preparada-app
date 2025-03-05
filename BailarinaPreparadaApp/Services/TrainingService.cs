@@ -73,6 +73,17 @@ namespace BailarinaPreparadaApp.Services
             return trainings;
         }
 
+        public async Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year)
+        {
+            var trainingDaysCount = await _dbContext.Trainings
+                .Where(t => t.UserId == userId && t.IsCompleted && t.Date.Year == year)
+                .Select(t => t.Date.Date)
+                .Distinct()
+                .CountAsync();
+
+            return trainingDaysCount;
+        }
+
         public async Task DeleteTrainingAsync(string userId, int trainingId)
         {
             var user = await _userManager.FindByIdAsync(userId);

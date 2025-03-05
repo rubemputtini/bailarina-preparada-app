@@ -84,7 +84,7 @@ const Nav = () => {
                     />
                 </div>
                 <List>
-                    <ListItem button component={Link} to="/home" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to="/dashboard" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><Home /></ListItemIcon>
                         <ListItemText primary="Início" />
                     </ListItem>

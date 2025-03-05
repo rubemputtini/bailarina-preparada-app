@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children, publicRoute = false }) => {
     const loggedIn = isLoggedIn();
 
     if (publicRoute) {
-        return loggedIn ? <Navigate to="/home" replace /> : children;
+        return loggedIn ? <Navigate to="/dashboard" replace /> : children;
     }
 
     return loggedIn ? children : <Navigate to="/signup" replace />;

@@ -76,11 +76,11 @@ export const trainingCategories = [
   "Outros"
 ];
 
-export const tasksColors = {
-  lightBlue: "var(--color-light-blue)",
-  blue: "var(--color-blue)",
-  darkPurple: "var(--color-dark-purple)",
-  lightPurple: "var(--color-light-purple)",
+export const tasksColorsMap = {
+  lightBlue: { tailwind: "bg-[var(--color-light-blue)] border-[var(--color-light-blue)]", hex: "#c5e1e9" },
+  blue: { tailwind: "bg-[var(--color-blue)] border-[var(--color-blue)]", hex: "#9bb1ff" },
+  darkPurple: { tailwind: "bg-[var(--color-dark-purple)] border-[var(--color-dark-purple)] text-white", hex: "#6a1b9a" },
+  lightPurple: { tailwind: "bg-[var(--color-light-purple)] border-[var(--color-light-purple)]", hex: "#9575cd" },
 };
 
 export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";

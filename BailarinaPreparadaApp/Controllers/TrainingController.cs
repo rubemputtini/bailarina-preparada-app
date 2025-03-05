@@ -49,6 +49,21 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(trainings);
         }
 
+        [HttpGet("trainings-yearly-days-count")]
+        public async Task<IActionResult> GetYearlyTrainingDaysCount([FromQuery] int year)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedException("Usuário não autenticado.");
+            }
+
+            var trainingDaysCount = await _trainingService.GetYearlyTrainingDaysCountAsync(userId, year);
+
+            return Ok(trainingDaysCount);
+        }
+
         [HttpDelete("delete-training/{trainingId}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {

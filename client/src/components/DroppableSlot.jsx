@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useDrop } from "react-dnd";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import DraggableEvent from "./DraggableEvent";
-import { tasksColors } from "../utils/constants";
+import { tasksColorsMap } from "../utils/constants";
 
 const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) => {
     const [newEventTitle, setNewEventTitle] = useState("");
     const [selectedColor, setSelectedColor] = useState("lightBlue");
     const [isAdding, setIsAdding] = useState(false);
 
-    const colors = Object.keys(tasksColors);
+    const colors = Object.keys(tasksColorsMap);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "EVENT",
@@ -51,6 +51,9 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
             ref={isEditing ? drop : null}
             className={`relative flex items-center justify-center border ${isOver ? "border-purple-700" : "border-gray-300"
                 } bg-white w-full min-h-[60px]`}
+            style={{
+                backgroundColor: events.length > 0 ? tasksColorsMap[events[0].color]?.hex : "transparent",
+            }}
         >
             {events.length === 0 && isEditing && !isAdding && (
                 <button
@@ -76,7 +79,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
                                 key={color}
                                 className={`w-5 h-5 rounded-full border-2 ${selectedColor === color ? "border-black" : "border-transparent"
                                     }`}
-                                style={{ backgroundColor: tasksColors[color] }}
+                                style={{ backgroundColor: tasksColorsMap[color]?.hex }}
                                 onClick={() => setSelectedColor(color)}
                             />
                         ))}

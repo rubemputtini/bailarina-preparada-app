@@ -1,7 +1,9 @@
 ﻿using BailarinaPreparadaApp.DTOs.Schedule;
+using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
@@ -23,6 +25,21 @@ namespace BailarinaPreparadaApp.Controllers
             var schedule = await _scheduleService.GetUserScheduleAsync(userId);
 
             return Ok(schedule);
+        }
+
+        [HttpGet("daily-schedule")]
+        public async Task<IActionResult> GetDailySchedule()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedException("Usuário não autenticado.");
+            }
+
+            var dailySchedule = await _scheduleService.GetDailyScheduleAsync(userId);
+
+            return Ok(dailySchedule);
         }
 
         [HttpPost("create-schedule")]

@@ -1,6 +1,6 @@
 import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
-import { tasksColors } from "../utils/constants";
+import { tasksColorsMap } from "../utils/constants";
 import { deleteScheduleTask } from "../services/scheduleTaskService";
 
 const DraggableEvent = ({ event, isEditing, setEvents }) => {
@@ -25,7 +25,7 @@ const DraggableEvent = ({ event, isEditing, setEvents }) => {
             style={{
                 height: "100%",
                 width: "100%",
-                backgroundColor: tasksColors[event.color],
+                backgroundColor: tasksColorsMap[event.color]?.hex || "transparent",
                 opacity: isDragging ? 0.5 : 1,
             }}
         >

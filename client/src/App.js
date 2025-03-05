@@ -3,7 +3,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import EvaluationPage from './pages/EvaluationPage';
-import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
 import RankingPage from './pages/RankingPage';
 import SchedulePage from './pages/SchedulePage';
 import TrainingPage from './pages/TrainingPage';
@@ -38,10 +38,10 @@ function App() {
               } 
           />
           <Route 
-              path="/home" 
+              path="/dashboard" 
               element={
                   <ProtectedRoute>
-                      <HomePage />
+                      <Dashboard />
                   </ProtectedRoute>
               } 
           />
