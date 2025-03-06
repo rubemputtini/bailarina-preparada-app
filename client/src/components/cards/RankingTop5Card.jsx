@@ -14,7 +14,7 @@ const RankingTop5Card = ({ ranking }) => {
                             <span className={`font-medium ${index === 0 ? "text-yellow-600" : "text-gray-800"}`}>
                                 {user.userName}
                             </span>
-                            <span className="ml-auto text-gray-600">{user.points} dias</span>
+                            <span className="ml-auto text-gray-600">{user.daysTrained} dias</span>
                         </li>
                     ))}
                 </ul>

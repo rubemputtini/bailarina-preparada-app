@@ -34,11 +34,14 @@ const EvaluationPage = () => {
         date: "",
     });
 
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedUsers = await getUsers();
+            const fetchedUsers = await getUsers(page + 1, pageSize);
             const fetchedExercises = await getExercises();
-            setUsers(fetchedUsers);
+            setUsers(fetchedUsers.users);
             setExercises(fetchedExercises);
         };
         fetchData();

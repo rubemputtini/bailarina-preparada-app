@@ -23,13 +23,19 @@ const AdminPage = () => {
     const [userToDelete, setUserToDelete] = useState(null);
     const [userDeleted, setUserDeleted] = useState(null);
     const [showDialog, setShowDialog] = useState(false);
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalUsers, setTotalUsers] = useState(0);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const data = await getUsers();
-                setUsers(data);
+                const { users, totalUsers } = await getUsers(page + 1, pageSize);
+
+                setUsers(users);
+                setTotalUsers(totalUsers);
                 setError("");
             } catch (error) {
                 setError("Erro ao buscar usuários: " + error.message);
@@ -39,7 +45,7 @@ const AdminPage = () => {
         };
 
         fetchUsers();
-    }, []);
+    }, [page, pageSize]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -138,6 +144,11 @@ const AdminPage = () => {
                                     onView={handleViewUser}
                                     onEdit={handleEditUser}
                                     onDelete={handleDeleteUser}
+                                    page={page}
+                                    setPage={setPage}
+                                    pageSize={pageSize}
+                                    setPageSize={setPageSize}
+                                    totalUsers={totalUsers}
                                 />
                             </>
                         )}

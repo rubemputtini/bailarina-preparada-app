@@ -15,6 +15,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { createTraining } from "../services/trainingService";
 import { trainingCategories } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 const TrainingPage = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -26,6 +27,8 @@ const TrainingPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleCreateTraining = async () => {
         if (!newTraining.date || !newTraining.category) {
@@ -49,6 +52,10 @@ const TrainingPage = () => {
         }
     };
 
+    const handleDialogClose = () => {
+        setSuccess(false);
+        navigate("/dashboard");
+    };
 
     return (
         <>
@@ -168,7 +175,7 @@ const TrainingPage = () => {
                 {success && (
                     <SuccessDialog
                         message="Treino registrado com sucesso!"
-                        onClose={() => setSuccess(false)}
+                        onClose={handleDialogClose}
                     />
                 )}
             </Box>

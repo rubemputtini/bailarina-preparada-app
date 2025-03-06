@@ -19,9 +19,16 @@ namespace BailarinaPreparadaApp.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<UserResponse>> GetUsersAsync()
+        public async Task<(IEnumerable<UserResponse> Users, int TotalUsers)> GetUsersAsync(int page = 1, int pageSize = 10)
         {
-            var users = await _userManager.Users.ToListAsync();
+            var totalUsers = await _userManager.Users.CountAsync();
+
+            var users = await _userManager.Users
+                .OrderBy(u => u.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             var userResponses = new List<UserResponse>();
 
             foreach (var user in users)
@@ -38,7 +45,7 @@ namespace BailarinaPreparadaApp.Services
                 });
             }
 
-            return userResponses;
+            return (userResponses, totalUsers);
         }
 
         public async Task<List<EvaluationResponse>?> GetUserEvaluationsAsync(string userId)

@@ -17,11 +17,11 @@ namespace BailarinaPreparadaApp.Controllers
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var users = await _adminService.GetUsersAsync();
+            var (users, totalUsers) = await _adminService.GetUsersAsync(page, pageSize);
 
-            return Ok(users);
+            return Ok(new { users, totalUsers });
         }
 
         [HttpGet("user-evaluations/{userId}")]

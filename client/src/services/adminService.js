@@ -1,9 +1,9 @@
 import api from "./api";
 import { handleError } from "./handleError";
 
-export const getUsers = async () => {
+export const getUsers = async (page, pageSize) => {
     try {
-        const response = await api.get('/admin/users');
+        const response = await api.get(`/admin/users?page=${page}&pageSize=${pageSize}`);
 
         return response.data;
     } catch (error) {
