@@ -6,7 +6,8 @@ namespace BailarinaPreparadaApp.Models
     {
         public string Name { get; set; } = string.Empty;
         public bool IsAdmin { get; set; } = false;
-        public string? Country { get; set; }
-        public string? City { get; set; }
+
+        public Address Address { get; set; } = null!;
+        public DateTime DateOfBirth { get; set; }
     }
 }

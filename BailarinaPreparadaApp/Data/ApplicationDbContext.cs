@@ -8,6 +8,7 @@ namespace BailarinaPreparadaApp.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Evaluation> Evaluations { get; set; }
         public DbSet<EvaluationExercise> EvaluationExercises { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
@@ -20,6 +21,12 @@ namespace BailarinaPreparadaApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<User>()
+                .HasOne(u => u.Address)
+                .WithOne(a => a.User)
+                .HasForeignKey<Address>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Evaluation>()
                 .HasOne(e => e.Admin)

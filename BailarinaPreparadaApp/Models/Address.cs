@@ -1,11 +1,8 @@
-﻿namespace BailarinaPreparadaApp.DTOs.Account
+﻿namespace BailarinaPreparadaApp.Models
 {
-    public class UserDetailsResponse
+    public class Address
     {
-        public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string? PhoneNumber { get; set; }
+        public int AddressId { get; set; }
         public string Street { get; set; } = string.Empty;
         public string Number { get; set; } = string.Empty;
         public string? Complement { get; set; }
@@ -15,6 +12,7 @@
         public string Country { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
 
-        public DateTime DateOfBirth { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public User User { get; set; } = null!;
     }
 }

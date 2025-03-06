@@ -66,7 +66,19 @@ namespace BailarinaPreparadaApp.Services
                 Name = request.Name,
                 UserName = request.Email,
                 Email = request.Email,
-                IsAdmin = adminEmails!.Contains(request.Email)
+                IsAdmin = adminEmails!.Contains(request.Email),
+                DateOfBirth = request.DateOfBirth,
+                Address = new Address
+                {
+                    Street = request.Street,
+                    Number = request.Number,
+                    Complement = request.Complement,
+                    Neighborhood = request.Neighborhood,
+                    City = request.City,
+                    State = request.State,
+                    Country = request.Country,
+                    PostalCode = request.PostalCode
+                }
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);

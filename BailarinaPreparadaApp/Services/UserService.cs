@@ -21,8 +21,8 @@ namespace BailarinaPreparadaApp.Services
         public async Task<UserDetailsResponse> GetUserDetailsAsync(string? userId, string? currentUserEmail)
         {
             var user = userId == null
-                ? await _userManager.Users.FirstOrDefaultAsync(u => u.Email == currentUserEmail)
-                : await _userManager.FindByIdAsync(userId);
+                ? await _userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Email == currentUserEmail)
+                : await _userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -35,8 +35,15 @@ namespace BailarinaPreparadaApp.Services
                 Name = user.Name,
                 Email = user.Email!,
                 PhoneNumber = user.PhoneNumber,
-                City = user.City,
-                Country = user.Country
+                DateOfBirth = user.DateOfBirth,
+                Street = user.Address.Street,
+                Number = user.Address.Number,
+                Complement = user.Address.Complement,
+                Neighborhood = user.Address.Neighborhood,
+                City = user.Address.City,
+                State = user.Address.State,
+                Country = user.Address.Country,
+                PostalCode = user.Address.PostalCode
             };
 
             return response;
@@ -44,7 +51,9 @@ namespace BailarinaPreparadaApp.Services
 
         public async Task<UserResponse> EditUserAsync(string userId, EditUserRequest request)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users
+                .Include(u => u.Address)
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -55,8 +64,15 @@ namespace BailarinaPreparadaApp.Services
             user.Email = request.Email ?? user.Email;
             user.UserName = request.Email ?? user.Email;
             user.PhoneNumber = request.PhoneNumber;
-            user.Country = request.Country;
-            user.City = request.City;
+            user.DateOfBirth = request.DateOfBirth;
+            user.Address.Street = request.Street ?? user.Address.Street;
+            user.Address.Number = request.Number ?? user.Address.Number;
+            user.Address.Complement = request.Complement ?? user.Address.Complement;
+            user.Address.Neighborhood = request.Neighborhood ?? user.Address.Neighborhood;
+            user.Address.City = request.City ?? user.Address.City;
+            user.Address.State = request.State ?? user.Address.State;
+            user.Address.Country = request.Country ?? user.Address.Country;
+            user.Address.PostalCode = request.PostalCode ?? user.Address.PostalCode;
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -73,8 +89,15 @@ namespace BailarinaPreparadaApp.Services
                 Name = user.Name,
                 Email = user.Email!,
                 PhoneNumber = user.PhoneNumber,
-                Country = user.Country,
-                City = user.City
+                DateOfBirth = user.DateOfBirth,
+                Street = user.Address.Street,
+                Number = user.Address.Number,
+                Complement = user.Address.Complement,
+                Neighborhood = user.Address.Neighborhood,
+                City = user.Address.City,
+                State = user.Address.State,
+                Country = user.Address.Country,
+                PostalCode = user.Address.PostalCode
             };
 
             return response;
