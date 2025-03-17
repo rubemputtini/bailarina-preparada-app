@@ -13,12 +13,23 @@ export const login = async (email, password) => {
     }
 };
 
-export const register = async (name, email, password) => {
+export const register = async (formData) => {
     try {
         const response = await api.post('/Account/register', {
-          name,
-          email,
-          password
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            street: formData.street,
+            number: formData.number,
+            complement: formData.complement,
+            neighborhood: formData.neighborhood,
+            city: formData.city,
+            state: formData.state,
+            country: formData.country,
+            postalCode: formData.postalCode,
+            dateOfBirth: formData.dateOfBirth,
+            latitude: formData.latitude,
+            longitude: formData.longitude
         });
 
         const { token, message } = response.data;

@@ -3,29 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { register } from "../services/accountService";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import SignupForm from "../components/forms/SignupForm"
 import { Box, CircularProgress } from "@mui/material";
+import SignupStepper from "../components/SignupStepper";
 
 const SignupPage = () => {
-    const [userName, setUserName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
+    const handleRegister = async (formData) => {
         setLoading(true);
         setError(null);
 
         try {
-            await register(userName, email, password);
-
+            await register(formData);
             navigate("/dashboard");
         } catch (error) {
-            setError(error.message || 'Erro ao cadastrar, tente novamente.');
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -43,20 +37,9 @@ const SignupPage = () => {
                     <CircularProgress color="primary" />
                 </Box>
             ) : (
-                <SignupForm
-                    title="Crie sua conta"
-                    buttonText="Registrar"
-                    onSubmit={handleRegister}
-                    userName={userName}
-                    setUserName={setUserName}
-                    email={email}
-                    setEmail={setEmail}
-                    password={password}
-                    setPassword={setPassword}
-                    confirmPassword={confirmPassword}
-                    setConfirmPassword={setConfirmPassword}
+                <SignupStepper
+                    onRegister={handleRegister}
                     onLoginRedirect={handleLoginRedirect}
-                    disableSubmit={loading}
                     error={error}
                 />
             )}

@@ -43,7 +43,9 @@ namespace BailarinaPreparadaApp.Services
                 City = user.Address.City,
                 State = user.Address.State,
                 Country = user.Address.Country,
-                PostalCode = user.Address.PostalCode
+                PostalCode = user.Address.PostalCode,
+                Latitude = user.Address.Latitude,
+                Longitude = user.Address.Longitude
             };
 
             return response;
@@ -73,6 +75,8 @@ namespace BailarinaPreparadaApp.Services
             user.Address.State = request.State ?? user.Address.State;
             user.Address.Country = request.Country ?? user.Address.Country;
             user.Address.PostalCode = request.PostalCode ?? user.Address.PostalCode;
+            user.Address.Latitude = request.Latitude ?? user.Address.Latitude;
+            user.Address.Longitude = request.Longitude ?? user.Address.Longitude;
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -97,7 +101,9 @@ namespace BailarinaPreparadaApp.Services
                 City = user.Address.City,
                 State = user.Address.State,
                 Country = user.Address.Country,
-                PostalCode = user.Address.PostalCode
+                PostalCode = user.Address.PostalCode,
+                Latitude = user.Address.Latitude,
+                Longitude = user.Address.Longitude
             };
 
             return response;

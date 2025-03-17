@@ -77,7 +77,9 @@ namespace BailarinaPreparadaApp.Services
                     City = request.City,
                     State = request.State,
                     Country = request.Country,
-                    PostalCode = request.PostalCode
+                    PostalCode = request.PostalCode,
+                    Latitude = request.Latitude,
+                    Longitude = request.Longitude
                 }
             };
 

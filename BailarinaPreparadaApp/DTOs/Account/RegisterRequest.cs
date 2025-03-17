@@ -39,6 +39,9 @@ namespace BailarinaPreparadaApp.DTOs.Account
         [Required(ErrorMessage = "O CEP é obrigatório.")]
         public string PostalCode { get; set; } = string.Empty;
 
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
         [Required(ErrorMessage = "A data de nascimento é obrigatória.")]
         public DateTime DateOfBirth { get; set; }
     }
