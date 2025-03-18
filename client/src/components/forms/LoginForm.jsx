@@ -77,7 +77,6 @@ const LoginForm = ({
                                 sx={{
                                     backgroundColor: "#6c5c80",
                                     color: "#fff",
-                                    textTransform: "none",
                                     fontWeight: 600,
                                     fontFamily: "'Montserrat', sans-serif",
                                     "&:hover": { backgroundColor: "#5b4c6c" },

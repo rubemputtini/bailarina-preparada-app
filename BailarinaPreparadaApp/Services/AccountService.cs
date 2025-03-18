@@ -66,6 +66,7 @@ namespace BailarinaPreparadaApp.Services
                 Name = request.Name,
                 UserName = request.Email,
                 Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
                 IsAdmin = adminEmails!.Contains(request.Email),
                 DateOfBirth = request.DateOfBirth,
                 Address = new Address

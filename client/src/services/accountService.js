@@ -18,6 +18,7 @@ export const register = async (formData) => {
         const response = await api.post('/Account/register', {
             name: formData.name,
             email: formData.email,
+            phoneNumber: formData.phoneNumber,
             password: formData.password,
             street: formData.street,
             number: formData.number,

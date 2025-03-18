@@ -33,9 +33,7 @@ namespace BailarinaPreparadaApp.Services
 
             if (!trainings.Any())
             {
-                throw new NotFoundException(selectedMonth.HasValue
-                    ? $"Nenhum treino encontrado para o mês {selectedMonth} e ano {selectedYear}."
-                    : $"Nenhum treino encontrado para o ano {selectedYear}.");
+                return new List<RankingResponse>();
             }
 
             var ranking = trainings

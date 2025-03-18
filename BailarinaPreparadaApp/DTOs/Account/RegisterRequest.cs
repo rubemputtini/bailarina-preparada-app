@@ -12,6 +12,10 @@ namespace BailarinaPreparadaApp.DTOs.Account
         [EmailAddress(ErrorMessage = "O formato do E-mail é inválido.")]
         public string Email { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "O número de telefone do usuário é obrigatório.")]
+        [Phone(ErrorMessage = "O formato do número de telefone é inválido.")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "A senha é obrigatória.")]
         public string Password { get; set; } = string.Empty;
 

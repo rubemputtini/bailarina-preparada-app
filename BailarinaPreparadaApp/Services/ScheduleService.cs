@@ -71,7 +71,7 @@ namespace BailarinaPreparadaApp.Services
 
             if (dailySchedule == null)
             {
-                throw new NotFoundException("Planejamento diário não encontrado para o usuário.");
+                return new List<ScheduleTaskResponse>();
             }
 
             return dailySchedule;

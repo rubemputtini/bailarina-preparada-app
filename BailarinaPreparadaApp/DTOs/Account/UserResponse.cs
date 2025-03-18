@@ -7,7 +7,7 @@
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public bool IsAdmin { get; set; } = false;
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         public string Street { get; set; } = string.Empty;
         public string Number { get; set; } = string.Empty;

@@ -20,7 +20,7 @@ namespace BailarinaPreparadaApp.Services
 
             if (!exercises.Any())
             {
-                throw new NotFoundException("Nenhum exercício encontrado.");
+                return new List<ExerciseResponse>();
             }
 
             var response = exercises.Select(e => new ExerciseResponse

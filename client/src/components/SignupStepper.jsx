@@ -3,7 +3,7 @@ import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, Ale
 import { Person, Home, CheckCircle } from "@mui/icons-material";
 import AddressForm from "./forms/AddressForm";
 import PersonalInfoForm from "./forms/PersonalInfoForm";
-import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed } from "../utils/validators";
+import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "../utils/validators";
 
 const steps = [
     { label: "Usuário", icon: <Person /> },
@@ -11,7 +11,7 @@ const steps = [
 ];
 
 const initialFormState = {
-    name: "", email: "", dateOfBirth: "", password: "", confirmPassword: "",
+    name: "", email: "", dateOfBirth: "", phoneNumber: "", password: "", confirmPassword: "",
     street: "", number: "", complement: "", neighborhood: "", city: "",
     state: "", country: "", postalCode: ""
 };
@@ -30,7 +30,7 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error }) => {
     };
 
     const isFormValid = formData.name && isEmailValid(formData.email) &&
-        isDateValid(formData.dateOfBirth) &&
+        isDateValid(formData.dateOfBirth) && isPhoneValid(formData.phoneNumber) &&
         Object.values(passwordRequisites).every(Boolean) &&
         isPasswordConfirmed(formData.password, formData.confirmPassword);
 
