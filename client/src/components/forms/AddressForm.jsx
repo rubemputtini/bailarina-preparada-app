@@ -58,8 +58,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.street}
                 onChange={(e) => { setValue(e.target.value); updateAddressField("street", e.target.value); }}
-                sx={{ marginBottom: "1rem" }}
-            />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             {suggestions.status === "OK" && (
                 <List>
                     {suggestions.data.map((suggestion) => (
@@ -76,14 +78,20 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.number}
                 onChange={(e) => updateAddressField("number", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField label="Complemento"
                 fullWidth
                 variant="outlined"
                 size="small"
                 value={data.complement}
                 onChange={(e) => updateAddressField("complement", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField label="Bairro"
                 fullWidth
                 required
@@ -91,7 +99,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.neighborhood}
                 onChange={(e) => updateAddressField("neighborhood", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField
                 label="Cidade"
                 fullWidth
@@ -100,7 +111,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.city}
                 onChange={(e) => updateAddressField("city", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField
                 label="Estado"
                 fullWidth
@@ -109,7 +123,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.state}
                 onChange={(e) => updateAddressField("state", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField
                 label="País"
                 fullWidth
@@ -118,7 +135,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.country}
                 onChange={(e) => updateAddressField("country", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
             <TextField
                 label="CEP"
                 fullWidth
@@ -127,7 +147,10 @@ const AddressForm = ({ data, onChange }) => {
                 size="small"
                 value={data.postalCode}
                 onChange={(e) => updateAddressField("postalCode", e.target.value)}
-                sx={{ marginBottom: "1rem" }} />
+                sx={{
+                    marginBottom: "1rem",
+                    "& .MuiOutlinedInput-root": { borderRadius: "8px" }
+                }} />
         </Box>
     );
 };

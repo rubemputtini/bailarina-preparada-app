@@ -54,6 +54,7 @@ const LoginForm = ({
                                 variant="outlined"
                                 size="small"
                                 required
+                                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -66,6 +67,7 @@ const LoginForm = ({
                                 variant="outlined"
                                 size="small"
                                 required
+                                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                             />
                         </Grid>
                         <Grid item xs={12} display="flex" justifyContent="center">
@@ -75,12 +77,11 @@ const LoginForm = ({
                                 size="medium"
                                 disabled={disableSubmit}
                                 sx={{
+                                    minWidth: "120px",
                                     backgroundColor: "#6c5c80",
                                     color: "#fff",
                                     fontWeight: 600,
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    "&:hover": { backgroundColor: "#5b4c6c" },
-                                    padding: "0.5rem 1.5rem",
+                                    "&:hover": { backgroundColor: "#5b4c6c" }
                                 }}
                             >
                                 {buttonText}
