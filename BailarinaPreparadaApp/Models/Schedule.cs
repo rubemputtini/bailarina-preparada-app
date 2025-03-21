@@ -6,5 +6,7 @@
         public string UserId { get; set; } = string.Empty;
         public required User User { get; set; }
         public List<ScheduleTask> Entries { get; set; } = new List<ScheduleTask>();
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -164,7 +164,7 @@ const RankingPage = () => {
                                         align="center"
                                         style={{ color: "white", fontWeight: "bold" }}
                                     >
-                                        Pontos
+                                        Treinos
                                     </TableCell>
                                     <TableCell
                                         align="center"
@@ -211,7 +211,7 @@ const RankingPage = () => {
                                         <TableCell>
                                             {item.userName}
                                         </TableCell>
-                                        <TableCell align="center">{item.points}</TableCell>
+                                        <TableCell align="center">{item.trainingsCompleted}</TableCell>
                                         <TableCell align="center">{item.daysTrained}</TableCell>
                                     </TableRow>
                                 ))}

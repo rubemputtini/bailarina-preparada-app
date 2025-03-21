@@ -1,3 +1,7 @@
+import {
+  DirectionsRun, FitnessCenter, SelfImprovement, TheaterComedy, SportsGymnastics, ElectricBolt, AutoStories, Category
+} from "@mui/icons-material";
+
 import instagram from "../assets/instagram.svg";
 import youtube from "../assets/youtube.svg";
 import facebook from "../assets/facebook.svg"   
@@ -65,15 +69,15 @@ export const periods = [
 ];
 
 export const trainingCategories = [
-  "Alongamento",
-  "Ballet",
-  "Cardio",
-  "Contemporâneo",
-  "Jazz",
-  "Musculação",
-  "PBT",
-  "Potência",
-  "Outros"
+  { name: "Alongamento", icon: <SelfImprovement fontSize="large" /> },
+  { name: "Ballet", icon: <TheaterComedy fontSize="large" /> },
+  { name: "Cardio", icon: <DirectionsRun fontSize="large" /> },
+  { name: "Contemporâneo", icon: <SportsGymnastics fontSize="large" /> },
+  { name: "Jazz", icon: <TheaterComedy fontSize="large" /> },
+  { name: "Musculação", icon: <FitnessCenter fontSize="large" /> },
+  { name: "PBT", icon: <AutoStories fontSize="large" /> },
+  { name: "Potência", icon: <ElectricBolt fontSize="large" /> },
+  { name: "Outros", icon: <Category fontSize="large" /> },
 ];
 
 export const tasksColorsMap = {
@@ -81,6 +85,10 @@ export const tasksColorsMap = {
   blue: { tailwind: "bg-[var(--color-blue)] border-[var(--color-blue)]", hex: "#9bb1ff" },
   darkPurple: { tailwind: "bg-[var(--color-dark-purple)] border-[var(--color-dark-purple)] text-white", hex: "#6a1b9a" },
   lightPurple: { tailwind: "bg-[var(--color-light-purple)] border-[var(--color-light-purple)]", hex: "#9575cd" },
+  teal: { tailwind: "bg-[var(--color-teal)] border-[var(--color-teal)]", hex: "#80cbc4" },
+  peach: { tailwind: "bg-[var(--color-peach)] border-[var(--color-peach)]", hex: "#ffab91" },
+  softYellow: { tailwind: "bg-[var(--color-soft-yellow)] border-[var(--color-soft-yellow)]", hex: "#fff59d" },
+  pink: { tailwind: "bg-[var(--color-pink)] border-[var(--color-pink)]", hex: "#f48fb1" },
 };
 
 export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";

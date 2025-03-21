@@ -41,12 +41,12 @@ namespace BailarinaPreparadaApp.Services
                 .Select(g => new RankingResponse
                 {
                     UserName = g.Key.Name,
-                    Points = g.Count(),
+                    TrainingsCompleted = g.Count(),
                     DaysTrained = g.Select(t => t.Date.Date).Distinct().Count(),
                     Month = selectedMonth ?? 0,
                     Year = selectedYear
                 })
-                .OrderByDescending(r => r.Points)
+                .OrderByDescending(r => r.TrainingsCompleted)
                 .ThenByDescending(r => r.DaysTrained)
                 .ToList();
 

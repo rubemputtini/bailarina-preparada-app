@@ -73,7 +73,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
                         className="p-1 w-full text-center text-xs md:text-sm"
                         placeholder="TREINO"
                     />
-                    <div className="flex justify-center gap-2 mt-2">
+                    <div className="grid grid-cols-4 gap-2 mt-2 p-2">
                         {colors.map((color) => (
                             <button
                                 key={color}
@@ -84,18 +84,18 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
                             />
                         ))}
                     </div>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 my-2">
+                        <button
+                            onClick={() => setIsAdding(false)}
+                            className="text-red-500 hover:text-red-800"
+                        >
+                            <FaTimes size={16} />
+                        </button>
                         <button
                             onClick={handleAddEvent}
                             className="text-green-600 hover:text-green-800"
                         >
                             <FaCheck size={16} />
-                        </button>
-                        <button
-                            onClick={() => setIsAdding(false)}
-                            className="text-gray-500 hover:text-red-500"
-                        >
-                            <FaTimes size={16} />
                         </button>
                     </div>
                 </div>

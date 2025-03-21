@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import {
-    Box,
-    Typography,
-    TextField,
-    Button,
-    MenuItem,
-    Grid,
-    Alert,
-    CircularProgress,
-} from "@mui/material";
-import { CheckCircle } from "@mui/icons-material";
-import SuccessDialog from "../components/dialogs/SuccessDialog";
+import React, { useState, useEffect } from "react";
+import { Box, LinearProgress, IconButton } from "@mui/material";
+import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
+import Confetti from "react-confetti";
+import { useNavigate } from "react-router-dom";
+import { createTraining } from "../services/trainingService";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { createTraining } from "../services/trainingService";
+import StepDate from "../components/StepDate";
+import StepCategory from "../components/StepCategory";
+import StepDescription from "../components/StepDescription";
+import StepConfirm from "../components/StepConfirm";
+import TrainingDialog from "../components/dialogs/TrainingDialog";
 import { trainingCategories } from "../utils/constants";
-import { useNavigate } from "react-router-dom";
 
 const TrainingPage = () => {
+    const [step, setStep] = useState(1);
     const today = new Date().toISOString().split("T")[0];
     const [newTraining, setNewTraining] = useState({
         date: today,
@@ -25,161 +22,91 @@ const TrainingPage = () => {
         description: "",
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
-
+    const [showDialog, setShowDialog] = useState(false);
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
-    const handleCreateTraining = async () => {
-        if (!newTraining.date || !newTraining.category) {
-            setError("A data e a categoria são obrigatórias.");
+    useEffect(() => {
+        if (success) {
+            setShowDialog(true);
+            setTimeout(() => {
+                setShowDialog(false);
+                navigate("/dashboard");
+            }, 5000);
+        }
+    }, [success, navigate]);
+
+    const handleNext = () => {
+        if (step === 2 && !newTraining.category) {
+            setError(true);
             return;
         }
+        setError(false);
+        setStep((prev) => prev + 1);
+    };
+
+    const handleBack = () => setStep((prev) => prev - 1);
+
+    const handleSave = async () => {
         setLoading(true);
         try {
-            await createTraining(
-                newTraining.date,
-                newTraining.category,
-                newTraining.description
-            );
+            await createTraining(newTraining.date, newTraining.category, newTraining.description);
             setSuccess(true);
-            setNewTraining({ date: today, category: "", description: "" });
-            setError("");
         } catch (err) {
-            setError("Erro ao registrar treino. Tente novamente.");
+            alert("Erro ao registrar treino. Tente novamente.");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDialogClose = () => {
-        setSuccess(false);
-        navigate("/dashboard");
-    };
-
     return (
         <>
+            {success && <Confetti numberOfPieces={500} recycle={false} />}
             <Nav />
-            <Box
-                sx={{
-                    padding: "32px",
-                    minHeight: "100vh",
-                }}
-            >
-                <Box
-                    sx={{
-                        maxWidth: "400px",
-                        width: "100%",
-                        backgroundColor: "#FFFFFF",
-                        borderRadius: "12px",
-                        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
+            <Box sx={{ minHeight: "100vh", padding: "32px" }}>
+                <Box sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
+                    <Box sx={{
+                        backgroundColor: "#c5e1e9",
+                        borderRadius: "32px",
                         padding: "24px",
-                        margin: "0 auto",
-                    }}
-                >
-                    <Typography
-                        variant="h5"
-                        sx={{ fontWeight: "bold", color: "#4A148C", marginBottom: "16px" }}
-                        align="center"
-                    >
-                        Registrar Novo Treino
-                    </Typography>
+                        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+                    }}>
+                        <LinearProgress
+                            variant="determinate"
+                            value={(step / 4) * 100}
+                            sx={{
+                                marginBottom: "16px",
+                                borderRadius: "8px",
+                                height: "8px",
+                                backgroundColor: "#FFFFFF",
+                                "& .MuiLinearProgress-bar": { backgroundColor: "#00C853" }
+                            }}
+                        />
 
-                    {loading ? (
-                        <Box display="flex" justifyContent="center" my={3}>
-                            <CircularProgress />
-                        </Box>
-                    ) : (
-                        <>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Data"
-                                        type="date"
-                                        value={newTraining.date}
-                                        onChange={(e) =>
-                                            setNewTraining((prev) => ({ ...prev, date: e.target.value }))
-                                        }
-                                        fullWidth
-                                        InputProps={{ inputProps: { max: today } }}
-                                        InputLabelProps={{ shrink: true }}
-                                        required
-                                    />
-                                </Grid>
+                        {step === 1 && <StepDate newTraining={newTraining} setNewTraining={setNewTraining} today={today} />}
+                        {step === 2 && <StepCategory newTraining={newTraining} setNewTraining={setNewTraining} error={error} setError={setError} trainingCategories={trainingCategories} />}
+                        {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
+                        {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} />}
 
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Categoria"
-                                        value={newTraining.category}
-                                        onChange={(e) =>
-                                            setNewTraining((prev) => ({ ...prev, category: e.target.value }))
-                                        }
-                                        fullWidth
-                                        select
-                                        required
-                                    >
-                                        {trainingCategories.map((category) => (
-                                            <MenuItem key={category} value={category}>
-                                                {category}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Descrição"
-                                        value={newTraining.description}
-                                        onChange={(e) =>
-                                            setNewTraining((prev) => ({ ...prev, description: e.target.value }))
-                                        }
-                                        fullWidth
-                                        multiline
-                                        rows={3}
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            {error && (
-                                <Alert severity="error" sx={{ marginTop: "16px" }}>
-                                    {error}
-                                </Alert>
+                        {/* Botões de navegação */}
+                        <Box display="flex" justifyContent="space-between" mt={3}>
+                            {step > 1 && (
+                                <IconButton onClick={handleBack} sx={{ color: "#323232" }}>
+                                    <ArrowBackIosNew fontSize="large" />
+                                </IconButton>
                             )}
-                            <Box display="flex" justifyContent="center" mt={3}>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        backgroundColor: "#4A148C",
-                                        color: "#FFFFFF",
-                                        fontWeight: "bold",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        padding: "8px 16px",
-                                        fontSize: "16px",
-                                        borderRadius: "8px",
-                                        transition: "transform 0.2s",
-                                        "&:hover": {
-                                            backgroundColor: "#6A1B9A",
-                                            transform: "scale(1.02)",
-                                        },
-                                    }}
-                                    onClick={handleCreateTraining}
-                                >
-                                    <CheckCircle /> Registrar
-                                </Button>
-                            </Box>
-                        </>
-                    )}
+                            {step < 4 && (
+                                <IconButton onClick={handleNext} sx={{ color: "#323232" }}>
+                                    <ArrowForwardIos fontSize="large" />
+                                </IconButton>
+                            )}
+                        </Box>
+                    </Box>
                 </Box>
-                {success && (
-                    <SuccessDialog
-                        message="Treino registrado com sucesso!"
-                        onClose={handleDialogClose}
-                    />
-                )}
             </Box>
             <Footer />
+            <TrainingDialog showDialog={showDialog} setShowDialog={setShowDialog} />
         </>
     );
 };

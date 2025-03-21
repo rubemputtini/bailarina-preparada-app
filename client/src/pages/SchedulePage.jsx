@@ -13,13 +13,19 @@ import { scheduleForm, daysOfWeek, periods } from "../utils/constants";
 const SchedulePage = () => {
     const [events, setEvents] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
-    const [suggestedDate, setSuggestedDate] = useState("10/03/2024"); //TODO
+    const [suggestedDate, setSuggestedDate] = useState();
 
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
                 const userId = getUserId();
                 const response = await getUserSchedule(userId);
+
+                const lastUpdate = new Date(response.updatedAt || response.createdAt);
+                const nextSuggestedDate = new Date(lastUpdate);
+                nextSuggestedDate.setMonth(nextSuggestedDate.getMonth() + 3);
+
+                setSuggestedDate(nextSuggestedDate.toLocaleDateString("pt-BR"));
 
                 const formattedEvents = response.tasks.map((task) => ({
                     id: task.scheduleTaskId,
@@ -47,11 +53,13 @@ const SchedulePage = () => {
     const handleSave = async () => {
         if (events.length === 0) return;
 
-        const scheduleId = events[0]?.scheduleId;
+        let scheduleId = events[0]?.scheduleId;
 
         if (!scheduleId) {
-            console.error("Erro: scheduleId está undefined ou null.");
-            return;
+            const userId = getUserId();
+            const response = await getUserSchedule(userId);
+
+            scheduleId = response.scheduleId;
         }
 
         const payload = {
@@ -124,21 +132,24 @@ const SchedulePage = () => {
                         </Paper>
                     </div>
                     <div className="mt-6 text-center">
-                        <Typography variant="h5" className="text-gray-300">
-                            Próxima atualização sugerida: <span className="font-bold">{suggestedDate}</span>
-                        </Typography>
-                        <Typography variant="body1" className="text-gray-300" sx={{ mt: 2 }}>
-                            Precisa de um novo planejamento?{" "}
+                        <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
+                            <span>Próxima atualização sugerida:</span>
+                            <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center mt-2 text-gray-300 text-base">
+                            <span>Precisa de um novo planejamento?</span>
                             <a
                                 href={scheduleForm}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[#c5e1e9] font-bold underline hover:text-[#8ad9ee]"
+                                className="text-[#c5e1e9] font-bold underline hover:text-[#8ad9ee] sm:ml-2 sm:whitespace-nowrap"
                             >
                                 Solicite aqui.
                             </a>
-                        </Typography>
+                        </div>
                     </div>
+
                 </Container>
                 <Footer />
             </div>

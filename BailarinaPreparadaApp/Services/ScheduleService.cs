@@ -18,6 +18,13 @@ namespace BailarinaPreparadaApp.Services
 
         public async Task<ScheduleResponse> GetUserScheduleAsync(string userId)
         {
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("Usuário não encontrado.");
+            }
+
             var schedule = await _dbContext.Schedules
                 .Include(s => s.Entries)
                 .Where(s => s.UserId == userId)
@@ -26,14 +33,24 @@ namespace BailarinaPreparadaApp.Services
 
             if (schedule == null)
             {
-                throw new NotFoundException("Planejamento não encontrado para o usuário.");
+                schedule = new Schedule
+                {
+                    UserId = userId,
+                    User = user,
+                    Entries = new List<ScheduleTask>()
+                };
+
+                _dbContext.Schedules.Add(schedule);
+                await _dbContext.SaveChangesAsync();
             }
 
             var response = new ScheduleResponse
             {
                 ScheduleId = schedule.ScheduleId,
                 UserId = schedule.UserId,
-                UserName = (await _dbContext.Users.FindAsync(schedule.UserId))?.Name ?? string.Empty,
+                UserName = user.Name,
+                CreatedAt = schedule.CreatedAt,
+                UpdatedAt = schedule.UpdatedAt,
                 Tasks = schedule.Entries.Select(e => new ScheduleTaskResponse
                 {
                     ScheduleTaskId = e.ScheduleTaskId,
@@ -90,6 +107,8 @@ namespace BailarinaPreparadaApp.Services
             {
                 UserId = request.UserId,
                 User = user,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 Entries = request.Tasks.Select(t => new ScheduleTask
                 {
                     DayOfWeek = t.DayOfWeek,
@@ -146,6 +165,7 @@ namespace BailarinaPreparadaApp.Services
                 }
             }
 
+            schedule.UpdatedAt = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
         }
 

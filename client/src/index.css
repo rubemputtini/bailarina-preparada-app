@@ -12,6 +12,10 @@
   --color-blue: #9bb1ff;
   --color-dark-purple: #6a1b9a;
   --color-light-purple: #9575cd;
+  --color-teal: #80cbc4;
+  --color-peach: #ffab91;
+  --color-soft-yellow: #fff59d;
+  --color-pink: #f48fb1;
 }
 
 @layer utilities {
