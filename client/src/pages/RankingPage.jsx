@@ -5,21 +5,19 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import {
     Container,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
+    Box,
     Typography,
     CircularProgress,
-    Box,
     Alert,
     IconButton,
     Menu,
     MenuItem,
     Tooltip,
 } from "@mui/material";
-import { Refresh, FilterList, EmojiEvents } from "@mui/icons-material";
+import { Refresh, FilterList } from "@mui/icons-material";
+import { getUserId } from "../services/auth";
+import TopRankingCard from "../components/ranking/TopRankingCard";
+import RankingRow from "../components/ranking/RankingRow";
 
 const RankingPage = () => {
     const [rankingData, setRankingData] = useState([]);
@@ -28,6 +26,7 @@ const RankingPage = () => {
     const [month, setMonth] = useState(null);
     const [year, setYear] = useState(new Date().getFullYear());
     const [anchorEl, setAnchorEl] = useState(null);
+    const currentUserId = getUserId()
 
     const fetchRanking = useCallback(async () => {
         try {
@@ -46,14 +45,8 @@ const RankingPage = () => {
         fetchRanking();
     }, [fetchRanking]);
 
-    const handleOpenFilters = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseFilters = () => {
-        setAnchorEl(null);
-    };
-
+    const handleOpenFilters = (event) => setAnchorEl(event.currentTarget);
+    const handleCloseFilters = () => setAnchorEl(null);
     const handleSetMonth = (value) => {
         setMonth(value);
         handleCloseFilters();
@@ -64,20 +57,33 @@ const RankingPage = () => {
         return selectedMonth ? `${selectedMonth}/${year}` : `${year}`;
     };
 
+    const getMedalColor = (index) => {
+        return index === 0
+            ? "#FFD700"
+            : index === 1
+                ? "#C0C0C0"
+                : index === 2
+                    ? "#CD7F32"
+                    : "#9c27b0";
+    };
+
+    const rankingDataTop3 = rankingData.slice(0, 3);
+    const rankingDataOthers = rankingData.slice(3);
+
     return (
-        <div className="min-h-screen flex flex-col ">
+        <div className="min-h-screen flex flex-col">
             <Nav />
-            <Container className="flex-grow py-8">
+            <Container className="flex-grow py-10">
                 <Typography
                     variant="h4"
                     align="center"
-                    gutterBottom
                     className="text-[#c5e1e9]"
                     sx={{ fontWeight: "bold" }}
                 >
                     Ranking CBP
                 </Typography>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+
+                <Box display="flex" justifyContent="space-between" alignItems="center" mt={3} mb={2}>
                     <Tooltip title="Atualizar Ranking">
                         <IconButton style={{ color: "#c5e1e9" }} onClick={fetchRanking}>
                             <Refresh />
@@ -88,21 +94,11 @@ const RankingPage = () => {
                             <FilterList />
                         </IconButton>
                     </Tooltip>
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleCloseFilters}
-                    >
-                        <MenuItem
-                            onClick={() => handleSetMonth(null)}
-                            selected={month === null}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            ANUAL
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseFilters}>
+                        <MenuItem onClick={() => handleSetMonth(null)} selected={month === null}>
+                            <strong>ANUAL</strong>
                         </MenuItem>
-                        <MenuItem disabled>
-                            <strong>Mês</strong>
-                        </MenuItem>
+                        <MenuItem disabled><strong>Mês</strong></MenuItem>
                         {months.map((option) => (
                             <MenuItem
                                 key={option.value}
@@ -112,23 +108,13 @@ const RankingPage = () => {
                                 {option.label}
                             </MenuItem>
                         ))}
-                        <MenuItem disabled>
-                            <strong>Ano</strong>
+                        <MenuItem disabled><strong>Ano</strong></MenuItem>
+                        <MenuItem selected={year === new Date().getFullYear()} onClick={() => setYear(new Date().getFullYear())}>
+                            {new Date().getFullYear()}
                         </MenuItem>
-                        {Array.from({ length: 1 }).map((_, idx) => {
-                            const yearOption = new Date().getFullYear() - idx;
-                            return (
-                                <MenuItem
-                                    key={yearOption}
-                                    selected={year === yearOption}
-                                    onClick={() => setYear(yearOption)}
-                                >
-                                    {yearOption}
-                                </MenuItem>
-                            );
-                        })}
                     </Menu>
                 </Box>
+
                 <Typography
                     variant="h6"
                     align="center"
@@ -137,86 +123,39 @@ const RankingPage = () => {
                 >
                     {getSelectedPeriod()}
                 </Typography>
+
                 {loading ? (
-                    <Box display="flex" justifyContent="center" my={22}>
+                    <Box display="flex" justifyContent="center" my={10}>
                         <CircularProgress />
                     </Box>
                 ) : error ? (
                     <Alert severity="error">{error}</Alert>
                 ) : (
-                    <Box sx={{ overflowX: "auto" }}>
-                        <Table className="bg-white">
-                            <TableHead style={{ backgroundColor: "#9c27b0" }}>
-                                <TableRow>
-                                    <TableCell
-                                        align="center"
-                                        style={{ color: "white", fontWeight: "bold" }}
-                                    >
-                                        Posição
-                                    </TableCell>
-                                    <TableCell
-                                        align="left"
-                                        style={{ color: "white", fontWeight: "bold" }}
-                                    >
-                                        Nome
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        style={{ color: "white", fontWeight: "bold" }}
-                                    >
-                                        Treinos
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        style={{ color: "white", fontWeight: "bold" }}
-                                    >
-                                        Dias Treinados
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rankingData.map((item, index) => (
-                                    <TableRow
-                                        key={index}
-                                        style={{
-                                            backgroundColor:
-                                                index < 3 ? "#f3f3f3" : "transparent"
-                                        }}
-                                        className="hover:bg-gray-100 transition-all duration-200"
-                                    >
-                                        <TableCell>
-                                            <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-                                                {index < 3 ? (
-                                                    <EmojiEvents
-                                                        style={{
-                                                            color:
-                                                                index === 0
-                                                                    ? "#FFD700"
-                                                                    : index === 1
-                                                                        ? "#C0C0C0"
-                                                                        : "#CD7F32",
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <Box
-                                                        style={{
-                                                            width: "24px",
-                                                            height: "24px",
-                                                        }}
-                                                    />
-                                                )}
-                                                {index + 1}
-                                            </Box>
-                                        </TableCell>
-                                        <TableCell>
-                                            {item.userName}
-                                        </TableCell>
-                                        <TableCell align="center">{item.trainingsCompleted}</TableCell>
-                                        <TableCell align="center">{item.daysTrained}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                    <Box>
+                        <Box className="grid md:grid-cols-3 gap-4 mt-6 mb-10">
+                            {rankingDataTop3.map((user, index) => (
+                                <TopRankingCard
+                                    key={index}
+                                    user={user}
+                                    index={index}
+                                    getMedalColor={getMedalColor}
+                                />
+                            ))}
+                        </Box>
+                        <Box className="mt-6 max-h-[500px] overflow-y-auto">
+                            {rankingDataOthers.map((user, index) => {
+                                const rank = index + 4;
+                                const isCurrentUser = user.userId === currentUserId;
+                                return (
+                                    <RankingRow
+                                        key={index + 3}
+                                        user={user}
+                                        rank={rank}
+                                        isCurrentUser={isCurrentUser}
+                                    />
+                                );
+                            })}
+                        </Box>
                     </Box>
                 )}
             </Container>

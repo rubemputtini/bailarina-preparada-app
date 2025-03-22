@@ -40,6 +40,7 @@ namespace BailarinaPreparadaApp.Services
                 .GroupBy(t => t.User)
                 .Select(g => new RankingResponse
                 {
+                    UserId = g.Key.Id,
                     UserName = g.Key.Name,
                     TrainingsCompleted = g.Count(),
                     DaysTrained = g.Select(t => t.Date.Date).Distinct().Count(),

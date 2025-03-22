@@ -1,7 +1,7 @@
 import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
-import { tasksColorsMap } from "../utils/constants";
-import { deleteScheduleTask } from "../services/scheduleTaskService";
+import { tasksColorsMap } from "../../utils/constants";
+import { deleteScheduleTask } from "../../services/scheduleTaskService";
 
 const DraggableEvent = ({ event, isEditing, setEvents }) => {
     const [{ isDragging }, drag] = useDrag(() => ({

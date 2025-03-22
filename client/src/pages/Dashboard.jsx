@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getDailySchedule, getRankingMonthTop5, getYearlyTrainingDaysCount } from "../services/dashboardService";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
-import RegisterTrainingButton from "../components/RegisterTrainingButton";
+import RegisterTrainingButton from "../components/training/RegisterTrainingButton";
 import NotificationsCard from "../components/cards/NotificationsCard";
 import CompletedTrainingCard from "../components/cards/CompletedTrainingCard";
 import RankingTop5Card from "../components/cards/RankingTop5Card";

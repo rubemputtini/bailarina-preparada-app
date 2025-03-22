@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from "@mui/material";
-import { trainingCategories } from "../utils/constants";
+import { trainingCategories } from "../../utils/constants";
 
 const StepCategory = ({ newTraining, setNewTraining, error, setError }) => {
     return (

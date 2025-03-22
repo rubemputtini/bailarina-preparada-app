@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import CalendarSummary from "../components/CalendarSummary";
+import CalendarSummary from "../components/calendar/CalendarSummary";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { getCalendarSummary } from "../services/calendarService";
@@ -43,16 +43,7 @@ const CalendarPage = () => {
     };
 
     const handleNavigation = ({ activeStartDate }) => {
-        const minDate = new Date(2025, 0, 1);
-        const maxDate = new Date();
-
-        if (activeStartDate < minDate) {
-            setCurrentMonth(minDate);
-        } else if (activeStartDate > maxDate) {
-            setCurrentMonth(maxDate);
-        } else {
-            setCurrentMonth(activeStartDate);
-        }
+        setCurrentMonth(activeStartDate);
     };
 
     if (error) {
@@ -71,69 +62,67 @@ const CalendarPage = () => {
             <Box
                 sx={{
                     padding: "16px",
-                    minHeight: "100vh",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                 }}
             >
-                <Box
+                <Typography
+                    variant="h4"
                     sx={{
-                        width: "100%",
-                        maxWidth: "500px",
+                        fontWeight: "800",
                         textAlign: "center",
-                        backgroundColor: "#FFFFFF",
-                        borderRadius: "12px",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        padding: "24px",
+                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        marginBottom: "24px",
+                        fontSize: { xs: "2rem", md: "2.5rem" },
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        sx={{ fontWeight: "bold", color: "#4A148C", marginBottom: "16px" }}
+                    Frequência de Treinos
+                </Typography>
+                {loading ? (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            minHeight: "300px",
+                        }}
                     >
-                        Frequência de Treinos
-                    </Typography>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <Calendar
+                        tileClassName={getTileClassName}
+                        onActiveStartDateChange={handleNavigation}
+                        showNeighboringMonth={false}
+                        formatShortWeekday={(locale, date) =>
+                            date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
+                        }
+                        maxDate={new Date()}
+                        tileDisabled={() => true}
+                        navigationLabel={({ date }) => (
+                            <Box sx={{ textAlign: "center", lineHeight: 1.2 }}>
+                                <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "1rem", lineHeight: 1 }}>
+                                    {date.getFullYear()}
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem", lineHeight: 1 }}>
+                                    {date.toLocaleString("pt-BR", { month: "long" })}
+                                </Typography>
+                            </Box>
+                        )}
+                        prev2Label={null}
+                        next2Label={null}
+                        view="month"
+                        defaultView="month"
+                        allowPartialRange={false}
+                        value={currentMonth}
+                    />
+                )}
 
-                    {loading ? (
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                minHeight: "300px",
-                            }}
-                        >
-                            <CircularProgress />
-                        </Box>
-                    ) : (
-                        <Calendar
-                            tileClassName={getTileClassName}
-                            onActiveStartDateChange={handleNavigation}
-                            showNeighboringMonth={false}
-                            minDate={new Date(2025, 0, 1)}
-                            maxDate={new Date()}
-                            navigationLabel={({ date }) => (
-                                <div>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                        {date.getFullYear()}
-                                    </Typography>
-                                    <Typography sx={{ fontWeight: "medium" }}>
-                                        {date.toLocaleString("pt-BR", { month: "long" })}
-                                    </Typography>
-                                </div>
-                            )}
-                            prev2Label={null}
-                            next2Label={null}
-                            view="month"
-                            defaultView="month"
-                            allowPartialRange={false}
-                        />
-                    )}
-
-                    <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
-                </Box>
+                <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
             </Box>
             <Footer />
         </>

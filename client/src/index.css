@@ -67,76 +67,58 @@ h3 {
 .training-day {
   background-color: var(--color-dark-purple) !important;
   color: white !important;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 6px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Estilo geral do calendário */
 .react-calendar {
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
   margin: 0 auto;
   background-color: #fff;
   border: none;
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px;
 }
 
 .react-calendar__tile {
-  height: 50px !important;
-  width: 50px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 1 / 1;
+  max-width: 36px;
+  padding: 4px !important;
   font-weight: bold;
   border-radius: 50%;
-  margin: 4px;
   transition: background-color 0.3s;
-  text-decoration: none !important;
+  transform: scale(0.75);
+  font-size: 1.2rem !important;
 }
 
-/* Navegação do calendário */
+/* Ajustando os botões de navegação */
 .react-calendar__navigation button {
   color: var(--color-dark-purple);
   font-weight: bold;
   background: none;
   border: none;
-  padding: 8px;
-  margin: 4px;
+  padding: 6px;
+  margin: 2px;
   border-radius: 8px;
   transition: background-color 0.3s;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .react-calendar__navigation button:hover {
   background-color: #f0f0f0;
 }
 
-.react-calendar__navigation button:disabled {
-  color: #ccc;
-  cursor: not-allowed;
+.react-calendar__month-view__weekdays__weekday {
+  color: var(--color-dark-purple);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  font-family: var(--secondary-font);
 }
 
-/* Ajuste de navegação para alinhar ano e mês */
-.react-calendar__navigation__label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+  border: none !important;
   cursor: default;
-  color: inherit;
-}
-
-.react-calendar__navigation__label > div {
-  margin: 0;
-  padding: 0;
 }

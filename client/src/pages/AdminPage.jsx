@@ -12,8 +12,8 @@ import ConfirmationDialog from "../components/dialogs/ConfirmationDialog";
 import SuccessDialog from "../components/dialogs/SuccessDialog";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../services/accountService";
-import SearchField from "../components/SearchField";
-import UserTable from "../components/UserTable";
+import SearchField from "../components/admin/SearchField";
+import UserTable from "../components/admin/UserTable";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);

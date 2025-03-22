@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDrop } from "react-dnd";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import DraggableEvent from "./DraggableEvent";
-import { tasksColorsMap } from "../utils/constants";
+import { tasksColorsMap } from "../../utils/constants";
 
 const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) => {
     const [newEventTitle, setNewEventTitle] = useState("");

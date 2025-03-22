@@ -4,7 +4,7 @@ import { register } from "../services/accountService";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Box, CircularProgress } from "@mui/material";
-import SignupStepper from "../components/SignupStepper";
+import SignupStepper from "../components/signup/SignupStepper";
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false);

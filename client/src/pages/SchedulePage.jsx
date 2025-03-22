@@ -7,7 +7,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { getUserSchedule, updateSchedule } from "../services/scheduleService";
 import { getUserId } from "../services/auth";
-import DroppableSlot from "../components/DroppableSlot";
+import DroppableSlot from "../components/schedule/DroppableSlot";
 import { scheduleForm, daysOfWeek, periods } from "../utils/constants";
 
 const SchedulePage = () => {
@@ -85,7 +85,7 @@ const SchedulePage = () => {
                 <Nav />
                 <Container className="flex-grow py-6">
                     <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h4" className="text-[#c5e1e9] font-bold">
+                        <Typography variant="h4" className="text-[#c5e1e9]">
                             Planejamento Semanal
                         </Typography>
                         <IconButton onClick={isEditing ? handleSave : handleToggleEdit} sx={{ color: "#c5e1e9" }}>

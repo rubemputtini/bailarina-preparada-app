@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { createTraining } from "../services/trainingService";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import StepDate from "../components/StepDate";
-import StepCategory from "../components/StepCategory";
-import StepDescription from "../components/StepDescription";
-import StepConfirm from "../components/StepConfirm";
+import StepDate from "../components/training/StepDate";
+import StepCategory from "../components/training/StepCategory";
+import StepDescription from "../components/training/StepDescription";
+import StepConfirm from "../components/training/StepConfirm";
 import TrainingDialog from "../components/dialogs/TrainingDialog";
 import { trainingCategories } from "../utils/constants";
 
@@ -62,7 +62,6 @@ const TrainingPage = () => {
 
     return (
         <>
-            {success && <Confetti numberOfPieces={500} recycle={false} />}
             <Nav />
             <Box sx={{ minHeight: "100vh", padding: "32px" }}>
                 <Box sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
@@ -89,7 +88,6 @@ const TrainingPage = () => {
                         {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
                         {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} />}
 
-                        {/* Botões de navegação */}
                         <Box display="flex" justifyContent="space-between" mt={3}>
                             {step > 1 && (
                                 <IconButton onClick={handleBack} sx={{ color: "#323232" }}>
@@ -106,6 +104,7 @@ const TrainingPage = () => {
                 </Box>
             </Box>
             <Footer />
+            {success && <Confetti numberOfPieces={500} recycle={false} />}
             <TrainingDialog showDialog={showDialog} setShowDialog={setShowDialog} />
         </>
     );

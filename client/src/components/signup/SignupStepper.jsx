@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, Alert } from "@mui/material";
 import { Person, Home, CheckCircle } from "@mui/icons-material";
-import AddressForm from "./forms/AddressForm";
-import PersonalInfoForm from "./forms/PersonalInfoForm";
-import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "../utils/validators";
+import AddressForm from "../forms/AddressForm";
+import PersonalInfoForm from "../forms/PersonalInfoForm";
+import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "../../utils/validators";
 
 const steps = [
     { label: "Usuário", icon: <Person /> },

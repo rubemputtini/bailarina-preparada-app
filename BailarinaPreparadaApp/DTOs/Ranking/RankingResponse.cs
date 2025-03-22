@@ -2,6 +2,7 @@
 {
     public class RankingResponse
     {
+        public string UserId { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public int TrainingsCompleted { get; set; }
         public int DaysTrained { get; set; }
