@@ -6,18 +6,18 @@ using System.Security.Claims;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/calendars")]
     [Authorize]
-    public class CalendarController : ControllerBase
+    public class CalendarsController : ControllerBase
     {
         private readonly CalendarService _calendarService;
 
-        public CalendarController(CalendarService calendarService)
+        public CalendarsController(CalendarService calendarService)
         {
             _calendarService = calendarService;
         }
 
-        [HttpGet("calendar-summary")]
+        [HttpGet("summary")]
         public async Task<IActionResult> GetCalendarSummary([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

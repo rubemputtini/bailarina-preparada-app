@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/admin")]
     [Authorize(Roles = "admin")]
     public class AdminController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(new { users, totalUsers });
         }
 
-        [HttpGet("user-evaluations/{userId}")]
+        [HttpGet("users/{userId}/evaluations")]
         public async Task<IActionResult> GetUserEvaluations(string userId)
         {
             var evaluations = await _adminService.GetUserEvaluationsAsync(userId);

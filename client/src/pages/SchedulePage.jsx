@@ -5,8 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaEdit, FaCheck } from "react-icons/fa";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { getUserSchedule, updateSchedule } from "../services/scheduleService";
-import { getUserId } from "../services/auth";
+import { getMySchedule, updateSchedule } from "../services/scheduleService";
 import DroppableSlot from "../components/schedule/DroppableSlot";
 import { scheduleForm, daysOfWeek, periods } from "../utils/constants";
 
@@ -18,8 +17,7 @@ const SchedulePage = () => {
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
-                const userId = getUserId();
-                const response = await getUserSchedule(userId);
+                const response = await getMySchedule();
 
                 const lastUpdate = new Date(response.updatedAt || response.createdAt);
                 const nextSuggestedDate = new Date(lastUpdate);
@@ -56,8 +54,7 @@ const SchedulePage = () => {
         let scheduleId = events[0]?.scheduleId;
 
         if (!scheduleId) {
-            const userId = getUserId();
-            const response = await getUserSchedule(userId);
+            const response = await getMySchedule();
 
             scheduleId = response.scheduleId;
         }

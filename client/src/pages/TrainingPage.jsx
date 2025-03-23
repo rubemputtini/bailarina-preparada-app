@@ -88,7 +88,12 @@ const TrainingPage = () => {
                         {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
                         {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} />}
 
-                        <Box display="flex" justifyContent="space-between" mt={3}>
+                        <Box
+                            display="flex"
+                            justifyContent={step === 1 ? "flex-end" : "space-between"}
+                            alignItems="center"
+                            mt={3}
+                        >
                             {step > 1 && (
                                 <IconButton onClick={handleBack} sx={{ color: "#323232" }}>
                                     <ArrowBackIosNew fontSize="large" />

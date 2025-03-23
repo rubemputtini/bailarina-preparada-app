@@ -8,13 +8,13 @@ using System.Security.Claims;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/schedules")]
     [Authorize]
-    public class ScheduleController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
         private readonly ScheduleService _scheduleService;
 
-        public ScheduleController(ScheduleService scheduleService)
+        public SchedulesController(ScheduleService scheduleService)
         {
             _scheduleService = scheduleService;
         }
@@ -22,12 +22,35 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserSchedule(string userId)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+
+            if (!isAdmin && currentUserId != userId)
+            {
+                throw new UnauthorizedException("Usuário não autorizado.");
+            }
+
             var schedule = await _scheduleService.GetUserScheduleAsync(userId);
 
             return Ok(schedule);
         }
 
-        [HttpGet("daily-schedule")]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMySchedule()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedException("Usuário não autenticado.");
+            }
+
+            var schedule = await _scheduleService.GetUserScheduleAsync(userId);
+
+            return Ok(schedule);
+        }
+
+        [HttpGet("daily")]
         public async Task<IActionResult> GetDailySchedule()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -42,7 +65,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(dailySchedule);
         }
 
-        [HttpPost("create-schedule")]
+        [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateSchedule(CreateScheduleRequest request)
         {
@@ -55,7 +78,7 @@ namespace BailarinaPreparadaApp.Controllers
             });
         }
 
-        [HttpPut("update-schedule/{scheduleId}")]
+        [HttpPut("{scheduleId}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateSchedule(int scheduleId, UpdateScheduleRequest request)
         {
@@ -64,7 +87,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(new { message = "Planejamento atualizado com sucesso!" });
         }
 
-        [HttpDelete("delete-schedule/{scheduleId}")]
+        [HttpDelete("{scheduleId}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteSchedule(int scheduleId)
         {

@@ -5,7 +5,7 @@ const currentDate = new Date();
 
 export const getDailySchedule = async () => {
     try {
-        const response = await api.get("/api/v1/Schedule/daily-schedule");
+        const response = await api.get("/api/v1/schedules/daily");
 
         return response.data;
     } catch (error) {
@@ -16,8 +16,8 @@ export const getDailySchedule = async () => {
 
 export const getRankingMonthTop5 = async () => {
     try {
-        const response = await api.get('/api/v1/Ranking/top5', {
-            params: { month: currentDate.getMonth() + 1, year: currentDate.getFullYear() }
+        const response = await api.get('/api/v1/ranking', {
+            params: { month: currentDate.getMonth() + 1, year: currentDate.getFullYear(), limit: 5 }
         });
 
         return response.data;
@@ -29,7 +29,7 @@ export const getRankingMonthTop5 = async () => {
 
 export const getYearlyTrainingDaysCount = async () => {
     try {
-        const response = await api.get("/api/v1/Training/trainings-yearly-days-count", {
+        const response = await api.get("/api/v1/trainings/yearly-days-count", {
             params: { year: currentDate.getFullYear() }
         });
 

@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/exercises")]
     [Authorize(Roles = "admin")]
-    public class ExerciseController : ControllerBase
+    public class ExercisesController : ControllerBase
     {
         private readonly ExerciseService _exerciseService;
 
-        public ExerciseController(ExerciseService exerciseService)
+        public ExercisesController(ExerciseService exerciseService)
         {
             _exerciseService = exerciseService;
         }

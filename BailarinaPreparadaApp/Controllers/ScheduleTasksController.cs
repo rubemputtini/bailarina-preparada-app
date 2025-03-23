@@ -5,18 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/schedule-tasks")]
     [Authorize(Roles = "admin")]
-    public class ScheduleTaskController : ControllerBase
+    public class ScheduleTasksController : ControllerBase
     {
         private readonly ScheduleTaskService _scheduleTaskService;
 
-        public ScheduleTaskController(ScheduleTaskService scheduleTaskService)
+        public ScheduleTasksController(ScheduleTaskService scheduleTaskService)
         {
             _scheduleTaskService = scheduleTaskService;
         }
 
-        [HttpDelete("delete-scheduleTask/{scheduleTaskId}")]
+        [HttpDelete("{scheduleTaskId}")]
         public async Task<IActionResult> DeleteScheduleTask(int scheduleTaskId)
         {
             await _scheduleTaskService.DeleteScheduleTaskAsync(scheduleTaskId);

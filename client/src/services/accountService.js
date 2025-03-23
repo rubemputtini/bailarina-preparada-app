@@ -4,7 +4,7 @@ import { handleError } from './handleError';
 
 export const login = async (email, password) => {
     try {
-      const response = await api.post('/Account/login', { email, password });
+      const response = await api.post('/api/v1/account/login', { email, password });
 
       return response.data;
 
@@ -15,7 +15,7 @@ export const login = async (email, password) => {
 
 export const register = async (formData) => {
     try {
-        const response = await api.post('/Account/register', {
+        const response = await api.post('/api/v1/account/register', {
             name: formData.name,
             email: formData.email,
             phoneNumber: formData.phoneNumber,
@@ -54,7 +54,7 @@ export const logout = () => {
 
 export const deleteUser = async (userId) => {
     try {
-        const response = await api.delete('/Account/delete-user/', {
+        const response = await api.delete('/api/v1/account/user', {
           data: { id : userId },
         });
   

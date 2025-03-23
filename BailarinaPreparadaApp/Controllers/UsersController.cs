@@ -7,18 +7,18 @@ using System.Security.Claims;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/users")]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
 
-        public UserController(UserService userService)
+        public UsersController(UserService userService)
         {
             _userService = userService;
         }
 
-        [HttpGet("details/{userId?}")]
+        [HttpGet("{userId?}")]
         public async Task<IActionResult> GetUserDetails(string? userId = null)
         {
             var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -28,7 +28,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(userDetails);
         }
 
-        [HttpPut("edit-user/{userId}")]
+        [HttpPut("{userId}")]
         public async Task<IActionResult> EditUser(string userId, [FromBody] EditUserRequest request)
         {
             var updatedUser = await _userService.EditUserAsync(userId, request);

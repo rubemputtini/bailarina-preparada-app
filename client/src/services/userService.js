@@ -2,7 +2,7 @@ import api from "./api";
 import { handleError } from "./handleError";
 
 export const getUserDetails = async (userId = null) => {
-    const url = userId ? `/User/details/${userId}` : `/User/details`;
+    const url = userId ? `/api/v1/users/${userId}` : `/api/v1/users`;
     try {
         const response = await api.get(url);
 
@@ -15,7 +15,7 @@ export const getUserDetails = async (userId = null) => {
 
 export const updateUserDetails = async (userId, userData) => {
     try {
-        const response = await api.put(`/User/edit-user/${userId}`, userData, {
+        const response = await api.put(`/api/v1/users/${userId}`, userData, {
             headers: {
                 'Content-Type': 'application/json',
             },

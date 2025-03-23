@@ -3,7 +3,7 @@ import { handleError } from "./handleError";
 
 export const getUsers = async (page, pageSize) => {
     try {
-        const response = await api.get(`/admin/users?page=${page}&pageSize=${pageSize}`);
+        const response = await api.get(`/api/v1/admin/users?page=${page}&pageSize=${pageSize}`);
 
         return response.data;
     } catch (error) {
@@ -13,7 +13,7 @@ export const getUsers = async (page, pageSize) => {
 
 export const getUserEvaluations = async (userId) => {
     try {
-        const response = await api.get(`/admin/user-evaluations/${userId}`);
+        const response = await api.get(`/api/v1/admin/users/${userId}/evaluations`);
 
         return response.data;
     } catch (error) {

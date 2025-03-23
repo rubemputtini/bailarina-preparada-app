@@ -8,18 +8,18 @@ using System.Security.Claims;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/trainings")]
     [Authorize]
-    public class TrainingController : ControllerBase
+    public class TrainingsController : ControllerBase
     {
         private readonly TrainingService _trainingService;
 
-        public TrainingController(TrainingService trainingService)
+        public TrainingsController(TrainingService trainingService)
         {
             _trainingService = trainingService;
         }
 
-        [HttpPost("create-training")]
+        [HttpPost]
         public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingRequest request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -34,7 +34,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(new { message = "Treino registrado com sucesso!" });
         }
 
-        [HttpGet("completed-trainings")]
+        [HttpGet("completed")]
         public async Task<IActionResult> GetCompletedTrainingsByUser([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? category)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -49,7 +49,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(trainings);
         }
 
-        [HttpGet("trainings-yearly-days-count")]
+        [HttpGet("yearly-days-count")]
         public async Task<IActionResult> GetYearlyTrainingDaysCount([FromQuery] int year)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -64,7 +64,7 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(trainingDaysCount);
         }
 
-        [HttpDelete("delete-training/{trainingId}")]
+        [HttpDelete("{trainingId}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

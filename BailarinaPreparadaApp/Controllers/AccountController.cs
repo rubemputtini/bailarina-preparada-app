@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/account")]
     public class AccountController : ControllerBase
     {       
         private readonly AccountService _accountService;
@@ -43,7 +43,7 @@ namespace BailarinaPreparadaApp.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("delete-user")]
+        [HttpDelete("user")]
         public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request)
         {
             var (success, message) = await _accountService.DeleteUserAsync(request);

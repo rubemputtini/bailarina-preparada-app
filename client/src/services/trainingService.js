@@ -3,7 +3,7 @@ import { handleError } from "./handleError";
 
 export const createTraining = async (date, category, description) => {
     try {
-        await api.post('/api/v1/Training/create-training', {
+        await api.post('/api/v1/trainings', {
             date,
             category,
             description
@@ -16,7 +16,7 @@ export const createTraining = async (date, category, description) => {
 
 export const getTrainingsByUser = async (startDate, endDate, category) => {
     try {
-        const response = await api.get('/api/v1/Training/completed-trainings', {
+        const response = await api.get('/api/v1/trainings/completed', {
             params: {
                 startDate: startDate || null,
                 endDate: endDate || null,
@@ -32,7 +32,7 @@ export const getTrainingsByUser = async (startDate, endDate, category) => {
 
 export const deleteTraining = async (trainingId) => {
     try {
-        await api.delete(`/api/v1/Training/delete-training/${trainingId}`)
+        await api.delete(`/api/v1/trainings/${trainingId}`)
     } catch (error) {
         handleError(error, "Erro ao excluir treino.");
     }

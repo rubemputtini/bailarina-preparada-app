@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/ranking")]
     [Authorize]
     public class RankingController : ControllerBase
     {
@@ -17,19 +17,11 @@ namespace BailarinaPreparadaApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRanking([FromQuery] int? month, int? year)
+        public async Task<IActionResult> GetRanking([FromQuery] int? month, [FromQuery] int? year, [FromQuery] int? limit)
         {
-            var ranking = await _rankingService.GetRankingAsync(month, year);
+            var ranking = await _rankingService.GetRankingAsync(month, year, limit);
 
             return Ok(ranking);
-        }
-
-        [HttpGet("top5")]
-        public async Task<IActionResult> GetTop5Ranking([FromQuery] int? month, int? year)
-        {
-            var ranking = await _rankingService.GetRankingAsync(month, year);
-
-            return Ok(ranking.Take(5));
         }
     }
 }

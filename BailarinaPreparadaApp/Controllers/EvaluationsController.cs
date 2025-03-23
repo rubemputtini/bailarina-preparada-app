@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/evaluations")]
     [Authorize]
-    public class EvaluationController : ControllerBase
+    public class EvaluationsController : ControllerBase
     {
         private readonly EvaluationService _evaluationService;
 
-        public EvaluationController(EvaluationService evaluationService)
+        public EvaluationsController(EvaluationService evaluationService)
         {
             _evaluationService = evaluationService;
         }

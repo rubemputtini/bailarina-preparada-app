@@ -3,7 +3,7 @@ import { handleError } from "./handleError";
 
 export const getExercises = async () => {
     try {
-        const response = await api.get('/api/v1/Exercise');
+        const response = await api.get('/api/v1/exercises');
 
         return response.data;
     } catch (error) {
