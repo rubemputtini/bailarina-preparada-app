@@ -17,12 +17,23 @@ const ScheduleAdminPage = () => {
     const [suggestedDate, setSuggestedDate] = useState();
     const [deletedIds, setDeletedIds] = useState([]);
     const [initialEvents, setInitialEvents] = useState([]);
+    const [userName, setUserName] = useState("");
+    const [userBirthDate, setUserBirthDate] = useState("");
+    const [goal, setGoal] = useState("");
+    const [observations, setObservations] = useState("");
+    const [initialGoal, setInitialGoal] = useState("");
+    const [initialObservations, setInitialObservations] = useState("");
     const { userId } = useParams();
 
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
                 const response = await getUserSchedule(userId);
+
+                setUserName(response.userName || "");
+                setUserBirthDate(response.dateOfBirth);
+                setGoal(response.goal || "");
+                setObservations(response.observations || "");
 
                 const lastUpdate = new Date(response.updatedAt || response.createdAt);
                 const nextSuggestedDate = new Date(lastUpdate);
@@ -43,6 +54,8 @@ const ScheduleAdminPage = () => {
 
                 setEvents(formattedEvents);
                 setInitialEvents(formattedEvents);
+                setInitialGoal(response.goal || "");
+                setInitialObservations(response.observations || "");
             } catch (error) {
                 console.error("Error fetching schedule:", error);
             }
@@ -76,7 +89,8 @@ const ScheduleAdminPage = () => {
     };
 
     const handleSave = async () => {
-        const isUnchanged = areEventsEqual(events, initialEvents) && deletedIds.length === 0;
+        const hasGoalOrObsChanged = goal !== initialGoal || observations !== initialObservations;
+        const isUnchanged = areEventsEqual(events, initialEvents) && deletedIds.length === 0 && !hasGoalOrObsChanged;
 
         if (isUnchanged) {
             setIsEditing(false);
@@ -90,6 +104,8 @@ const ScheduleAdminPage = () => {
         if (!scheduleId) {
             const createResponse = await createSchedule({
                 userId,
+                goal,
+                observations,
                 tasks: events.map(event => ({
                     dayOfWeek: event.dayOfWeek,
                     slot: event.row,
@@ -103,6 +119,8 @@ const ScheduleAdminPage = () => {
         } else {
             const payload = {
                 scheduleId,
+                goal,
+                observations,
                 tasks: events.map(event => ({
                     scheduleTaskId: event.id,
                     dayOfWeek: event.dayOfWeek,
@@ -121,7 +139,20 @@ const ScheduleAdminPage = () => {
         }
 
         setDeletedIds([]);
+        setInitialGoal(goal);
+        setInitialObservations(observations);
         setIsEditing(false);
+    };
+
+    const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const hasBirthdayPassed =
+            today.getMonth() > birthDate.getMonth() ||
+            (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+        if (!hasBirthdayPassed) age--;
+        return age;
     };
 
     return (
@@ -131,14 +162,38 @@ const ScheduleAdminPage = () => {
                 <Container className="flex-grow py-6">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h4" className="text-[#c5e1e9]">
-                            Planejamento Semanal
+                            Planejamento Semanal:
                         </Typography>
                         <IconButton onClick={isEditing ? handleSave : handleToggleEdit} sx={{ color: "#c5e1e9" }}>
                             {isEditing ? <FaCheck size={24} /> : <FaEdit size={24} />}
                         </IconButton>
                     </div>
+                    <div className="mb-4">
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                color: '#9575cd',
+                                fontSize: { xs: '20px', sm: '22px' },
+                                fontWeight: 500,
+                                marginBottom: '6px'
+                            }}
+                        >
+                            {userName}, {calculateAge(userBirthDate)} anos
+                        </Typography>
 
-                    <div className="overflow-x-auto overflow-y-scroll max-h-[450px] sm:max-h-[500px]">
+                        <div className="flex items-center space-x-2">
+                            <label className="text-sm text-gray-300 whitespace-nowrap">Objetivo:</label>
+                            <textarea
+                                className="p-1 rounded bg-gray-800 text-white text-sm w-96 resize-none"
+                                rows={1}
+                                disabled={!isEditing}
+                                value={goal}
+                                onChange={(e) => setGoal(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="overflow-x-auto overflow-y-auto max-h-[450px] sm:max-h-[500px]">
                         <Paper elevation={3} className="p-4 bg-gray-100 shadow-lg min-w-[900px]">
                             <div className="grid grid-cols-8 gap-1 text-center border-b border-gray-400 pb-2 text-gray-900 text-xs sm:text-sm md:text-lg bg-white font-bold">
                                 <div className="text-left">Período</div>
@@ -176,6 +231,16 @@ const ScheduleAdminPage = () => {
                                 </div>
                             ))}
                         </Paper>
+                    </div>
+                    <div className="mt-4">
+                        <label className="block text-sm text-gray-300 mb-1">Observações:</label>
+                        <textarea
+                            className="w-full p-2 rounded bg-gray-800 text-white resize-none"
+                            rows={2}
+                            disabled={!isEditing}
+                            value={observations}
+                            onChange={(e) => setObservations(e.target.value)}
+                        />
                     </div>
                     <div className="mt-6 text-center">
                         <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">

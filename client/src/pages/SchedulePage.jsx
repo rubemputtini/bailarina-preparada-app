@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
-import { Container, Typography, Paper, IconButton } from "@mui/material";
+import { Container, Typography, Paper } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { FaEdit, FaCheck } from "react-icons/fa";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { getMySchedule, updateSchedule } from "../services/scheduleService";
+import { getMySchedule } from "../services/scheduleService";
 import DroppableSlot from "../components/schedule/DroppableSlot";
 import { scheduleForm, daysOfWeek, periods } from "../utils/constants";
 
 const SchedulePage = () => {
     const [events, setEvents] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
+    const [goal, setGoal] = useState("");
+    const [observations, setObservations] = useState("");
     const [suggestedDate, setSuggestedDate] = useState();
 
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
                 const response = await getMySchedule();
+
+                setGoal(response.goal || "");
+                setObservations(response.observations || "");
 
                 const lastUpdate = new Date(response.updatedAt || response.createdAt);
                 const nextSuggestedDate = new Date(lastUpdate);
@@ -46,36 +49,6 @@ const SchedulePage = () => {
         fetchSchedule();
     }, []);
 
-    const handleToggleEdit = () => setIsEditing(!isEditing);
-
-    const handleSave = async () => {
-        if (events.length === 0) return;
-
-        let scheduleId = events[0]?.scheduleId;
-
-        if (!scheduleId) {
-            const response = await getMySchedule();
-
-            scheduleId = response.scheduleId;
-        }
-
-        const payload = {
-            scheduleId,
-            tasks: events.map(event => ({
-                scheduleTaskId: event.id,
-                dayOfWeek: event.dayOfWeek,
-                slot: event.row,
-                period: event.period,
-                activity: event.title,
-                notes: event.notes,
-                color: event.color
-            }))
-        };
-
-        await updateSchedule(scheduleId, payload);
-        setIsEditing(false);
-    };
-
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="min-h-screen flex flex-col bg-gray-900 text-white">
@@ -86,8 +59,19 @@ const SchedulePage = () => {
                             Planejamento Semanal
                         </Typography>
                     </div>
+                    <div className="mb-4">
+                        <div className="flex items-center space-x-2">
+                            <label className="text-sm text-gray-300 whitespace-nowrap">Objetivo:</label>
+                            <textarea
+                                className="p-1 rounded bg-gray-800 text-white text-sm w-96 resize-none"
+                                rows={1}
+                                value={goal}
+                                disabled
+                            />
+                        </div>
+                    </div>
 
-                    <div className="overflow-x-auto overflow-y-scroll max-h-[450px] sm:max-h-[500px]">
+                    <div className="overflow-x-auto overflow-y-auto max-h-[450px] sm:max-h-[500px]">
                         <Paper elevation={3} className="p-4 bg-gray-100 shadow-lg min-w-[900px]">
                             <div className="grid grid-cols-8 gap-1 text-center border-b border-gray-400 pb-2 text-gray-900 text-xs sm:text-sm md:text-lg bg-white font-bold">
                                 <div className="text-left">Período</div>
@@ -109,7 +93,6 @@ const SchedulePage = () => {
                                                     colIndex={colIndex}
                                                     period={period}
                                                     row={row}
-                                                    isEditing={isEditing}
                                                     setEvents={setEvents}
                                                     events={events.filter(
                                                         event =>
@@ -124,6 +107,15 @@ const SchedulePage = () => {
                                 </div>
                             ))}
                         </Paper>
+                    </div>
+                    <div className="mt-4">
+                        <label className="block text-sm text-gray-300 mb-1">Observações:</label>
+                        <textarea
+                            className="w-full p-2 rounded bg-gray-800 text-white resize-none"
+                            rows={2}
+                            value={observations}
+                            disabled
+                        />
                     </div>
                     <div className="mt-6 text-center">
                         <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">

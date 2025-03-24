@@ -49,8 +49,11 @@ namespace BailarinaPreparadaApp.Services
                 ScheduleId = schedule.ScheduleId,
                 UserId = schedule.UserId,
                 UserName = user.Name,
+                DateOfBirth = user.DateOfBirth,
                 CreatedAt = schedule.CreatedAt,
                 UpdatedAt = schedule.UpdatedAt,
+                Goal = schedule.Goal,
+                Observations = schedule.Observations,
                 Tasks = schedule.Entries.Select(e => new ScheduleTaskResponse
                 {
                     ScheduleTaskId = e.ScheduleTaskId,
@@ -109,6 +112,8 @@ namespace BailarinaPreparadaApp.Services
                 User = user,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
+                Goal = request.Goal,
+                Observations = request.Observations,
                 Entries = request.Tasks.Select(t => new ScheduleTask
                 {
                     DayOfWeek = t.DayOfWeek,
@@ -176,7 +181,10 @@ namespace BailarinaPreparadaApp.Services
                 }
             }
 
+            schedule.Goal = request.Goal;
+            schedule.Observations = request.Observations;
             schedule.UpdatedAt = DateTime.UtcNow;
+
             await _dbContext.SaveChangesAsync();
         }
 

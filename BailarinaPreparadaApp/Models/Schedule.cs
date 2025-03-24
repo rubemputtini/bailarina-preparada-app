@@ -8,5 +8,7 @@
         public List<ScheduleTask> Entries { get; set; } = new List<ScheduleTask>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string Goal { get; set; } = string.Empty;
+        public string Observations { get; set; } = string.Empty;
     }
 }
