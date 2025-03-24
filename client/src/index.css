@@ -35,12 +35,7 @@
 
 body {
   font-family: var(--primary-font);
-  background: linear-gradient(
-    144.39deg,
-    #ffffff -278.56%,
-    #403b4d -78.47%,
-    #302539 91.61%
-  );
+  background: linear-gradient(to bottom, #0f0f1a 0%, #1a1a2b 85%, #2a1c3f 100%);
   margin: 0;
   padding: 0;
   box-sizing: border-box;

@@ -51,7 +51,7 @@ const SchedulePage = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="min-h-screen flex flex-col bg-gray-900 text-white">
+            <div className="min-h-screen flex flex-col text-white">
                 <Nav />
                 <Container className="flex-grow py-6">
                     <div className="flex justify-between items-center mb-4">

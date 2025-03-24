@@ -1,11 +1,15 @@
 import { Card, CardContent, Typography } from '@mui/material'
 import { tasksColorsMap } from '../../utils/constants';
+import calendar from '../../assets/calendar.png';
 
 const DailyScheduleCard = ({ dailySchedule }) => {
     return (
         <Card className="bg-white text-black shadow-lg lg:col-span-2">
             <CardContent>
-                <Typography variant="h6" className="font-bold text-gray-800" style={{ marginBottom: "0.5em" }}>📅 Aulas do Dia</Typography>
+                <div className="flex items-center mb-2">
+                    <img src={calendar} alt="Calendário" className="w-6 h-6 mr-2" />
+                    <Typography variant="h6" className="font-bold text-gray-800">Aulas do Dia</Typography>
+                </div>
                 {dailySchedule.length > 0 ? (
                     <ul className="space-y-3">
                         {dailySchedule.map((classItem, index) => {

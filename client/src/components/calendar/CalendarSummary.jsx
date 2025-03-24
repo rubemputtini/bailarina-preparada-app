@@ -1,11 +1,16 @@
 import { Box, Typography } from "@mui/material";
+import trophy from '../../assets/trophy.png';
+import love from '../../assets/love.png';
+import heart from '../../assets/heart.png';
+import sad from '../../assets/sad.png';
+import happiness from '../../assets/happiness.png';
 
 const CalendarSummary = ({ uniqueDaysTrained }) => {
-    const getEmoji = () => {
-        if (uniqueDaysTrained > 20) return "🏆";
-        if (uniqueDaysTrained > 15) return "😍";
-        if (uniqueDaysTrained > 5) return "💙";
-        return "🙂";
+    const getIcon = () => {
+        if (uniqueDaysTrained > 20) return trophy;
+        if (uniqueDaysTrained > 15) return love;
+        if (uniqueDaysTrained > 5) return heart;
+        return happiness;
     };
 
     return (
@@ -24,9 +29,12 @@ const CalendarSummary = ({ uniqueDaysTrained }) => {
             }}
         >
             {uniqueDaysTrained === 0 ? (
-                <Typography variant="body1" sx={{ color: "#6a1b9a" }}>
-                    Você ainda <strong>não treinou</strong> este mês! 🥺
-                </Typography>
+                <>
+                    <Typography variant="body1" sx={{ color: "#6a1b9a" }}>
+                        Você ainda <strong>não treinou</strong> este mês!
+                    </Typography>
+                    <img src={sad} alt="triste" className="w-6 h-6" />
+                </>
             ) : (
                 <>
                     <Typography variant="body1" sx={{ color: "#6a1b9a" }}>
@@ -34,8 +42,9 @@ const CalendarSummary = ({ uniqueDaysTrained }) => {
                         <strong>
                             {uniqueDaysTrained} {uniqueDaysTrained === 1 ? "dia" : "dias"}
                         </strong>{" "}
-                        este mês! {getEmoji()}
+                        este mês!
                     </Typography>
+                    <img src={getIcon()} alt="ícone" className="w-6 h-6" />
                 </>
             )}
         </Box>

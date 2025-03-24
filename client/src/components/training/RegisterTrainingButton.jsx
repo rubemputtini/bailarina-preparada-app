@@ -6,7 +6,7 @@ const RegisterTrainingButton = () => {
 
     return (
         <div
-            className="fixed bottom-6 right-6 bg-dark-purple text-white p-4 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-all"
+            className="fixed bottom-6 right-6 bg-blue text-white p-4 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-all"
             onClick={() => navigate("/treinos")}
         >
             <span className="text-2xl md:text-3xl"><FaPlus /></span>

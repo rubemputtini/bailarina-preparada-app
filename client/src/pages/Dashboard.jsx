@@ -29,7 +29,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-900 text-white">
+        <div className="min-h-screen flex flex-col text-white">
             <Nav />
             <div className="p-6 flex-grow">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

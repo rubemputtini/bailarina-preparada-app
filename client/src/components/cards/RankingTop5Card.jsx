@@ -1,11 +1,17 @@
 import { Card, CardContent, Typography, Avatar } from '@mui/material'
 import { FaMedal } from "react-icons/fa";
+import trophy from '../../assets/trophy.png';
 
 const RankingTop5Card = ({ ranking }) => {
     return (
         <Card className="bg-white text-black shadow-lg lg:col-span-1">
             <CardContent>
-                <Typography variant="h6" className="font-bold text-gray-800" style={{ marginBottom: "0.5em" }}>🏆 TOP 5 - {new Date().toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}</Typography>
+                <div className="flex items-center mb-2">
+                    <img src={trophy} alt="Troféu" className="w-6 h-6 mr-2" />
+                    <Typography variant="h6" className="font-bold text-gray-800">
+                        TOP 5 - {new Date().toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+                    </Typography>
+                </div>
                 <ul className="space-y-3">
                     {ranking.map((user, index) => (
                         <li key={index} className="flex items-center space-x-3 p-2 bg-gray-100 rounded-lg shadow-sm">

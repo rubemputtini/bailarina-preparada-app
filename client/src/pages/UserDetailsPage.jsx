@@ -90,7 +90,7 @@ const UserDetailsPage = () => {
 
     if (loading) {
         return (
-            <Box className="flex justify-center items-center min-h-screen bg-gradient-to-b from-purple-900 to-gray-900">
+            <Box className="flex justify-center items-center min-h-screen">
                 <CircularProgress color="secondary" />
             </Box>
         );
@@ -98,7 +98,7 @@ const UserDetailsPage = () => {
 
     if (error) {
         return (
-            <Box className="flex justify-center items-center min-h-screen bg-gradient-to-b from-purple-900 to-gray-900">
+            <Box className="flex justify-center items-center min-h-screen">
                 <Alert severity="error">{error}</Alert>
             </Box>
         );
@@ -106,7 +106,7 @@ const UserDetailsPage = () => {
 
     if (evaluations.length === 0) {
         return (
-            <Box className="flex justify-center items-center min-h-screen bg-gradient-to-b from-purple-900 to-gray-900">
+            <Box className="flex justify-center items-center min-h-screen">
                 <Typography variant="h6" color="white">
                     Nenhuma avaliação encontrada para este usuário.
                 </Typography>

@@ -1,4 +1,6 @@
 import { Box, Typography, Modal } from "@mui/material";
+import biceps from "../../assets/biceps.png";
+import heart from "../../assets/heart.png";
 
 const TrainingDialog = ({ showDialog, setShowDialog }) => {
     return (
@@ -21,8 +23,10 @@ const TrainingDialog = ({ showDialog, setShowDialog }) => {
                 <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "0.5em" }}>
                     Treino concluído com sucesso!
                 </Typography>
-                <Typography sx={{ fontSize: "18px", lineHeight: "1.5" }}>
-                    Constância e Paciência! 💙💪
+                <Typography sx={{ fontSize: "18px", lineHeight: "1.5", display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
+                    Constância e Paciência!
+                    <img src={heart} alt="Coração" className="w-6 h-6" />
+                    <img src={biceps} alt="Bíceps" className="w-6 h-6" />
                 </Typography>
             </Box>
         </Modal>

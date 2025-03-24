@@ -3,7 +3,7 @@ import footer from "../assets/footer-logo.webp";
 
 const Footer = () => {
     return (
-        <footer className="py-4 mt-8 bg-gray-900 text-white">
+        <footer className="py-4 mt-8 text-white">
             <div className="container mx-auto text-center px-4">
                 <img
                     src={footer}
@@ -23,7 +23,7 @@ const Footer = () => {
                         </a>
                     ))}
                 </div>
-                <p className="mb-4 text-sm text-gray-400">
+                <p className="mb-4 text-sm">
                     Bailarina Preparada &copy; {new Date().getFullYear()}. Todos os direitos reservados.
                 </p>
             </div>
