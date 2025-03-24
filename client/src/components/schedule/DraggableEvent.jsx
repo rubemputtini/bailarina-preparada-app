@@ -1,21 +1,30 @@
 import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
 import { tasksColorsMap } from "../../utils/constants";
-import { deleteScheduleTask } from "../../services/scheduleTaskService";
 
-const DraggableEvent = ({ event, isEditing, setEvents }) => {
+const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "EVENT",
-        item: { id: event.id },
+        item: {
+            id: event.id,
+            title: event.title,
+            color: event.color,
+            notes: event.notes,
+            dayOfWeek: event.dayOfWeek,
+            period: event.period,
+            row: event.row,
+        },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
     }));
 
-    const handleDelete = async () => {
-        await deleteScheduleTask(event.id);
-
+    const handleDelete = () => {
         setEvents((prevEvents) => prevEvents.filter(e => e.id !== event.id));
+
+        if (event.id) {
+            setDeletedIds((prev) => [...prev, event.id]);
+        }
     };
 
     return (

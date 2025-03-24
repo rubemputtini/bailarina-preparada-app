@@ -23,8 +23,9 @@ export const getMySchedule = async () => {
 
 export const createSchedule = async (payload) => {
     try {
-        await api.post("/api/v1/schedules");
+        const response = await api.post("/api/v1/schedules", payload);
 
+        return response.data.schedule;
     } catch (error) {
         handleError(error, "Erro ao criar planejamento do usuário.");
     }

@@ -59,6 +59,10 @@ const AdminPage = () => {
         console.log("Editar usuário", userId);
     };
 
+    const handleScheduleUser = (userId) => {
+        navigate(`/admin/planejamento/${userId}`);
+    };
+
     const handleDeleteUser = (userId) => {
         setUserToDelete(userId);
         setShowDialog(true);
@@ -143,6 +147,7 @@ const AdminPage = () => {
                                     users={filteredUsers}
                                     onView={handleViewUser}
                                     onEdit={handleEditUser}
+                                    onSchedule={handleScheduleUser}
                                     onDelete={handleDeleteUser}
                                     page={page}
                                     setPage={setPage}

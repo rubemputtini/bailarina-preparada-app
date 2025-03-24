@@ -4,7 +4,7 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import DraggableEvent from "./DraggableEvent";
 import { tasksColorsMap } from "../../utils/constants";
 
-const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) => {
+const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events, setDeletedIds }) => {
     const [newEventTitle, setNewEventTitle] = useState("");
     const [selectedColor, setSelectedColor] = useState("lightBlue");
     const [isAdding, setIsAdding] = useState(false);
@@ -16,13 +16,29 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
         drop: (item) => {
             if (events.length > 0) return;
 
-            setEvents((prevEvents) =>
-                prevEvents.map(event =>
-                    event.id === item.id
-                        ? { ...event, dayOfWeek: colIndex, period: period.label, row: row }
-                        : event
-                )
-            );
+            setEvents((prevEvents) => {
+                const filteredEvents = prevEvents.filter((event) => {
+                    if (item.id !== null) {
+                        return event.id !== item.id;
+                    }
+
+                    return !(
+                        event.title === item.title &&
+                        event.dayOfWeek === item.dayOfWeek &&
+                        event.period === item.period &&
+                        event.row === item.row
+                    );
+                });
+
+                const updatedItem = {
+                    ...item,
+                    dayOfWeek: colIndex,
+                    period: period.label,
+                    row: row,
+                };
+
+                return [...filteredEvents, updatedItem];
+            });
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
@@ -31,6 +47,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
 
     const handleAddEvent = () => {
         if (!newEventTitle.trim()) return;
+
         setEvents((prevEvents) => [
             ...prevEvents,
             {
@@ -40,8 +57,10 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
                 period: period.label,
                 row: row,
                 color: selectedColor,
+                notes: null
             }
         ]);
+
         setIsAdding(false);
         setNewEventTitle("");
     };
@@ -52,7 +71,9 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
             className={`relative flex items-center justify-center border ${isOver ? "border-purple-700" : "border-gray-300"
                 } bg-white w-full min-h-[60px]`}
             style={{
-                backgroundColor: events.length > 0 ? tasksColorsMap[events[0].color]?.hex : "transparent",
+                backgroundColor: events.length > 0
+                    ? tasksColorsMap[events[0].color]?.hex || "transparent"
+                    : "transparent",
             }}
         >
             {events.length === 0 && isEditing && !isAdding && (
@@ -77,7 +98,9 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
                         {colors.map((color) => (
                             <button
                                 key={color}
-                                className={`w-5 h-5 rounded-full border-2 ${selectedColor === color ? "border-black" : "border-transparent"
+                                className={`w-5 h-5 rounded-full border-2 ${selectedColor === color
+                                    ? "border-black"
+                                    : "border-transparent"
                                     }`}
                                 style={{ backgroundColor: tasksColorsMap[color]?.hex }}
                                 onClick={() => setSelectedColor(color)}
@@ -102,7 +125,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events }) 
             )}
 
             {events.length > 0 && (
-                <DraggableEvent event={events[0]} isEditing={isEditing} setEvents={setEvents} />
+                <DraggableEvent event={events[0]} isEditing={isEditing} setEvents={setEvents} setDeletedIds={setDeletedIds} />
             )}
         </div>
     );

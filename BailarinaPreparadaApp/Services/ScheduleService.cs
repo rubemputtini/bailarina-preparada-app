@@ -139,6 +139,17 @@ namespace BailarinaPreparadaApp.Services
 
             var taskMap = schedule.Entries.ToDictionary(t => t.ScheduleTaskId);
 
+            var incomingTaskIds = request.Tasks
+                .Where(t => t.ScheduleTaskId.HasValue && t.ScheduleTaskId.Value > 0)
+                .Select(t => t.ScheduleTaskId.Value)
+                .ToHashSet();
+
+            var tasksToRemove = schedule.Entries
+                .Where(t => !incomingTaskIds.Contains(t.ScheduleTaskId))
+                .ToList();
+
+            _dbContext.ScheduleTasks.RemoveRange(tasksToRemove);
+
             foreach (var taskRequest in request.Tasks)
             {
                 if (!taskRequest.ScheduleTaskId.HasValue || taskRequest.ScheduleTaskId == 0)

@@ -4,10 +4,12 @@ import { Menu as MenuIcon, AccountCircle, Home, Star, EmojiEvents, Settings, Exi
 import { Link, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
 import { logout } from "../services/accountService";
+import { getUserRole } from '../services/auth';
 
 const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const isAdmin = getUserRole() === "admin";
     const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
@@ -127,14 +129,20 @@ const Nav = () => {
                     <ListItemIcon><Person /></ListItemIcon>
                     Conta
                 </MenuItem>
-                <MenuItem onClick={handleEvaluationClick}>
-                    <ListItemIcon><EditNote /></ListItemIcon>
-                    Avaliação
-                </MenuItem>
-                <MenuItem onClick={handleSettingsClick}>
-                    <ListItemIcon><Settings /></ListItemIcon>
-                    Configurações
-                </MenuItem>
+
+                {isAdmin && (
+                    <>
+                        <MenuItem onClick={handleEvaluationClick}>
+                            <ListItemIcon><EditNote /></ListItemIcon>
+                            Avaliação
+                        </MenuItem>
+                        <MenuItem onClick={handleSettingsClick}>
+                            <ListItemIcon><Settings /></ListItemIcon>
+                            Configurações
+                        </MenuItem>
+                    </>
+                )}
+
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon sx={{ color: "#302539" }}><ExitToApp /></ListItemIcon>
                     Sair

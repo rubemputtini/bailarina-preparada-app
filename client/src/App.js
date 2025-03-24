@@ -14,6 +14,7 @@ import UserDetailsPage from './pages/UserDetailsPage';
 import EvaluationReportPage from './pages/EvaluationListPage';
 import EvaluationDetailPage from './pages/EvaluationDetailPage';
 import EvaluationListPage from './pages/EvaluationListPage';
+import ScheduleAdminPage from './pages/ScheduleAdminPage';
 
 function App() {
   return (
@@ -125,14 +126,22 @@ function App() {
                   </ProtectedRoute>
               } 
           />
+          <Route 
+              path="/admin/planejamento/:userId" 
+              element={
+                  <ProtectedRoute requireAdmin>
+                      <ScheduleAdminPage />
+                  </ProtectedRoute>
+              } 
+          />
           <Route
-                    path="/admin/users/:userId"
-                    element={
-                        <ProtectedRoute>
-                            <UserDetailsPage />
-                        </ProtectedRoute>
-                    }
-                />
+              path="/admin/users/:userId"
+              element={
+                  <ProtectedRoute>
+                      <UserDetailsPage />
+                  </ProtectedRoute>
+              }
+          />
           <Route path="*" element={<Navigate to="/" />} />    
       </Routes>
     </BrowserRouter>

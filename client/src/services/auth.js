@@ -17,11 +17,19 @@ export const setToken = (token) => {
 };
 
 export const getUserRole = () => {
-    const decodedToken = jwtDecode(getToken());
+    const token = getToken();
+
+    if (!token) return null;
+
+    const decodedToken = jwtDecode(token);
     return decodedToken.role;
 };
 
 export const getUserId = () => {
-    const decodedToken = jwtDecode(getToken());
+    const token = getToken();
+
+    if (!token) return null;
+
+    const decodedToken = jwtDecode(token);
     return decodedToken.nameid;
 };
