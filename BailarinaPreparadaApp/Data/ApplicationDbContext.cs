@@ -17,6 +17,7 @@ namespace BailarinaPreparadaApp.Data
         public DbSet<ClassEvent> ClassEvents { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ScheduleTask> ScheduleTasks { get; set; }
+        public DbSet<UserGoal> UserGoals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

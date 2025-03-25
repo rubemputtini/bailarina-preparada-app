@@ -1,7 +1,19 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, CircularProgress, Typography, Box } from '@mui/material'
 import loudspeaker from '../../assets/loudspeaker.png'
 
-const NotificationsCard = () => {
+const NotificationsCard = ({ loading }) => {
+    if (loading) {
+        return (
+            <Card className="bg-white text-black shadow-lg lg:col-span-1">
+                <CardContent>
+                    <Box display="flex" justifyContent="center" my={10}>
+                        <CircularProgress size={24} color="inherit" />
+                    </Box>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg lg:col-span-1">
             <CardContent>

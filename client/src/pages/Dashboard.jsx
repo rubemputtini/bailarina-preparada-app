@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { getDailySchedule, getRankingMonthTop5, getYearlyTrainingDaysCount } from "../services/dashboardService";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import RegisterTrainingButton from "../components/training/RegisterTrainingButton";
@@ -7,36 +5,24 @@ import NotificationsCard from "../components/cards/NotificationsCard";
 import CompletedTrainingCard from "../components/cards/CompletedTrainingCard";
 import RankingTop5Card from "../components/cards/RankingTop5Card";
 import DailyScheduleCard from "../components/cards/DailyScheduleCard";
+import useDailySchedule from "../hooks/useDailySchedule";
+import useTopRanking from "../hooks/useTopRanking";
+import useTrainingDaysCount from "../hooks/useTrainingDaysCount";
 
 const Dashboard = () => {
-    const [dailySchedule, setDailySchedule] = useState([]);
-    const [ranking, setRanking] = useState([]);
-    const [trainingDaysCount, setTrainingDaysCount] = useState(0);
-
-    const DAYS_GOAL = 100; // Meta anual de dias
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const dailyScheduleData = await getDailySchedule();
-            const rankingData = await getRankingMonthTop5();
-            const trainingDaysData = await getYearlyTrainingDaysCount();
-
-            setDailySchedule(dailyScheduleData);
-            setRanking(rankingData);
-            setTrainingDaysCount(trainingDaysData);
-        };
-        fetchData();
-    }, []);
+    const { dailySchedule, loading: loadingSchedule } = useDailySchedule();
+    const { ranking, loading: loadingRanking } = useTopRanking();
+    const { trainingDaysCount } = useTrainingDaysCount();
 
     return (
         <div className="min-h-screen flex flex-col text-white">
             <Nav />
             <div className="p-6 flex-grow">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <DailyScheduleCard dailySchedule={dailySchedule} />
-                    <RankingTop5Card ranking={ranking} />
-                    <CompletedTrainingCard trainingDaysCount={trainingDaysCount} daysGoal={DAYS_GOAL} />
-                    <NotificationsCard />
+                    <DailyScheduleCard dailySchedule={dailySchedule} loading={loadingSchedule} />
+                    <RankingTop5Card ranking={ranking} loading={loadingRanking} />
+                    <CompletedTrainingCard trainingDaysCount={trainingDaysCount} />
+                    <NotificationsCard loading={false} />
                 </div>
                 <RegisterTrainingButton />
             </div>

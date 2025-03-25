@@ -1,8 +1,20 @@
-import { Card, CardContent, Typography, Avatar } from '@mui/material'
+import { Card, CardContent, CircularProgress, Typography, Box, Avatar } from '@mui/material'
 import { FaMedal } from "react-icons/fa";
 import trophy from '../../assets/trophy.png';
 
-const RankingTop5Card = ({ ranking }) => {
+const RankingTop5Card = ({ ranking, loading }) => {
+    if (loading) {
+        return (
+            <Card className="bg-white text-black shadow-lg lg:col-span-1">
+                <CardContent>
+                    <Box display="flex" justifyContent="center" my={10}>
+                        <CircularProgress size={24} color="inherit" />
+                    </Box>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="bg-white text-black shadow-lg lg:col-span-1">
             <CardContent>

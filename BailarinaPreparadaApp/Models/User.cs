@@ -9,5 +9,6 @@ namespace BailarinaPreparadaApp.Models
 
         public Address Address { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
+        public List<UserGoal> Goals { get; set; } = new List<UserGoal>();
     }
 }

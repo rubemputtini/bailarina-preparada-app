@@ -1,8 +1,20 @@
-import { Card, CardContent, Typography } from '@mui/material'
+import { Card, CardContent, CircularProgress, Typography, Box } from '@mui/material'
 import { tasksColorsMap } from '../../utils/constants';
 import calendar from '../../assets/calendar.png';
 
-const DailyScheduleCard = ({ dailySchedule }) => {
+const DailyScheduleCard = ({ dailySchedule, loading }) => {
+    if (loading) {
+        return (
+            <Card className="bg-white text-black shadow-lg lg:col-span-2">
+                <CardContent>
+                    <Box display="flex" justifyContent="center" my={10}>
+                        <CircularProgress size={24} color="inherit" />
+                    </Box>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card className="bg-white text-black shadow-lg lg:col-span-2">
             <CardContent>
