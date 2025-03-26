@@ -24,6 +24,7 @@ export const getEvaluationById = async (evaluationId) => {
 export const createEvaluation = async (payload) => {    
     try {
         await api.post('/api/v1/evaluations', payload);
+
     } catch (error) {
         handleError(error, "Erro ao criar avaliação.");
     }
@@ -42,7 +43,8 @@ export const updateEvaluation = async (evaluationId, updatedExercises) => {
 export const deleteEvaluation = async (evaluationId) => {
     try {
         await api.delete(`/api/v1/evaluations/${evaluationId}`);
+        
     } catch (error) {
         handleError(error, `Erro ao apagar avaliação com ID ${evaluationId}.`);
     }
-}
+};

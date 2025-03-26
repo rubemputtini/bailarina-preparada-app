@@ -28,6 +28,7 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<TrainingService>();
             services.AddScoped<UserService>();
             services.AddScoped<UserGoalService>();
+            services.AddScoped<AnnouncementService>();
 
             services.AddTransient<TokenService>();
 

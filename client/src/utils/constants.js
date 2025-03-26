@@ -92,3 +92,22 @@ export const tasksColorsMap = {
 };
 
 export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";
+
+export const announcementColorsMap = {
+  Aulas: {
+      tailwind: "border-blue-500 bg-blue-100 text-blue-800",
+      icon: "📘"
+  },
+  Feriados: {
+      tailwind: "border-red-500 bg-red-100 text-red-800",
+      icon: "🏖"
+  },
+  Eventos: {
+      tailwind: "border-green-500 bg-green-100 text-green-800",
+      icon: "📅"
+  },
+  Outros: {
+      tailwind: "border-gray-400 bg-gray-100 text-gray-700",
+      icon: "📢"
+  }
+};
