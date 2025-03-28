@@ -9,7 +9,10 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.2 }}
         >
-            <Card className="shadow-xl rounded-2xl h-full">
+            <Card
+                className={`shadow-xl rounded-2xl h-full border-2`}
+                style={{ borderColor: getMedalColor(index) }}
+            >
                 <CardContent className="text-center p-6 flex flex-col items-center justify-center">
                     <EmojiEvents sx={{ fontSize: 48, color: getMedalColor(index) }} />
                     <Typography variant="h6" className="font-bold mt-2">

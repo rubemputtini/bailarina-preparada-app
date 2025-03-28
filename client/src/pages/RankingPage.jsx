@@ -158,6 +158,7 @@ const RankingPage = () => {
                                         user={user}
                                         rank={rank}
                                         isCurrentUser={isCurrentUser}
+                                        isEven={index % 2 === 0}
                                     />
                                 );
                             })}
