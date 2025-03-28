@@ -73,12 +73,18 @@ const RankingPage = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <Nav />
-            <Container className="flex-grow py-10">
+            <Container className="flex-grow py-5">
                 <Typography
                     variant="h4"
-                    align="center"
-                    className="text-[#c5e1e9]"
-                    sx={{ fontWeight: "bold" }}
+                    sx={{
+                        fontWeight: "800",
+                        textAlign: "center",
+                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        marginBottom: "24px",
+                        fontSize: { xs: "2rem", md: "2.5rem" },
+                    }}
                 >
                     Ranking CBP
                 </Typography>

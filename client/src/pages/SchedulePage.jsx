@@ -53,7 +53,7 @@ const SchedulePage = () => {
         <DndProvider backend={HTML5Backend}>
             <div className="min-h-screen flex flex-col text-white">
                 <Nav />
-                <Container className="flex-grow py-6">
+                <Container className="flex-grow py-5">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h4" className="text-[#c5e1e9]">
                             Planejamento Semanal

@@ -1,7 +1,7 @@
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import RegisterTrainingButton from "../components/training/RegisterTrainingButton";
-import NotificationsCard from "../components/cards/NotificationsCard";
+import AnnouncementsFeedCard from "../components/cards/AnnouncementsFeedCard";
 import CompletedTrainingCard from "../components/cards/CompletedTrainingCard";
 import RankingTop5Card from "../components/cards/RankingTop5Card";
 import DailyScheduleCard from "../components/cards/DailyScheduleCard";
@@ -22,7 +22,7 @@ const Dashboard = () => {
                     <DailyScheduleCard dailySchedule={dailySchedule} loading={loadingSchedule} />
                     <RankingTop5Card ranking={ranking} loading={loadingRanking} />
                     <CompletedTrainingCard trainingDaysCount={trainingDaysCount} />
-                    <NotificationsCard loading={false} />
+                    <AnnouncementsFeedCard loading={false} />
                 </div>
                 <RegisterTrainingButton />
             </div>

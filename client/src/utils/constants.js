@@ -111,3 +111,5 @@ export const announcementColorsMap = {
       icon: "📢"
   }
 };
+
+export const announcementCategories = Object.keys(announcementColorsMap);

@@ -6,6 +6,13 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel, isLoading }) => (
             <p className="text-lg font-semibold text-gray-800">{message}</p>
             <div className="flex justify-center gap-4">
                 <button
+                    className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-xl w-full sm:w-auto hover:bg-gray-600"
+                    onClick={onCancel}
+                    disabled={isLoading}
+                >
+                    CANCELAR
+                </button>
+                <button
                     className={`mt-4 px-4 py-2 text-white rounded-xl w-full sm:w-auto ${isLoading ? "bg-purple-300 cursor-not-allowed" : "bg-purple-500 hover:bg-purple-600"
                         }`}
                     onClick={onConfirm}
@@ -16,13 +23,6 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel, isLoading }) => (
                     ) : (
                         "CONFIRMAR"
                     )}
-                </button>
-                <button
-                    className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-xl w-full sm:w-auto hover:bg-gray-600"
-                    onClick={onCancel}
-                    disabled={isLoading}
-                >
-                    CANCELAR
                 </button>
             </div>
         </div>

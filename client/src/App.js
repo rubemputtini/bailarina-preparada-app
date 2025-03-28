@@ -15,6 +15,7 @@ import EvaluationReportPage from './pages/EvaluationListPage';
 import EvaluationDetailPage from './pages/EvaluationDetailPage';
 import EvaluationListPage from './pages/EvaluationListPage';
 import ScheduleAdminPage from './pages/ScheduleAdminPage';
+import AnnouncementAdminPage from './pages/AnnouncementAdminPage';
 
 function App() {
   return (
@@ -133,6 +134,14 @@ function App() {
                       <ScheduleAdminPage />
                   </ProtectedRoute>
               } 
+          />
+          <Route
+              path="/avisos"
+              element={
+                  <ProtectedRoute>
+                      <AnnouncementAdminPage />
+                  </ProtectedRoute>
+              }
           />
           <Route
               path="/admin/users/:userId"

@@ -25,8 +25,7 @@ namespace BailarinaPreparadaApp.Services
             var announcements = await _dbContext.Announcements
                 .Include(a => a.Author)
                 .Where(a =>
-                    a.IsVisible &&
-                    (a.PublishAt == null || a.PublishAt <= now) &&
+                    (a.IsVisible || (a.PublishAt != null && a.PublishAt <= now)) &&
                     (a.ExpiresAt == null || a.ExpiresAt >= now))
                 .OrderByDescending(a => a.Date)
                 .ToListAsync();

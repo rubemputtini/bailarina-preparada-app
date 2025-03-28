@@ -93,7 +93,7 @@ const AdminPage = () => {
     return (
         <>
             <Nav />
-            <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+            <div className="p-5 max-w-7xl m-auto">
                 <Typography
                     variant="h4"
                     sx={{
