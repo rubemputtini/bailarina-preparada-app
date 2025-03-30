@@ -39,7 +39,7 @@ const AnnouncementAdminPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#0f0f1a] text-white">
+        <div className="min-h-screen flex flex-col text-white">
             <Nav />
             <main className="flex-grow px-4 md:px-8 py-5">
                 <Typography

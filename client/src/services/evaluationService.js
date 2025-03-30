@@ -23,8 +23,9 @@ export const getEvaluationById = async (evaluationId) => {
 
 export const createEvaluation = async (payload) => {    
     try {
-        await api.post('/api/v1/evaluations', payload);
+        const response = await api.post('/api/v1/evaluations', payload);
 
+        return response.data;
     } catch (error) {
         handleError(error, "Erro ao criar avaliação.");
     }

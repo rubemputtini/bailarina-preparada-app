@@ -29,7 +29,8 @@ namespace BailarinaPreparadaApp.Services
                 Name = e.Name,
                 Category = e.ExerciseCategory.ToString(),
                 PhotoUrl = e.PhotoUrl,
-                VideoUrl = e.VideoUrl
+                VideoUrl = e.VideoUrl,
+                IsUnilateral = e.IsUnilateral,
             });
 
             return response;

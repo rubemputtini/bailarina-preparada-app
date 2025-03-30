@@ -61,7 +61,7 @@ const AccountPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#1a132b] text-white">
+        <div className="min-h-screen text-white">
             <Nav />
             <div className="max-w-3xl mx-auto py-10 px-4">
                 <div className="bg-white rounded-2xl shadow-md p-6">

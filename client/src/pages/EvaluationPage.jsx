@@ -1,304 +1,286 @@
 import { useState, useEffect } from "react";
-import {
-    Tabs,
-    Tab,
-    TextField,
-    Rating,
-    Grid,
-    Card,
-    CardMedia,
-    CardContent,
-    Autocomplete,
-} from "@mui/material";
 import { getUsers } from "../services/adminService";
 import { getExercises } from "../services/exerciseService";
 import { createEvaluation } from "../services/evaluationService";
+import { getUserId } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { getUserId } from "../services/auth";
+import ConfirmationDialog from "../components/dialogs/ConfirmationDialog";
+import SuccessDialog from "../components/dialogs/SuccessDialog";
+import { Typography } from "@mui/material";
+import UserSelect from "../components/evaluation/UserSelect";
+import ExerciseCard from "../components/evaluation/ExerciseCard";
 
 const EvaluationPage = () => {
     const [users, setUsers] = useState([]);
     const [exercises, setExercises] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [exerciseScores, setExerciseScores] = useState({});
+    const [scores, setScores] = useState({});
     const [observations, setObservations] = useState({});
     const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
-    const [nextEvaluationDate, setNextEvaluationDate] = useState(
-        dayjs().add(6, "month").format("YYYY-MM-DD")
-    );
-    const [selectedCategory, setSelectedCategory] = useState(0);
-    const [errors, setErrors] = useState({
-        user: "",
-        date: "",
-    });
-
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [nextEvaluationDate, setNextEvaluationDate] = useState(dayjs().add(6, "month").format("YYYY-MM-DD"));
+    const [selectedTab, setSelectedTab] = useState("FMS");
+    const [errors, setErrors] = useState({});
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [successOpen, setSuccessOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [createdEvaluationId, setCreatedEvaluationId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedUsers = await getUsers(page + 1, pageSize);
-            const fetchedExercises = await getExercises();
-            setUsers(fetchedUsers.users);
-            setExercises(fetchedExercises);
+            const userRes = await getUsers(1, 500);
+            const exerciseRes = await getExercises();
+            setUsers(userRes.users);
+            setExercises(exerciseRes);
         };
         fetchData();
     }, []);
 
-    const handleSave = async () => {
-        let formErrors = { user: "", date: "" };
-
-        if (!selectedUser) formErrors.user = "Por favor, selecione um usuário.";
-        if (!date) formErrors.date = "Por favor, selecione a data da avaliação.";
-
-        setErrors(formErrors);
-
-        if (formErrors.user || formErrors.date) return;
-
-        const exercisesPayload = exercises.map((exercise) => ({
-            ExerciseId: String(exercise.exerciseId),
-            Score: exerciseScores[exercise.exerciseId] != null
-                ? parseInt(exerciseScores[exercise.exerciseId], 10)
-                : 0,
-            Observation: observations[exercise.exerciseId] || ""
-        }));
-
-        const payload = {
-            AdminId: getUserId(),
-            UserId: selectedUser.id,
-            Date: date,
-            Exercises: exercisesPayload,
-        };
-
-        await createEvaluation(payload);
-
-        setErrors({ user: "", date: "" });
-    };
-
-    const handleUserChange = (newValue) => {
-        setSelectedUser(newValue);
-        setErrors((prev) => ({ ...prev, user: "" }));
-    };
-
-    const handleDateChange = (newDate) => {
-        setDate(newDate);
-        setNextEvaluationDate(dayjs(newDate).add(6, "month").format("YYYY-MM-DD"));
-        setErrors((prev) => ({ ...prev, date: "" }));
-    };
-
-    const handleScoreChange = (exerciseId, newScore) => {
-        setExerciseScores((prev) => ({
+    const handleScoreChange = (exerciseId, side, value) => {
+        setScores((prev) => ({
             ...prev,
-            [exerciseId]: newScore,
+            [exerciseId]: {
+                ...prev[exerciseId],
+                [side]: value,
+            },
         }));
     };
 
-    const handleObservationChange = (exerciseId, text) => {
+    const handleObservationChange = (exerciseId, side, value) => {
         setObservations((prev) => ({
             ...prev,
-            [exerciseId]: text,
+            [exerciseId]: {
+                ...prev[exerciseId],
+                [side]: value,
+            },
         }));
     };
 
-    const categories = [...new Set(exercises.map((e) => e.category))];
-    const formatCategory = (category) =>
-        category === "FMS" ? "FMS" : "CAPACIDADES FÍSICAS";
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!selectedUser) {
+            newErrors.user = "Selecione o usuário";
+        }
+
+        exercises.forEach((exercise) => {
+            const entry = scores[exercise.exerciseId] || {};
+            const sides = exercise.isUnilateral ? ["Right", "Left"] : ["None"];
+            const maxScore = exercise.category === "FMS" ? 3 : 100;
+
+            sides.forEach((side) => {
+                const value = entry[side];
+
+                const isMissing = value === undefined || value === "";
+                const isOverLimit = Number(value) > maxScore;
+
+                if (isMissing || isOverLimit) {
+                    newErrors[`${exercise.exerciseId}-${side}`] = true;
+                }
+            });
+        });
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const resetForm = () => {
+        setScores({});
+        setObservations({});
+        setSelectedUser(null);
+        setErrors({});
+        setDate(dayjs().format("YYYY-MM-DD"));
+        setNextEvaluationDate(dayjs().add(6, "month").format("YYYY-MM-DD"));
+    };
+
+    const handleSaveConfirmed = async () => {
+        if (!selectedUser) return;
+        setIsLoading(true);
+
+        const payload = {
+            adminId: getUserId(),
+            userId: selectedUser.id,
+            date,
+            exercises: [],
+        };
+
+        exercises.forEach((exercise) => {
+            const entry = scores[exercise.exerciseId] || {};
+            const sides = exercise.isUnilateral ? ["Right", "Left"] : ["None"];
+
+            sides.forEach((side) => {
+                if (entry[side] != null) {
+                    payload.exercises.push({
+                        exerciseId: exercise.exerciseId,
+                        score: Number(entry[side]),
+                        observation: observations[exercise.exerciseId]?.[side] || "",
+                        side,
+                    });
+                }
+            });
+        });
+
+        const result = await createEvaluation(payload);
+        const evaluationId = result.evaluationId;
+
+        setCreatedEvaluationId(evaluationId);
+        setIsLoading(false);
+        setConfirmOpen(false);
+        resetForm();
+        setSuccessOpen(true);
+    };
+
+    const handleSave = () => {
+        if (validateForm()) {
+            setConfirmOpen(true);
+        }
+    };
 
     return (
-        <>
+        <div className="min-h-screen text-white">
             <Nav />
-            <section className="p-6 min-h-screen max-w-5xl mx-auto">
-                <div className="bg-white p-4 rounded-lg shadow-lg mb-6">
-                    <h2 className="text-center text-[#302539] font-bold text-3xl md:text-4xl mb-6">Criar Avaliação</h2>
-                    <Grid container spacing={3} className="mb-6">
-                        <Grid item xs={12} sm={6} md={4}>
-                            <Autocomplete
-                                options={users}
-                                getOptionLabel={(option) => option.name}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Buscar Usuário"
-                                        variant="outlined"
-                                        required
-                                        error={!!errors.user}
-                                        helperText={errors.user}
-                                    />
-                                )}
-                                value={selectedUser}
-                                onChange={(e, newValue) => handleUserChange(newValue)}
-                                noOptionsText="Usuário não encontrado"
-                                fullWidth
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: "#916AAF",
-                                    },
-                                    "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#916AAF",
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                                fullWidth
-                                type="date"
-                                label="Data da Avaliação"
-                                value={date}
-                                onChange={(e) => handleDateChange(e.target.value)}
-                                InputLabelProps={{ shrink: true }}
-                                variant="outlined"
-                                required
-                                error={!!errors.date}
-                                helperText={errors.date}
-                                sx={{
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "#916AAF",
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: "#916AAF",
-                                    },
-                                    "& .MuiInputLabel-root.Mui-focused": {
-                                        color: "#916AAF",
-                                    },
-                                    "& input": {
-                                        color: "#916AAF",
-                                    },
-                                    "& input::-webkit-calendar-picker-indicator": {
-                                        color: "#916AAF",
-                                        cursor: "pointer",
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                                fullWidth
-                                type="date"
-                                label="Próxima Avaliação"
-                                value={nextEvaluationDate}
-                                InputLabelProps={{ shrink: true }}
-                                variant="outlined"
-                                disabled
-                            />
-                        </Grid>
-                    </Grid>
-
-                </div>
-
-                <Tabs
-                    value={selectedCategory}
-                    onChange={(e, newValue) => setSelectedCategory(newValue)}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    className="mb-6 bg-white rounded-lg shadow-lg"
-                    TabIndicatorProps={{ style: { backgroundColor: "#4A148C" } }}
+            <div className="max-w-6xl mx-auto py-10 px-4">
+                <Typography
+                    variant="h4"
                     sx={{
-                        "& .MuiTab-root": {
-                            "&.Mui-selected": {
-                                color: "#8E24AA",
-                            },
-                        },
+                        fontWeight: "800",
+                        textAlign: "center",
+                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        marginBottom: "24px",
+                        fontSize: { xs: "2rem", md: "2.5rem" },
                     }}
                 >
-                    {categories.map((category, index) => (
-                        <Tab key={index} label={formatCategory(category)} />
-                    ))}
-                </Tabs>
+                    Criar Avaliação Física
+                </Typography>
 
-                <Grid container spacing={3}>
-                    {exercises
-                        .filter((exercise) => exercise.category === categories[selectedCategory])
-                        .map((exercise) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={3}
-                                key={exercise.exerciseId}
-                            >
-                                <Card className="shadow-lg flex flex-col  text-center h-full">
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={exercise.photoUrl}
-                                        alt={exercise.name}
-                                    />
-                                    <CardContent>
-                                        <h4 className="mb-2">
-                                            {exercise.name}
-                                        </h4>
-                                        {exercise.category === "FMS" ? (
-                                            <Rating
-                                                value={exerciseScores[exercise.exerciseId] || 0}
-                                                onChange={(e, newValue) =>
-                                                    handleScoreChange(exercise.exerciseId, newValue)
-                                                }
-                                                max={3}
-                                            />
-                                        ) : (
-                                            <TextField
-                                                label="Pontuação"
-                                                type="number"
-                                                value={exerciseScores[exercise.exerciseId] || ""}
-                                                onChange={(e) =>
-                                                    handleScoreChange(exercise.exerciseId, e.target.value)
-                                                }
-                                                fullWidth
-                                                sx={{ mt: 1 }}
-                                            />
-                                        )}
-                                        <TextField
-                                            fullWidth
-                                            multiline
-                                            rows={2}
-                                            label="Observações"
-                                            value={observations[exercise.exerciseId] || ""}
-                                            onChange={(e) =>
-                                                handleObservationChange(exercise.exerciseId, e.target.value)
-                                            }
-                                            sx={{ mt: 2 }}
-                                        />
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                </Grid>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div>
+                        <UserSelect
+                            users={users}
+                            selectedUser={selectedUser}
+                            setSelectedUser={setSelectedUser}
+                            error={errors.user}
+                        />
 
-                <div className="flex justify-center mt-8">
-                    <button
-                        onClick={handleSave}
-                        className="bg-gradient-to-r from-purple-600 to-purple-900 text-white px-8 py-3 rounded-lg shadow-lg font-extrabold hover:bg-purple-800 transition-colors duration-300"
-                    >
-                        SALVAR
-                    </button>
+                        {errors.user && <p className="text-red-500 text-sm mt-1">{errors.user}</p>}
+                    </div>
+
+                    <div>
+                        <label className="text-sm text-gray-300">Data da Avaliação</label>
+                        <input
+                            type="date"
+                            className="w-full mt-1 rounded-xl bg-white text-black p-3 border border-gray-600 focus:outline-none"
+                            value={date}
+                            onChange={(e) => {
+                                setDate(e.target.value);
+                                setNextEvaluationDate(dayjs(e.target.value).add(6, "month").format("YYYY-MM-DD"));
+                            }}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-sm text-gray-300">Próxima Avaliação</label>
+                        <input
+                            type="date"
+                            disabled
+                            className="w-full mt-1 rounded-xl bg-gray-700 text-white p-3 border border-gray-600"
+                            value={nextEvaluationDate}
+                        />
+                    </div>
                 </div>
 
-            </section>
+                <div className="flex gap-4 mb-6 overflow-x-auto">
+                    <button
+                        onClick={() => setSelectedTab("FMS")}
+                        className={`px-5 py-2 rounded-full font-semibold focus:outline-none focus:ring-0 focus:ring-offset-0 ${selectedTab === "FMS" ? "bg-purple-700" : "bg-gray-800"}`}
+                    >
+                        FMS
+                    </button>
+
+                    <button
+                        onClick={() => setSelectedTab("CAPACIDADES")}
+                        className={`px-5 py-2 rounded-full font-semibold focus:outline-none focus:ring-0 focus:ring-offset-0 ${selectedTab === "CAPACIDADES" ? "bg-purple-700" : "bg-gray-800"}`}
+                    >
+                        Capacidades Físicas
+                    </button>
+
+                </div>
+
+                <div className="space-y-6">
+                    {exercises
+                        .filter((e) => selectedTab === "FMS" ? e.category === "FMS" : e.category !== "FMS")
+                        .map((exercise) => {
+                            const currentSide = scores[exercise.exerciseId]?.__side || "Right";
+                            const toggleSide = () => {
+                                setScores((prev) => ({
+                                    ...prev,
+                                    [exercise.exerciseId]: {
+                                        ...(prev[exercise.exerciseId] || {}),
+                                        __side: currentSide === "Right" ? "Left" : "Right"
+                                    }
+                                }));
+                            };
+
+                            return (
+                                <ExerciseCard
+                                    key={exercise.exerciseId}
+                                    exercise={exercise}
+                                    score={scores[exercise.exerciseId]}
+                                    observation={observations[exercise.exerciseId]}
+                                    error={errors[`${exercise.exerciseId}-${exercise.isUnilateral ? currentSide : "None"}`]}
+                                    onScoreChange={handleScoreChange}
+                                    onObservationChange={handleObservationChange}
+                                    toggleSide={toggleSide}
+                                    currentSide={currentSide}
+                                />
+                            );
+                        })}
+                </div>
+
+                {Object.keys(errors).length > 0 && (
+                    <div className="mt-8 bg-red-100 text-red-900 border border-red-300 px-4 py-3 rounded-xl text-center font-medium max-w-lg mx-auto">
+                        Existem erros ou campos obrigatórios incompletos.
+                    </div>
+                )}
+
+                <div className="flex justify-center mt-12">
+                    <button
+                        onClick={handleSave}
+                        className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white text-lg font-bold py-3 px-12 rounded-full shadow-xl uppercase"
+                    >
+                        Salvar Avaliação
+                    </button>
+                </div>
+            </div>
+
+            {confirmOpen && (
+                <ConfirmationDialog
+                    message="Tem certeza que deseja salvar esta avaliação?"
+                    onConfirm={handleSaveConfirmed}
+                    onCancel={() => setConfirmOpen(false)}
+                    isLoading={isLoading}
+                />
+            )}
+
+            {successOpen && (
+                <SuccessDialog
+                    message="Avaliação salva com sucesso!"
+                    onClose={() => {
+                        setSuccessOpen(false);
+                        if (createdEvaluationId) {
+                            navigate(`/avaliacao/${createdEvaluationId}`);
+                        }
+                    }}
+                />
+            )}
+
             <Footer />
-        </>
+        </div>
     );
 };
 

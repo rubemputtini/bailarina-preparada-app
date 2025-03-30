@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BailarinaPreparadaApp.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace BailarinaPreparadaApp.DTOs.Evaluation
 {
@@ -12,5 +13,9 @@ namespace BailarinaPreparadaApp.DTOs.Evaluation
         public int Score { get; set; } = 0;
 
         public string? Observation { get; set; }
+
+        [Required]
+        [RegularExpression("^(Right|Left|None)$", ErrorMessage = "O lado do exercício deve ser Right, Left ou None.")]
+        public string Side { get; set; } = string.Empty;
     }
 }

@@ -7,5 +7,6 @@
         public string Category { get; set; } = string.Empty;
         public string? PhotoUrl { get; set; }
         public string? VideoUrl { get; set; }
+        public bool IsUnilateral { get; set; }
     }
 }

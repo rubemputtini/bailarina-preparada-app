@@ -41,6 +41,7 @@ namespace BailarinaPreparadaApp.Services
                         PhotoUrl = ex.Exercise.PhotoUrl,
                         VideoUrl = ex.Exercise.VideoUrl
                     },
+                    Side = ex.Side,
                     Score = ex.Score
                 }).ToList()
             });
@@ -76,8 +77,9 @@ namespace BailarinaPreparadaApp.Services
                         Name = ex.Exercise.Name,
                         Category = ex.Exercise.ExerciseCategory.ToString(),
                         PhotoUrl = ex.Exercise.PhotoUrl,
-                        VideoUrl = ex.Exercise.VideoUrl
+                        VideoUrl = ex.Exercise.VideoUrl,
                     },
+                    Side = ex.Side,
                     Score = ex.Score
                 }).ToList()
             };
@@ -94,7 +96,7 @@ namespace BailarinaPreparadaApp.Services
             {
                 return (false, "Usuário ou administrador não encontrado.", null);
             }
-            
+
             var evaluation = new Evaluation
             {
                 AdminId = request.AdminId,
@@ -119,15 +121,16 @@ namespace BailarinaPreparadaApp.Services
                     ExerciseId = exerciseRequest.ExerciseId,
                     Exercise = exercise,
                     Score = exerciseRequest.Score,
-                    Observation = exerciseRequest.Observation ?? string.Empty
+                    Observation = exerciseRequest.Observation ?? string.Empty,
+                    Side = Enum.Parse<ExerciseSide>(exerciseRequest.Side, true),
                 });
             }
 
             _dbContext.Evaluations.Add(evaluation);
-            
+
             await _dbContext.SaveChangesAsync();
-            
-            return (true, "Avaliação criada com sucesso.", evaluation.EvaluationId);            
+
+            return (true, "Avaliação criada com sucesso.", evaluation.EvaluationId);
         }
 
         public async Task<(bool Success, string Message)> UpdateEvaluationAsync(int id, List<EvaluationExerciseRequest> updatedExercises)
@@ -141,20 +144,26 @@ namespace BailarinaPreparadaApp.Services
                 return (false, "Avaliação não encontrada.");
             }
 
-            var exerciseIds = updatedExercises.Select(ue => ue.ExerciseId).ToList();
+            var updatedDict = updatedExercises.ToDictionary(
+                ue => (ue.ExerciseId, Side: Enum.Parse<ExerciseSide>(ue.Side, true)),
+                ue => ue
+            );
 
-            var existingExercises = evaluation.Exercises
-                .Where(e => exerciseIds.Contains(e.ExerciseId))
-                .ToDictionary(e => e.ExerciseId);
+            var existingDict = evaluation.Exercises.ToDictionary(
+                e => (e.ExerciseId, e.Side),
+                e => e
+            );
 
-            foreach (var exerciseUpdate in updatedExercises)
+            foreach (var key in updatedDict.Keys)
             {
-                if (!existingExercises.ContainsKey(exerciseUpdate.ExerciseId))
+                if (!existingDict.TryGetValue(key, out var existing))
                 {
-                    return (false, $"Exercício com ID {exerciseUpdate.ExerciseId} não encontrado na avaliação.");
+                    return (false, $"Exercício {key.ExerciseId} com lado '{key.Side}' não encontrado na avaliação.");
                 }
 
-                existingExercises[exerciseUpdate.ExerciseId].Score = exerciseUpdate.Score;
+                var update = updatedDict[key];
+                existing.Score = update.Score;
+                existing.Observation = update.Observation ?? string.Empty;
             }
 
             await _dbContext.SaveChangesAsync();
