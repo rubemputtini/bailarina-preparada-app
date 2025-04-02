@@ -1,6 +1,5 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Exercise;
-using BailarinaPreparadaApp.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Services

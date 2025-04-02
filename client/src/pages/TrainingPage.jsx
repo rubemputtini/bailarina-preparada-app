@@ -63,7 +63,7 @@ const TrainingPage = () => {
     return (
         <>
             <Nav />
-            <Box sx={{ minHeight: "100vh", padding: "32px" }}>
+            <Box sx={{ minHeight: "100vh", padding: "24px" }}>
                 <Box sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
                     <Box sx={{
                         backgroundColor: "#c5e1e9",

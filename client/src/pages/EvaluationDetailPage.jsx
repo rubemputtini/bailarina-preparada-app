@@ -1,172 +1,101 @@
-import { useEffect, useState } from "react";
-import {
-    Tabs,
-    Tab,
-    Typography,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Divider,
-    Box,
-    CircularProgress,
-} from "@mui/material";
-import { getEvaluationById } from "../services/evaluationService";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { calculateTotalFMSScore } from "../utils/fmsUtils";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { useParams } from "react-router-dom";
+import FMSScoreCard from "../components/evaluation/FMSScoreCard";
+import PhysicalScoreCard from "../components/evaluation/PhysicalScoreCard";
+import EvaluationSummary from "../components/evaluation/EvaluationSummary";
+import EvaluationTabs from "../components/evaluation/EvaluationTabs";
+import EvaluationGrid from "../components/evaluation/EvaluationGrid";
+import { groupUnilateralExercises } from "../utils/exerciseUtils";
+import { calculateAvgClassification } from "../utils/classificationUtils";
+import { Typography } from "@mui/material";
+import dayjs from "dayjs";
+import useEvaluationDetails from "../hooks/useEvaluationDetails";
+import { groupByCategory } from "../utils/exerciseUtils";
+import LoadingCard from "../components/cards/LoadingCard";
 
 const EvaluationDetailPage = () => {
     const { evaluationId } = useParams();
-    const [evaluation, setEvaluation] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState("FMS");
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchEvaluation = async () => {
-            try {
-                const data = await getEvaluationById(evaluationId);
-                setEvaluation(data);
-            } catch (error) {
-                console.error("Erro ao carregar avaliação:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchEvaluation();
-    }, [evaluationId]);
-
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" my={22}>
-                <CircularProgress />
-            </Box>
-        );
-    }
+    const { evaluation, referenceMap } = useEvaluationDetails(evaluationId);
+    const [selectedTab, setSelectedTab] = useState("FMS");
 
     if (!evaluation) {
         return (
-            <Box
-                sx={{
-                    minHeight: "100vh",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    textAlign: "center",
-                    padding: 4,
-                }}
-            >
-                <Typography variant="h5">Erro ao carregar a avaliação.</Typography>
-            </Box>
+            <div className="flex flex-col min-h-screen">
+                <Nav />
+                <div className="max-w-7xl mx-auto p-6 flex-grow">
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontWeight: "800",
+                            textAlign: "center",
+                            background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            marginBottom: "24px",
+                            fontSize: { xs: "2rem", md: "2.5rem" },
+                        }}
+                    >
+                        Resultado da Avaliação Física
+                    </Typography>
+
+                    <LoadingCard />
+                </div>
+                <Footer />
+            </div>
         );
     }
 
-    const { adminName, userName, date, exercises } = evaluation;
-    const filteredExercises = exercises.filter(
-        (ex) => ex.exercise.category === selectedCategory
-    );
+    const grouped = groupByCategory(evaluation.exercises);
+    const totalFMSScore = calculateTotalFMSScore(grouped.fms);
+    const avgClassification = calculateAvgClassification(grouped.physical, referenceMap);
+    const nextEvaluationDate = dayjs(evaluation.date).add(6, "month").format("DD/MM/YYYY");
 
     return (
-        <>
+        <div className="min-h-screen text-white">
             <Nav />
-            <Box
-                sx={{
-                    padding: "40px 16px",
-                    minHeight: "100vh",
-                }}
-            >
-                <Box
+            <div className="max-w-7xl mx-auto p-6">
+                <Typography
+                    variant="h4"
                     sx={{
-                        maxWidth: "1200px",
-                        margin: "0 auto",
-                        padding: "24px",
-                        backgroundColor: "#FFFFFF",
-                        borderRadius: "12px",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                        fontWeight: "800",
+                        textAlign: "center",
+                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        marginBottom: "24px",
+                        fontSize: { xs: "2rem", md: "2.5rem" },
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        gutterBottom
-                        sx={{
-                            fontWeight: "bold",
-                            color: "#302539",
-                            marginBottom: "24px",
-                        }}
-                    >
-                        Detalhes da Avaliação
-                    </Typography>
-                    <Typography variant="subtitle1" sx={{ marginBottom: 1 }}>
-                        <strong>Nome:</strong> {userName}
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
-                        <strong>Responsável:</strong> {adminName}
-                    </Typography>
-                    <Typography sx={{ marginBottom: 2 }}>
-                        <strong>Data:</strong>{" "}
-                        {new Date(date).toLocaleDateString("pt-BR")}
-                    </Typography>
-                    <Divider sx={{ marginY: 2 }} />
-                    <Typography sx={{ marginBottom: 2 }}>
-                        <strong>Pontuação Final:</strong>{" "}
-                        {exercises.reduce((acc, ex) => acc + ex.score, 0)}
-                    </Typography>
-                    <Typography sx={{ marginBottom: 4 }}>
-                        <strong>Ideal:</strong> {">"} 14 |{" "}
-                        <strong>Maior Risco:</strong> {"<"} 14
-                    </Typography>
+                    Resultado da Avaliação Física
+                </Typography>
 
-                    <Tabs
-                        value={selectedCategory}
-                        onChange={(e, newValue) => setSelectedCategory(newValue)}
-                        centered
-                        TabIndicatorProps={{ style: { backgroundColor: "#4A148C" } }}
-                        sx={{
-                            marginBottom: 4,
-                            "& .MuiTab-root": {
-                                "&.Mui-selected": {
-                                    color: "#8E24AA",
-                                },
-                            },
-                        }}
-                    >
-                        <Tab label="FMS Adaptado" value="FMS" />
-                        <Tab label="Capacidades Físicas" value="CapacidadesFisicas" />
-                    </Tabs>
+                <EvaluationSummary
+                    name={evaluation.userName}
+                    date={evaluation.date}
+                    nextDate={nextEvaluationDate}
+                />
 
-                    <Table sx={{ marginTop: 2 }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ fontWeight: "bold", color: "#4A148C" }}>
-                                    Exercício
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: "bold", color: "#4A148C" }}>
-                                    Pontuação
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: "bold", color: "#4A148C" }}>
-                                    Observação
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredExercises.map((exercise, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{exercise.exercise.name}</TableCell>
-                                    <TableCell>{exercise.score}</TableCell>
-                                    <TableCell>
-                                        {exercise.observation || "—"}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Box>
-            </Box>
+                <EvaluationTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+
+                {selectedTab === "FMS" && (
+                    <>
+                        <FMSScoreCard totalFMSScore={totalFMSScore} />
+                        <EvaluationGrid items={groupUnilateralExercises(grouped.fms, referenceMap)} />
+                    </>
+                )}
+
+                {selectedTab === "CAPACIDADES" && (
+                    <>
+                        <PhysicalScoreCard averageClassification={avgClassification} />
+                        <EvaluationGrid items={groupUnilateralExercises(grouped.physical, referenceMap)} />
+                    </>
+                )}
+            </div>
             <Footer />
-        </>
+        </div>
     );
 };
 

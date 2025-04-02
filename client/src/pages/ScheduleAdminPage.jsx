@@ -9,6 +9,7 @@ import { getUserSchedule, updateSchedule, createSchedule } from "../services/sch
 import { deleteScheduleTask } from "../services/scheduleTaskService";
 import DroppableSlot from "../components/schedule/DroppableSlot";
 import { daysOfWeek, periods } from "../utils/constants";
+import { calculateAge } from "../utils/dateUtils";
 import { useParams } from "react-router-dom";
 
 const ScheduleAdminPage = () => {
@@ -144,22 +145,11 @@ const ScheduleAdminPage = () => {
         setIsEditing(false);
     };
 
-    const calculateAge = (dob) => {
-        const birthDate = new Date(dob);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const hasBirthdayPassed =
-            today.getMonth() > birthDate.getMonth() ||
-            (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
-        if (!hasBirthdayPassed) age--;
-        return age;
-    };
-
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="min-h-screen flex flex-col text-white">
                 <Nav />
-                <Container className="flex-grow py-5">
+                <Container className="flex-grow p-6">
                     <div className="flex justify-between items-center mb-4">
                         <Typography variant="h4" className="text-[#c5e1e9]">
                             Planejamento Semanal:

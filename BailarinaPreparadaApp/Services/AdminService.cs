@@ -77,7 +77,8 @@ namespace BailarinaPreparadaApp.Services
                         Name = ex.Exercise.Name,
                         Category = ex.Exercise.ExerciseCategory.ToString(),
                         PhotoUrl = ex.Exercise.PhotoUrl,
-                        VideoUrl = ex.Exercise.VideoUrl
+                        VideoUrl = ex.Exercise.VideoUrl,
+                        IsUnilateral = ex.Exercise.IsUnilateral
                     },
                     Score = ex.Score
                 }).ToList()

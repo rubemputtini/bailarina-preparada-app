@@ -61,7 +61,7 @@ const CalendarPage = () => {
             <Nav />
             <Box
                 sx={{
-                    padding: "16px",
+                    padding: "24px",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",

@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
@@ -29,7 +30,10 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvaluationById(int id)
         {
-            var evaluation = await _evaluationService.GetEvaluationByIdAsync(id);
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var isAdmin = User.IsInRole("admin");
+
+            var evaluation = await _evaluationService.GetEvaluationByIdAsync(id, currentUserId, isAdmin);
 
             return Ok(evaluation);
         }

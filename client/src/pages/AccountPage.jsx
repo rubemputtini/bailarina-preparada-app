@@ -63,7 +63,7 @@ const AccountPage = () => {
     return (
         <div className="min-h-screen text-white">
             <Nav />
-            <div className="max-w-3xl mx-auto py-10 px-4">
+            <div className="max-w-3xl mx-auto p-6">
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-bold text-purple-800">Minha Conta</h2>

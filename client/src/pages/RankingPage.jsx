@@ -73,7 +73,7 @@ const RankingPage = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <Nav />
-            <Container className="flex-grow py-5">
+            <Container className="flex-grow py-6">
                 <Typography
                     variant="h4"
                     sx={{

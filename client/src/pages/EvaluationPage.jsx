@@ -12,6 +12,7 @@ import SuccessDialog from "../components/dialogs/SuccessDialog";
 import { Typography } from "@mui/material";
 import UserSelect from "../components/evaluation/UserSelect";
 import ExerciseCard from "../components/evaluation/ExerciseCard";
+import EvaluationTabs from "../components/evaluation/EvaluationTabs";
 
 const EvaluationPage = () => {
     const [users, setUsers] = useState([]);
@@ -20,6 +21,7 @@ const EvaluationPage = () => {
     const [scores, setScores] = useState({});
     const [observations, setObservations] = useState({});
     const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
+    const [userGender, setUserGender] = useState("");
     const [nextEvaluationDate, setNextEvaluationDate] = useState(dayjs().add(6, "month").format("YYYY-MM-DD"));
     const [selectedTab, setSelectedTab] = useState("FMS");
     const [errors, setErrors] = useState({});
@@ -66,10 +68,14 @@ const EvaluationPage = () => {
             newErrors.user = "Selecione o usuário";
         }
 
+        if (!userGender) {
+            newErrors.gender = "Selecione o sexo";
+        }
+
         exercises.forEach((exercise) => {
             const entry = scores[exercise.exerciseId] || {};
             const sides = exercise.isUnilateral ? ["Right", "Left"] : ["None"];
-            const maxScore = exercise.category === "FMS" ? 3 : 100;
+            const maxScore = exercise.category === "FMS" ? 3 : 200;
 
             sides.forEach((side) => {
                 const value = entry[side];
@@ -104,6 +110,7 @@ const EvaluationPage = () => {
             adminId: getUserId(),
             userId: selectedUser.id,
             date,
+            userGender,
             exercises: [],
         };
 
@@ -142,7 +149,7 @@ const EvaluationPage = () => {
     return (
         <div className="min-h-screen text-white">
             <Nav />
-            <div className="max-w-6xl mx-auto py-10 px-4">
+            <div className="max-w-7xl mx-auto p-6">
                 <Typography
                     variant="h4"
                     sx={{
@@ -158,7 +165,7 @@ const EvaluationPage = () => {
                     Criar Avaliação Física
                 </Typography>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                     <div>
                         <UserSelect
                             users={users}
@@ -166,8 +173,21 @@ const EvaluationPage = () => {
                             setSelectedUser={setSelectedUser}
                             error={errors.user}
                         />
-
                         {errors.user && <p className="text-red-500 text-sm mt-1">{errors.user}</p>}
+                    </div>
+
+                    <div>
+                        <label className="text-sm text-gray-300">Sexo</label>
+                        <select
+                            className="w-full mt-1 rounded-xl bg-white text-black p-3 border border-gray-600 focus:outline-none"
+                            value={userGender}
+                            onChange={(e) => setUserGender(e.target.value)}
+                        >
+                            <option value="">Selecione</option>
+                            <option value="F">Feminino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                        {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
                     </div>
 
                     <div>
@@ -183,6 +203,7 @@ const EvaluationPage = () => {
                         />
                     </div>
 
+
                     <div>
                         <label className="text-sm text-gray-300">Próxima Avaliação</label>
                         <input
@@ -194,22 +215,7 @@ const EvaluationPage = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-4 mb-6 overflow-x-auto">
-                    <button
-                        onClick={() => setSelectedTab("FMS")}
-                        className={`px-5 py-2 rounded-full font-semibold focus:outline-none focus:ring-0 focus:ring-offset-0 ${selectedTab === "FMS" ? "bg-purple-700" : "bg-gray-800"}`}
-                    >
-                        FMS
-                    </button>
-
-                    <button
-                        onClick={() => setSelectedTab("CAPACIDADES")}
-                        className={`px-5 py-2 rounded-full font-semibold focus:outline-none focus:ring-0 focus:ring-offset-0 ${selectedTab === "CAPACIDADES" ? "bg-purple-700" : "bg-gray-800"}`}
-                    >
-                        Capacidades Físicas
-                    </button>
-
-                </div>
+                <EvaluationTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
                 <div className="space-y-6">
                     {exercises

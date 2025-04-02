@@ -1,14 +1,15 @@
 export const handleError = (error, defaultMessage) => {
-    let errorMessage = defaultMessage;
-    
-    if (error.response) {
-        errorMessage = error.response.data?.message || defaultMessage;
-    } else if (error.message) {
-        errorMessage = error.message;
-    }
+    const errorMessage = error?.message || defaultMessage;
 
     const customError = new Error(errorMessage);
-    customError.details = error.response?.data?.details || [];
+
+    if (error.status) {
+        customError.status = error.status;
+    }
+
+    if (error.details) {
+        customError.details = error.details;
+    }
 
     throw customError;
 };

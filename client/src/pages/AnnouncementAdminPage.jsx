@@ -41,7 +41,7 @@ const AnnouncementAdminPage = () => {
     return (
         <div className="min-h-screen flex flex-col text-white">
             <Nav />
-            <main className="flex-grow px-4 md:px-8 py-5">
+            <main className="flex-grow m-auto max-w-7xl p-6">
                 <Typography
                     variant="h4"
                     sx={{

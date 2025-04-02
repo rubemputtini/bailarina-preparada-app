@@ -28,11 +28,16 @@ api.interceptors.response.use(
 
         if (status === 401) {
             clearToken();
-            console.error('Sessão expirada. Faça login novamente.');
+            return Promise.reject({ status, message: errorMessage });
         }
-        console.error(`Erro na API (${status}): ${errorMessage}`);
 
-        return Promise.reject(new Error(errorMessage));
+        if (status === 403) {
+            return Promise.reject({ status, message: errorMessage });
+        }
+
+        console.error(`Erro (${status}): ${errorMessage}`);
+
+        return Promise.reject({ status: status || 500, message: errorMessage });
     }
 );
 

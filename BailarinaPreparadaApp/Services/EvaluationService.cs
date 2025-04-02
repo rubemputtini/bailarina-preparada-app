@@ -31,6 +31,7 @@ namespace BailarinaPreparadaApp.Services
                 AdminName = e.Admin.Name,
                 UserName = e.User.Name,
                 Date = e.Date,
+                UserGender = e.UserGender,
                 Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
                 {
                     Exercise = new ExerciseResponse
@@ -39,17 +40,19 @@ namespace BailarinaPreparadaApp.Services
                         Name = ex.Exercise.Name,
                         Category = ex.Exercise.ExerciseCategory.ToString(),
                         PhotoUrl = ex.Exercise.PhotoUrl,
-                        VideoUrl = ex.Exercise.VideoUrl
+                        VideoUrl = ex.Exercise.VideoUrl,
+                        IsUnilateral = ex.Exercise.IsUnilateral
                     },
                     Side = ex.Side,
-                    Score = ex.Score
+                    Score = ex.Score,
+                    Observation = ex.Observation
                 }).ToList()
             });
 
             return response;
         }
 
-        public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id)
+        public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id, string currentUserId, bool isAdmin)
         {
             var evaluation = await _dbContext.Evaluations
                 .Include(e => e.Admin)
@@ -63,12 +66,18 @@ namespace BailarinaPreparadaApp.Services
                 throw new NotFoundException("Avaliação não encontrada.");
             }
 
+            if (!isAdmin && evaluation.UserId != currentUserId)
+            {
+                throw new ForbiddenException("Você não tem permissão para acessar essa avaliação.");
+            }
+
             var response = new EvaluationResponse
             {
                 EvaluationId = evaluation.EvaluationId,
                 AdminName = evaluation.Admin.Name,
                 UserName = evaluation.User.Name,
                 Date = evaluation.Date,
+                UserGender = evaluation.UserGender,
                 Exercises = evaluation.Exercises.Select(ex => new EvaluationExerciseResponse
                 {
                     Exercise = new ExerciseResponse
@@ -78,9 +87,11 @@ namespace BailarinaPreparadaApp.Services
                         Category = ex.Exercise.ExerciseCategory.ToString(),
                         PhotoUrl = ex.Exercise.PhotoUrl,
                         VideoUrl = ex.Exercise.VideoUrl,
+                        IsUnilateral = ex.Exercise.IsUnilateral
                     },
                     Side = ex.Side,
-                    Score = ex.Score
+                    Score = ex.Score,
+                    Observation = ex.Observation
                 }).ToList()
             };
 
@@ -104,6 +115,7 @@ namespace BailarinaPreparadaApp.Services
                 Date = request.Date,
                 Admin = admin,
                 User = user,
+                UserGender = request.UserGender,
                 Exercises = new List<EvaluationExercise>()
             };
 
