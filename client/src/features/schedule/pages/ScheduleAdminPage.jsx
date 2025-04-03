@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { Container, Typography, Paper, IconButton } from "@mui/material";
+import { Typography, Paper, IconButton } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FaEdit, FaCheck } from "react-icons/fa";
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import { getUserSchedule, updateSchedule, createSchedule } from "../services/scheduleService";
 import { deleteScheduleTask } from "../services/scheduleTaskService";
 import DroppableSlot from "../components/DroppableSlot";
 import { daysOfWeek, periods } from "../../../shared/utils/constants";
 import { calculateAge } from "../../../shared/utils/dateUtils";
 import { useParams } from "react-router-dom";
+import PageLayout from "layouts/PageLayout";
 
 const ScheduleAdminPage = () => {
     const [events, setEvents] = useState([]);
@@ -147,100 +146,96 @@ const ScheduleAdminPage = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="min-h-screen flex flex-col text-white">
-                <Nav />
-                <Container className="flex-grow p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h4" className="text-[#c5e1e9]">
-                            Planejamento Semanal:
-                        </Typography>
-                        <IconButton onClick={isEditing ? handleSave : handleToggleEdit} sx={{ color: "#c5e1e9" }}>
-                            {isEditing ? <FaCheck size={24} /> : <FaEdit size={24} />}
-                        </IconButton>
-                    </div>
-                    <div className="mb-4">
-                        <Typography
-                            variant="subtitle1"
-                            sx={{
-                                color: '#9575cd',
-                                fontSize: { xs: '20px', sm: '22px' },
-                                fontWeight: 500,
-                                marginBottom: '6px'
-                            }}
-                        >
-                            {userName}, {calculateAge(userBirthDate)} anos
-                        </Typography>
+            <PageLayout>
+                <div className="flex justify-between items-center mb-4">
+                    <Typography variant="h4" className="text-[#c5e1e9]">
+                        Planejamento Semanal
+                    </Typography>
+                    <IconButton onClick={isEditing ? handleSave : handleToggleEdit} sx={{ color: "#c5e1e9" }}>
+                        {isEditing ? <FaCheck size={24} /> : <FaEdit size={24} />}
+                    </IconButton>
+                </div>
+                <div className="mb-4">
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            color: '#9575cd',
+                            fontSize: { xs: '20px', sm: '22px' },
+                            fontWeight: 500,
+                            marginBottom: '6px'
+                        }}
+                    >
+                        {userName}, {calculateAge(userBirthDate)} anos
+                    </Typography>
 
-                        <div className="flex items-center space-x-2">
-                            <label className="text-sm text-gray-300 whitespace-nowrap">Objetivo:</label>
-                            <textarea
-                                className="p-1 rounded bg-gray-800 text-white text-sm w-96 resize-none"
-                                rows={1}
-                                disabled={!isEditing}
-                                value={goal}
-                                onChange={(e) => setGoal(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="overflow-x-auto overflow-y-auto max-h-[450px] sm:max-h-[500px]">
-                        <Paper elevation={3} className="p-4 bg-gray-100 shadow-lg min-w-[900px]">
-                            <div className="grid grid-cols-8 gap-1 text-center border-b border-gray-400 pb-2 text-gray-900 text-xs sm:text-sm md:text-lg bg-white font-bold">
-                                <div className="text-left">Período</div>
-                                {daysOfWeek.map((day, index) => (
-                                    <div key={index}>{day}</div>
-                                ))}
-                            </div>
-
-                            {periods.map((period, periodIndex) => (
-                                <div key={periodIndex} className="mb-1">
-                                    {[0, 1].map(row => (
-                                        <div key={`${period.label}-${row}`} className="grid grid-cols-8 gap-1 py-[3px] text-xs sm:text-sm md:text-base">
-                                            <div className="text-left text-gray-900 font-semibold pr-4">
-                                                {row === 0 ? period.label : ""}
-                                            </div>
-                                            {daysOfWeek.map((_, colIndex) => (
-                                                <DroppableSlot
-                                                    key={`${colIndex}-${period.label}-${row}`}
-                                                    colIndex={colIndex}
-                                                    period={period}
-                                                    row={row}
-                                                    isEditing={isEditing}
-                                                    setEvents={setEvents}
-                                                    events={events.filter(
-                                                        event =>
-                                                            event.dayOfWeek === colIndex &&
-                                                            event.period === period.label &&
-                                                            event.row === row
-                                                    )}
-                                                    setDeletedIds={setDeletedIds}
-                                                />
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
-                        </Paper>
-                    </div>
-                    <div className="mt-4">
-                        <label className="block text-sm text-gray-300 mb-1">Observações:</label>
+                    <div className="flex items-center space-x-2">
+                        <label className="text-sm text-gray-300 whitespace-nowrap">Objetivo:</label>
                         <textarea
-                            className="w-full p-2 rounded bg-gray-800 text-white resize-none"
-                            rows={2}
+                            className="p-1 rounded bg-gray-800 text-white text-sm w-96 resize-none"
+                            rows={1}
                             disabled={!isEditing}
-                            value={observations}
-                            onChange={(e) => setObservations(e.target.value)}
+                            value={goal}
+                            onChange={(e) => setGoal(e.target.value)}
                         />
                     </div>
-                    <div className="mt-6 text-center">
-                        <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
-                            <span>Próxima atualização sugerida:</span>
-                            <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
+                </div>
+
+                <div className="overflow-x-auto overflow-y-auto max-h-[450px] sm:max-h-[500px]">
+                    <Paper elevation={3} className="p-4 bg-gray-100 shadow-lg min-w-[900px]">
+                        <div className="grid grid-cols-8 gap-1 text-center border-b border-gray-400 pb-2 text-gray-900 text-xs sm:text-sm md:text-lg bg-white font-bold">
+                            <div className="text-left">Período</div>
+                            {daysOfWeek.map((day, index) => (
+                                <div key={index}>{day}</div>
+                            ))}
                         </div>
+
+                        {periods.map((period, periodIndex) => (
+                            <div key={periodIndex} className="mb-1">
+                                {[0, 1].map(row => (
+                                    <div key={`${period.label}-${row}`} className="grid grid-cols-8 gap-1 py-[3px] text-xs sm:text-sm md:text-base">
+                                        <div className="text-left text-gray-900 font-semibold pr-4">
+                                            {row === 0 ? period.label : ""}
+                                        </div>
+                                        {daysOfWeek.map((_, colIndex) => (
+                                            <DroppableSlot
+                                                key={`${colIndex}-${period.label}-${row}`}
+                                                colIndex={colIndex}
+                                                period={period}
+                                                row={row}
+                                                isEditing={isEditing}
+                                                setEvents={setEvents}
+                                                events={events.filter(
+                                                    event =>
+                                                        event.dayOfWeek === colIndex &&
+                                                        event.period === period.label &&
+                                                        event.row === row
+                                                )}
+                                                setDeletedIds={setDeletedIds}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </Paper>
+                </div>
+                <div className="mt-4">
+                    <label className="block text-sm text-gray-300 mb-1">Observações:</label>
+                    <textarea
+                        className="w-full p-2 rounded bg-gray-800 text-white resize-none"
+                        rows={2}
+                        disabled={!isEditing}
+                        value={observations}
+                        onChange={(e) => setObservations(e.target.value)}
+                    />
+                </div>
+                <div className="mt-6 text-center">
+                    <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
+                        <span>Próxima atualização sugerida:</span>
+                        <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
                     </div>
-                </Container>
-                <Footer />
-            </div>
+                </div>
+            </PageLayout>
         </DndProvider>
     );
 };

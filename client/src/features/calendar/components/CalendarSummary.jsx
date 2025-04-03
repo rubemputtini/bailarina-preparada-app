@@ -26,6 +26,8 @@ const CalendarSummary = ({ uniqueDaysTrained }) => {
                 gap: "8px",
                 flexWrap: "wrap",
                 textAlign: "center",
+                maxWidth: "370px",
+                marginX: "auto"
             }}
         >
             {uniqueDaysTrained === 0 ? (

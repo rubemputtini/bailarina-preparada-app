@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getRanking } from "../services/rankingService";
 import { months } from "shared/utils/constants";
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import {
-    Container,
     Box,
     Typography,
     CircularProgress,
@@ -18,6 +15,7 @@ import { Refresh, FilterList } from "@mui/icons-material";
 import { getUserId } from "features/auth/services/auth";
 import TopRankingCard from "../components/TopRankingCard";
 import RankingRow from "../components/RankingRow";
+import PageLayout from "layouts/PageLayout";
 
 const RankingPage = () => {
     const [rankingData, setRankingData] = useState([]);
@@ -71,103 +69,99 @@ const RankingPage = () => {
     const rankingDataOthers = rankingData.slice(3);
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Nav />
-            <Container className="flex-grow py-6">
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: "800",
-                        textAlign: "center",
-                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        marginBottom: "24px",
-                        fontSize: { xs: "2rem", md: "2.5rem" },
-                    }}
-                >
-                    Ranking CBP
-                </Typography>
+        <PageLayout>
+            <Typography
+                variant="h4"
+                sx={{
+                    fontWeight: "800",
+                    textAlign: "center",
+                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    marginBottom: "24px",
+                    fontSize: { xs: "2rem", md: "2.5rem" },
+                }}
+            >
+                Ranking CBP
+            </Typography>
 
-                <Box display="flex" justifyContent="space-between" alignItems="center" mt={3} mb={2}>
-                    <Tooltip title="Atualizar Ranking">
-                        <IconButton style={{ color: "#c5e1e9" }} onClick={fetchRanking}>
-                            <Refresh />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Filtros">
-                        <IconButton style={{ color: "#c5e1e9" }} onClick={handleOpenFilters}>
-                            <FilterList />
-                        </IconButton>
-                    </Tooltip>
-                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseFilters}>
-                        <MenuItem onClick={() => handleSetMonth(null)} selected={month === null}>
-                            <strong>ANUAL</strong>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mt={3} mb={2}>
+                <Tooltip title="Atualizar Ranking">
+                    <IconButton style={{ color: "#c5e1e9" }} onClick={fetchRanking}>
+                        <Refresh />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Filtros">
+                    <IconButton style={{ color: "#c5e1e9" }} onClick={handleOpenFilters}>
+                        <FilterList />
+                    </IconButton>
+                </Tooltip>
+                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseFilters}>
+                    <MenuItem onClick={() => handleSetMonth(null)} selected={month === null}>
+                        <strong>ANUAL</strong>
+                    </MenuItem>
+                    <MenuItem disabled><strong>Mês</strong></MenuItem>
+                    {months.map((option) => (
+                        <MenuItem
+                            key={option.value}
+                            selected={month === option.value}
+                            onClick={() => handleSetMonth(option.value)}
+                        >
+                            {option.label}
                         </MenuItem>
-                        <MenuItem disabled><strong>Mês</strong></MenuItem>
-                        {months.map((option) => (
-                            <MenuItem
-                                key={option.value}
-                                selected={month === option.value}
-                                onClick={() => handleSetMonth(option.value)}
-                            >
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                        <MenuItem disabled><strong>Ano</strong></MenuItem>
-                        <MenuItem selected={year === new Date().getFullYear()} onClick={() => setYear(new Date().getFullYear())}>
-                            {new Date().getFullYear()}
-                        </MenuItem>
-                    </Menu>
+                    ))}
+                    <MenuItem disabled><strong>Ano</strong></MenuItem>
+                    <MenuItem selected={year === new Date().getFullYear()} onClick={() => setYear(new Date().getFullYear())}>
+                        {new Date().getFullYear()}
+                    </MenuItem>
+                </Menu>
+            </Box>
+
+            <Typography
+                variant="h6"
+                align="center"
+                gutterBottom
+                className="font-semibold text-[#c5e1e9]"
+            >
+                {getSelectedPeriod()}
+            </Typography>
+
+            {loading ? (
+                <Box display="flex" justifyContent="center" my={10}>
+                    <CircularProgress />
                 </Box>
-
-                <Typography
-                    variant="h6"
-                    align="center"
-                    gutterBottom
-                    className="font-semibold text-[#c5e1e9]"
-                >
-                    {getSelectedPeriod()}
-                </Typography>
-
-                {loading ? (
-                    <Box display="flex" justifyContent="center" my={10}>
-                        <CircularProgress />
+            ) : error ? (
+                <Alert severity="error">{error}</Alert>
+            ) : (
+                <Box>
+                    <Box className="grid md:grid-cols-3 gap-4 mt-6 mb-10">
+                        {rankingDataTop3.map((user, index) => (
+                            <TopRankingCard
+                                key={index}
+                                user={user}
+                                index={index}
+                                getMedalColor={getMedalColor}
+                            />
+                        ))}
                     </Box>
-                ) : error ? (
-                    <Alert severity="error">{error}</Alert>
-                ) : (
-                    <Box>
-                        <Box className="grid md:grid-cols-3 gap-4 mt-6 mb-10">
-                            {rankingDataTop3.map((user, index) => (
-                                <TopRankingCard
-                                    key={index}
+                    <Box className="mt-6 max-h-[500px] overflow-y-auto text-black">
+                        {rankingDataOthers.map((user, index) => {
+                            const rank = index + 4;
+                            const isCurrentUser = user.userId === currentUserId;
+                            return (
+                                <RankingRow
+                                    key={index + 3}
                                     user={user}
-                                    index={index}
-                                    getMedalColor={getMedalColor}
+                                    rank={rank}
+                                    isCurrentUser={isCurrentUser}
+                                    isEven={index % 2 === 0}
                                 />
-                            ))}
-                        </Box>
-                        <Box className="mt-6 max-h-[500px] overflow-y-auto">
-                            {rankingDataOthers.map((user, index) => {
-                                const rank = index + 4;
-                                const isCurrentUser = user.userId === currentUserId;
-                                return (
-                                    <RankingRow
-                                        key={index + 3}
-                                        user={user}
-                                        rank={rank}
-                                        isCurrentUser={isCurrentUser}
-                                        isEven={index % 2 === 0}
-                                    />
-                                );
-                            })}
-                        </Box>
+                            );
+                        })}
                     </Box>
-                )}
-            </Container>
-            <Footer />
-        </div>
+                </Box>
+            )}
+        </PageLayout>
     );
 };
 

@@ -3,9 +3,8 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import CalendarSummary from "../components/CalendarSummary";
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import { getCalendarSummary } from "../services/calendarService";
+import PageLayout from "layouts/PageLayout";
 
 const CalendarPage = () => {
     const [calendarData, setCalendarData] = useState([]);
@@ -57,75 +56,64 @@ const CalendarPage = () => {
     }
 
     return (
-        <>
-            <Nav />
-            <Box
+        <PageLayout>
+            <Typography
+                variant="h4"
                 sx={{
-                    padding: "24px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    fontWeight: "800",
+                    textAlign: "center",
+                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    marginBottom: "24px",
+                    fontSize: { xs: "2rem", md: "2.5rem" },
                 }}
             >
-                <Typography
-                    variant="h4"
+                Frequência de Treinos
+            </Typography>
+
+            {loading ? (
+                <Box
                     sx={{
-                        fontWeight: "800",
-                        textAlign: "center",
-                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        marginBottom: "24px",
-                        fontSize: { xs: "2rem", md: "2.5rem" },
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "300px",
                     }}
                 >
-                    Frequência de Treinos
-                </Typography>
-                {loading ? (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            minHeight: "300px",
-                        }}
-                    >
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <Calendar
-                        tileClassName={getTileClassName}
-                        onActiveStartDateChange={handleNavigation}
-                        showNeighboringMonth={false}
-                        formatShortWeekday={(locale, date) =>
-                            date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
-                        }
-                        maxDate={new Date()}
-                        tileDisabled={() => true}
-                        navigationLabel={({ date }) => (
-                            <Box sx={{ textAlign: "center", lineHeight: 1.2 }}>
-                                <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "1rem", lineHeight: 1 }}>
-                                    {date.getFullYear()}
-                                </Typography>
-                                <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem", lineHeight: 1 }}>
-                                    {date.toLocaleString("pt-BR", { month: "long" })}
-                                </Typography>
-                            </Box>
-                        )}
-                        prev2Label={null}
-                        next2Label={null}
-                        view="month"
-                        defaultView="month"
-                        allowPartialRange={false}
-                        value={currentMonth}
-                    />
-                )}
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <Calendar
+                    tileClassName={getTileClassName}
+                    onActiveStartDateChange={handleNavigation}
+                    showNeighboringMonth={false}
+                    formatShortWeekday={(locale, date) =>
+                        date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
+                    }
+                    maxDate={new Date()}
+                    tileDisabled={() => true}
+                    navigationLabel={({ date }) => (
+                        <Box sx={{ textAlign: "center", lineHeight: 1.2 }}>
+                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "1rem", lineHeight: 1 }}>
+                                {date.getFullYear()}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem", lineHeight: 1 }}>
+                                {date.toLocaleString("pt-BR", { month: "long" })}
+                            </Typography>
+                        </Box>
+                    )}
+                    prev2Label={null}
+                    next2Label={null}
+                    view="month"
+                    defaultView="month"
+                    allowPartialRange={false}
+                    value={currentMonth}
+                />
+            )}
 
-                <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
-            </Box>
-            <Footer />
-        </>
+            <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
+        </PageLayout>
     );
 };
 

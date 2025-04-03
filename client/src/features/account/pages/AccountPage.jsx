@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { getUserDetails, updateUserDetails } from "../../../shared/services/userService";
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import "react-phone-input-2/lib/style.css";
 import { Edit, Check, Close } from "@mui/icons-material";
 import { Box, CardContent, CircularProgress, IconButton } from "@mui/material";
 import useAddressAutocomplete from "../../../hooks/useAddressAutocomplete";
 import Input from "shared/forms/Input";
 import PhoneInputStyled from "shared/forms/PhoneInputStyled";
+import PageLayout from "layouts/PageLayout";
 
 const tabs = ["Informações Pessoais", "Endereço"];
 
@@ -61,9 +60,8 @@ const AccountPage = () => {
     };
 
     return (
-        <div className="min-h-screen text-white">
-            <Nav />
-            <div className="max-w-3xl mx-auto p-6">
+        <PageLayout>
+            <div className="max-w-3xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-bold text-purple-800">Minha Conta</h2>
@@ -176,8 +174,7 @@ const AccountPage = () => {
                     )}
                 </div>
             </div>
-            <Footer />
-        </div>
+        </PageLayout>
     );
 };
 

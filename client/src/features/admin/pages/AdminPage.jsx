@@ -6,14 +6,13 @@ import {
     Alert
 } from "@mui/material";
 import { getUsers } from "../services/adminService";
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "features/account/services/accountService";
 import SearchField from "../components/SearchField";
 import UserTable from "../components/UserTable";
+import PageLayout from "layouts/PageLayout";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -91,76 +90,73 @@ const AdminPage = () => {
     );
 
     return (
-        <>
-            <Nav />
-            <div className="p-6 max-w-7xl m-auto">
-                <Typography
-                    variant="h4"
-                    sx={{
-                        textAlign: "center",
-                        color: "#c5e1e9",
-                        fontWeight: "bold",
-                        mb: 4,
-                        letterSpacing: 1.2,
-                    }}
-                >
-                    Gerenciador de Usuários
-                </Typography>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                    <SearchField value={searchTerm} onChange={handleSearch} />
-                </div>
+        <PageLayout>
+            <Typography
+                variant="h4"
+                sx={{
+                    textAlign: "center",
+                    color: "#c5e1e9",
+                    fontWeight: "bold",
+                    mb: 4,
+                    letterSpacing: 1.2,
+                }}
+            >
+                Gerenciador de Usuários
+            </Typography>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                <SearchField value={searchTerm} onChange={handleSearch} />
+            </div>
 
-                {loading ? (
-                    <Box display="flex" justifyContent="center" my={22}>
-                        <CircularProgress />
-                    </Box>
-                ) : error ? (
-                    <Alert severity="error">{error}</Alert>
-                ) : (
-                    <>
-                        {filteredUsers.length === 0 ? (
+            {loading ? (
+                <Box display="flex" justifyContent="center" my={22}>
+                    <CircularProgress />
+                </Box>
+            ) : error ? (
+                <Alert severity="error">{error}</Alert>
+            ) : (
+                <>
+                    {filteredUsers.length === 0 ? (
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                textAlign: "center",
+                                mt: 4,
+                                color: "white",
+                                fontStyle: "italic",
+                            }}
+                        >
+                            Nenhum usuário encontrado.
+                        </Typography>
+                    ) : (
+                        <>
                             <Typography
-                                variant="h6"
+                                variant="subtitle1"
                                 sx={{
                                     textAlign: "center",
-                                    mt: 4,
-                                    color: "white",
+                                    mb: 2,
                                     fontStyle: "italic",
+                                    color: "white",
                                 }}
                             >
-                                Nenhum usuário encontrado.
+                                {filteredUsers.length} usuário(s) encontrado(s)
                             </Typography>
-                        ) : (
-                            <>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{
-                                        textAlign: "center",
-                                        mb: 2,
-                                        fontStyle: "italic",
-                                        color: "white",
-                                    }}
-                                >
-                                    {filteredUsers.length} usuário(s) encontrado(s)
-                                </Typography>
-                                <UserTable
-                                    users={filteredUsers}
-                                    onView={handleViewUser}
-                                    onEdit={handleEditUser}
-                                    onSchedule={handleScheduleUser}
-                                    onDelete={handleDeleteUser}
-                                    page={page}
-                                    setPage={setPage}
-                                    pageSize={pageSize}
-                                    setPageSize={setPageSize}
-                                    totalUsers={totalUsers}
-                                />
-                            </>
-                        )}
-                    </>
-                )}
+                            <UserTable
+                                users={filteredUsers}
+                                onView={handleViewUser}
+                                onEdit={handleEditUser}
+                                onSchedule={handleScheduleUser}
+                                onDelete={handleDeleteUser}
+                                page={page}
+                                setPage={setPage}
+                                pageSize={pageSize}
+                                setPageSize={setPageSize}
+                                totalUsers={totalUsers}
+                            />
+                        </>
+                    )}
+                </>
+            )}
 
-            </div>
             {showDialog && (
                 <ConfirmationDialog
                     message="Tem certeza de que deseja excluir este usuário?"
@@ -173,8 +169,7 @@ const AdminPage = () => {
                 <SuccessDialog
                     message={"Usuário excluído com sucesso!"}
                     onClose={handleDialogClose} />}
-            <Footer />
-        </>
+        </PageLayout>
     );
 };
 

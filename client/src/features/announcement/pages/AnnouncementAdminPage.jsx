@@ -3,11 +3,10 @@ import { Typography } from '@mui/material';
 import AnnouncementForm from '../components/AnnouncementForm';
 import AnnouncementPreview from '../components/AnnouncementPreview';
 import AnnouncementList from '../components/AnnouncementList';
-import Nav from "../../../layouts/Nav";
-import Footer from "../../../layouts/Footer";
 import SuccessDialog from 'shared/dialogs/SuccessDialog';
 import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog';
 import { deleteAnnouncement } from '../services/announcementService';
+import PageLayout from 'layouts/PageLayout';
 
 const AnnouncementAdminPage = () => {
     const [previewData, setPreviewData] = useState(null);
@@ -39,53 +38,50 @@ const AnnouncementAdminPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col text-white">
-            <Nav />
-            <main className="flex-grow m-auto max-w-7xl p-6">
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: "800",
-                        textAlign: "center",
-                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        marginBottom: "24px",
-                        fontSize: { xs: "2rem", md: "2.5rem" },
-                    }}
-                >
-                    Central de Avisos
-                </Typography>
+        <PageLayout>
+            <Typography
+                variant="h4"
+                sx={{
+                    fontWeight: "800",
+                    textAlign: "center",
+                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    marginBottom: "24px",
+                    fontSize: { xs: "2rem", md: "2.5rem" },
+                }}
+            >
+                Central de Avisos
+            </Typography>
 
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                    <div className="lg:col-span-3">
-                        <div className="bg-white rounded-xl p-5 shadow-md">
-                            <Typography variant="h6" className="font-semibold text-gray-800" sx={{ marginBottom: "0.5em" }}>
-                                Criar Novo Aviso
-                            </Typography>
-                            <AnnouncementForm
-                                onPreviewChange={setPreviewData}
-                                onSuccess={handleSuccess}
-                            />
-                        </div>
-                    </div>
-                    <div className="lg:col-span-2">
-                        <div className="bg-white rounded-xl p-5 shadow-md">
-                            <Typography variant="h6" className="font-semibold text-gray-800" sx={{ marginBottom: "0.5em" }}>
-                                Pré-visualização
-                            </Typography>
-                            <AnnouncementPreview data={previewData} />
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="lg:col-span-3">
+                    <div className="bg-white rounded-xl p-5 shadow-md">
+                        <Typography variant="h6" className="font-semibold text-gray-800" sx={{ marginBottom: "0.5em" }}>
+                            Criar Novo Aviso
+                        </Typography>
+                        <AnnouncementForm
+                            onPreviewChange={setPreviewData}
+                            onSuccess={handleSuccess}
+                        />
                     </div>
                 </div>
-
-                <div className="mt-10">
-                    <AnnouncementList
-                        onDeleteRequest={handleRequestDelete}
-                        refreshKey={refreshKey}
-                    />
+                <div className="lg:col-span-2">
+                    <div className="bg-white rounded-xl p-5 shadow-md">
+                        <Typography variant="h6" className="font-semibold text-gray-800" sx={{ marginBottom: "0.5em" }}>
+                            Pré-visualização
+                        </Typography>
+                        <AnnouncementPreview data={previewData} />
+                    </div>
                 </div>
-            </main>
+            </div>
+
+            <div className="mt-10">
+                <AnnouncementList
+                    onDeleteRequest={handleRequestDelete}
+                    refreshKey={refreshKey}
+                />
+            </div>
 
             {showDialog && (
                 <SuccessDialog
@@ -102,9 +98,7 @@ const AnnouncementAdminPage = () => {
                     isLoading={deleting}
                 />
             )}
-
-            <Footer />
-        </div>
+        </PageLayout>
     );
 };
 

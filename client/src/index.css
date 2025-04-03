@@ -68,7 +68,7 @@ h3 {
 /* Estilo geral do calendário */
 .react-calendar {
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   margin: 0 auto;
   background-color: #fff;
   border: none;
