@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getRankingMonthTop5 } from '../services/dashboardService';
+import { getRankingMonthTop5 } from 'features/dashboard/services/dashboardService';
 
 const useTopRanking = () => {
   const [ranking, setRanking] = useState([]);

@@ -1,5 +1,5 @@
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
+import Nav from "../../../layouts/Nav";
+import Footer from "../../../layouts/Footer";
 
 const PageLayout = ({ children }) => {
     return (

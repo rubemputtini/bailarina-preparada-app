@@ -1,21 +1,21 @@
 import { Navigate, BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
-import SignupPage from './pages/SignupPage';
-import LoginPage from './pages/LoginPage';
-import EvaluationPage from './pages/EvaluationPage';
-import Dashboard from './pages/Dashboard';
-import RankingPage from './pages/RankingPage';
-import SchedulePage from './pages/SchedulePage';
-import TrainingPage from './pages/TrainingPage';
-import CalendarPage from './pages/CalendarPage';
-import AccountPage from './pages/AccountPage';
-import AdminPage from './pages/AdminPage';
-import UserDetailsPage from './pages/UserDetailsPage';
-import EvaluationReportPage from './pages/EvaluationListPage';
-import EvaluationDetailPage from './pages/EvaluationDetailPage';
-import EvaluationListPage from './pages/EvaluationListPage';
-import ScheduleAdminPage from './pages/ScheduleAdminPage';
-import AnnouncementAdminPage from './pages/AnnouncementAdminPage';
+import ProtectedRoute from './features/auth/ProtectedRoute';
+import SignupPage from './features/auth/signup/pages/SignupPage';
+import LoginPage from './features/auth/login/pages/LoginPage';
+import EvaluationAdminPage from './features/evaluation/pages/EvaluationAdminPage';
+import Dashboard from './features/dashboard/pages/Dashboard';
+import RankingPage from './features/ranking/pages/RankingPage';
+import SchedulePage from './features/schedule/pages/SchedulePage';
+import TrainingPage from './features/training/pages/TrainingPage';
+import CalendarPage from './features/calendar/pages/CalendarPage';
+import AccountPage from './features/account/pages/AccountPage';
+import AdminPage from './features/admin/pages/AdminPage';
+import EvaluationReportPage from './features/evaluation/pages/EvaluationListPage';
+import EvaluationDetailPage from './features/evaluation/pages/EvaluationDetailPage';
+import EvaluationListPage from './features/evaluation/pages/EvaluationListPage';
+import EvaluationHistoricPage from './features/evaluation/pages/EvaluationHistoricPage';
+import ScheduleAdminPage from './features/schedule/pages/ScheduleAdminPage';
+import AnnouncementAdminPage from './features/announcement/pages/AnnouncementAdminPage';
 
 function App() {
   return (
@@ -59,7 +59,7 @@ function App() {
               path="/criar-avaliacao" 
               element={
                   <ProtectedRoute>
-                      <EvaluationPage />
+                      <EvaluationAdminPage />
                   </ProtectedRoute>
               } 
           />
@@ -147,7 +147,7 @@ function App() {
               path="/admin/users/:userId"
               element={
                   <ProtectedRoute>
-                      <UserDetailsPage />
+                      <EvaluationHistoricPage />
                   </ProtectedRoute>
               }
           />

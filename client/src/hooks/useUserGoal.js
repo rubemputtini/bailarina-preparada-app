@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getMyGoalByYear, setMyGoal } from '../services/userGoalService';
+import { getMyGoalByYear, setMyGoal } from 'features/dashboard/services/userGoalService';
 
 const useUserGoal = (year, trainingDaysCount) => {
   const [goal, setGoal] = useState(null);

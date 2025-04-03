@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getEvaluationById } from "../services/evaluationService";
-import { getUserDetails } from "../services/userService";
-import { getClassificationForUser } from "../services/exerciseReferenceService";
-import { calculateAge } from "../utils/dateUtils";
+import { getEvaluationById } from "features/evaluation/services/evaluationService";
+import { getUserDetails } from "../shared/services/userService";
+import { getClassificationForUser } from "features/evaluation/services/exerciseReferenceService";
+import { calculateAge } from "../shared/utils/dateUtils";
 
 const useEvaluationDetails = (evaluationId) => {
     const [evaluation, setEvaluation] = useState(null);

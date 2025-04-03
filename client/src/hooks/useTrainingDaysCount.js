@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getYearlyTrainingDaysCount } from '../services/dashboardService';
+import { getYearlyTrainingDaysCount } from 'features/dashboard/services/dashboardService';
 
 const useTrainingDaysCount = () => {
   const [trainingDaysCount, setTrainingDaysCount] = useState(0);

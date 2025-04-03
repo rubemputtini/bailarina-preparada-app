@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDailySchedule } from '../services/dashboardService';
+import { getDailySchedule } from 'features/dashboard/services/dashboardService';
 
 const useDailySchedule = () => {
   const [data, setData] = useState([]);
