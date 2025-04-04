@@ -1,4 +1,4 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, CircularProgress } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 
 const StepConfirm = ({ handleSave, loading }) => {
@@ -9,7 +9,7 @@ const StepConfirm = ({ handleSave, loading }) => {
             </Typography>
             <Button
                 variant="contained"
-                startIcon={<CheckCircle />}
+                startIcon={!loading && <CheckCircle />}
                 onClick={handleSave}
                 disabled={loading}
                 sx={{
@@ -22,7 +22,7 @@ const StepConfirm = ({ handleSave, loading }) => {
                     "&:hover": { backgroundColor: "#00B53D" }
                 }}
             >
-                {loading ? "Salvando..." : "TREINO CONCLUÍDO"}
+                {loading ? <CircularProgress size={24} color="inherit" /> : "REGISTRAR AGORA"}
             </Button>
         </>
     );

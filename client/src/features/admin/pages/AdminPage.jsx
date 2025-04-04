@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Typography,
-    CircularProgress,
-    Box,
-    Alert
-} from "@mui/material";
+import { Typography, Alert } from "@mui/material";
 import { getUsers } from "../services/adminService";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
@@ -13,6 +8,7 @@ import { deleteUser } from "features/account/services/accountService";
 import SearchField from "../components/SearchField";
 import UserTable from "../components/UserTable";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -21,6 +17,7 @@ const AdminPage = () => {
     const [error, setError] = useState("");
     const [userToDelete, setUserToDelete] = useState(null);
     const [userDeleted, setUserDeleted] = useState(null);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -68,10 +65,13 @@ const AdminPage = () => {
     };
 
     const handleDialogConfirm = () => {
+        setDeleteLoading(true);
         deleteUser(userToDelete);
+
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userToDelete));
         setUserDeleted(true);
         setShowDialog(false);
+        setDeleteLoading(false);
         navigate("/admin");
     };
 
@@ -108,9 +108,7 @@ const AdminPage = () => {
             </div>
 
             {loading ? (
-                <Box display="flex" justifyContent="center" my={22}>
-                    <CircularProgress />
-                </Box>
+                <LoadingCard />
             ) : error ? (
                 <Alert severity="error">{error}</Alert>
             ) : (
@@ -162,6 +160,7 @@ const AdminPage = () => {
                     message="Tem certeza de que deseja excluir este usuário?"
                     onConfirm={handleDialogConfirm}
                     onCancel={handleDialogCancel}
+                    loading={deleteLoading}
                 />
             )}
 

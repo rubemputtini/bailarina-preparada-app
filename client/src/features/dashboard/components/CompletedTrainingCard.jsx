@@ -2,11 +2,9 @@ import { useState } from 'react';
 import {
     Card,
     CardContent,
-    CircularProgress,
     Typography,
     LinearProgress,
     IconButton,
-    Box
 } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import target from '../../../assets/target.png';
@@ -14,6 +12,7 @@ import partypopper from '../../../assets/partypopper.png';
 import useUserGoal from 'hooks/useUserGoal';
 import GoalDialog from './GoalDialog';
 import SuccessDialog from 'shared/dialogs/SuccessDialog';
+import LoadingCard from 'shared/ui/LoadingCard';
 
 const CompletedTrainingCard = ({ trainingDaysCount }) => {
     const currentYear = new Date().getFullYear();
@@ -21,18 +20,6 @@ const CompletedTrainingCard = ({ trainingDaysCount }) => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
     const progressValue = Math.min(progress, 100);
-
-    if (loading) {
-        return (
-            <Card className="bg-white text-black shadow-lg lg:col-span-2">
-                <CardContent>
-                    <Box display="flex" justifyContent="center" my={10}>
-                        <CircularProgress size={24} color="inherit" />
-                    </Box>
-                </CardContent>
-            </Card>
-        );
-    }
 
     if (notFound || !goal) {
         return (
@@ -47,7 +34,6 @@ const CompletedTrainingCard = ({ trainingDaysCount }) => {
                                 </Typography>
                             </div>
                         </div>
-
                         <div
                             onClick={() => setDialogOpen(true)}
                             className="cursor-pointer bg-gradient-to-r from-[#6B21A8] to-[#4c1d95] text-white p-5 rounded-xl shadow-lg hover:brightness-110 transition-all duration-200 text-center"
@@ -99,37 +85,43 @@ const CompletedTrainingCard = ({ trainingDaysCount }) => {
                         </IconButton>
                     </div>
 
-                    <div className="flex justify-center items-baseline gap-2 mb-1">
-                        <Typography variant="h2" className="text-[#6B21A8] font-extrabold leading-none">
-                            {trainingDaysCount}
-                        </Typography>
-                        <Typography variant="subtitle1" className="text-gray-600 font-medium">
-                            / {goal.goalDays}
-                        </Typography>
-                    </div>
+                    {loading ? (
+                        <LoadingCard marginY={5} />
+                    ) : (
+                        <>
+                            <div className="flex justify-center items-baseline gap-2 mb-1">
+                                <Typography variant="h2" className="text-[#6B21A8] font-extrabold leading-none">
+                                    {trainingDaysCount}
+                                </Typography>
+                                <Typography variant="subtitle1" className="text-gray-600 font-medium">
+                                    / {goal.goalDays}
+                                </Typography>
+                            </div>
 
-                    <LinearProgress
-                        variant="determinate"
-                        value={progressValue}
-                        className="h-3 rounded-lg bg-gray-200"
-                        sx={{ '& .MuiLinearProgress-bar': { backgroundColor: '#6B21A8' } }}
-                    />
+                            <LinearProgress
+                                variant="determinate"
+                                value={progressValue}
+                                className="h-3 rounded-lg bg-gray-200"
+                                sx={{ '& .MuiLinearProgress-bar': { backgroundColor: '#6B21A8' } }}
+                            />
 
-                    <Typography variant="body1" className="text-center text-gray-600" sx={{ marginTop: "1em" }}>
-                        {trainingDaysCount === goal.goalDays ? (
-                            <>
-                                Meta atingida!
-                                <img src={partypopper} alt="🎉" className="inline w-5 h-5 ml-1 align-middle" />
-                            </>
-                        ) : trainingDaysCount > goal.goalDays ? (
-                            <>
-                                Você superou sua meta! 👏
-                                <img src={partypopper} alt="🎉" className="inline w-5 h-5 ml-1 align-middle" />
-                            </>
-                        ) : (
-                            `Faltam ${goal.goalDays - trainingDaysCount} dias para sua meta.`
-                        )}
-                    </Typography>
+                            <Typography variant="body1" className="text-center text-gray-600" sx={{ marginTop: "1em" }}>
+                                {trainingDaysCount === goal.goalDays ? (
+                                    <>
+                                        Meta atingida!
+                                        <img src={partypopper} alt="🎉" className="inline w-5 h-5 ml-1 align-middle" />
+                                    </>
+                                ) : trainingDaysCount > goal.goalDays ? (
+                                    <>
+                                        Você superou sua meta! 👏
+                                        <img src={partypopper} alt="🎉" className="inline w-5 h-5 ml-1 align-middle" />
+                                    </>
+                                ) : (
+                                    `Faltam ${goal.goalDays - trainingDaysCount} dias para sua meta.`
+                                )}
+                            </Typography>
+                        </>
+                    )}
                 </CardContent>
             </Card>
 

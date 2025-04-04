@@ -26,7 +26,7 @@ const EvaluationAdminPage = () => {
     const [errors, setErrors] = useState({});
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [createdEvaluationId, setCreatedEvaluationId] = useState(null);
     const navigate = useNavigate();
 
@@ -103,7 +103,7 @@ const EvaluationAdminPage = () => {
 
     const handleSaveConfirmed = async () => {
         if (!selectedUser) return;
-        setIsLoading(true);
+        setLoading(true);
 
         const payload = {
             adminId: getUserId(),
@@ -133,7 +133,7 @@ const EvaluationAdminPage = () => {
         const evaluationId = result.evaluationId;
 
         setCreatedEvaluationId(evaluationId);
-        setIsLoading(false);
+        setLoading(false);
         setConfirmOpen(false);
         resetForm();
         setSuccessOpen(true);
@@ -265,7 +265,7 @@ const EvaluationAdminPage = () => {
                     message="Tem certeza que deseja salvar esta avaliação?"
                     onConfirm={handleSaveConfirmed}
                     onCancel={() => setConfirmOpen(false)}
-                    isLoading={isLoading}
+                    loading={loading}
                 />
             )}
 

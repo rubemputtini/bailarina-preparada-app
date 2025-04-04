@@ -5,7 +5,6 @@ import {
     Box,
     Card,
     Typography,
-    CircularProgress,
     Alert,
     Button,
     Dialog,
@@ -19,6 +18,7 @@ import dayjs from "dayjs";
 import { Edit } from "@mui/icons-material";
 import { updateEvaluation } from "../services/evaluationService";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const EvaluationHistoricPage = () => {
     const { userId } = useParams();
@@ -87,67 +87,55 @@ const EvaluationHistoricPage = () => {
         setSelectedEvaluation(null);
     };
 
-    if (loading) {
-        return (
-            <Box className="flex justify-center items-center min-h-screen">
-                <CircularProgress color="secondary" />
-            </Box>
-        );
-    }
-
-    if (error) {
-        return (
-            <Box className="flex justify-center items-center min-h-screen">
-                <Alert severity="error">{error}</Alert>
-            </Box>
-        );
-    }
-
-    if (evaluations.length === 0) {
-        return (
-            <Box className="flex justify-center items-center min-h-screen">
-                <Typography variant="h6" color="white">
-                    Nenhuma avaliação encontrada para este usuário.
-                </Typography>
-            </Box>
-        );
-    }
-
     return (
         <PageLayout>
             <Typography variant="h4" color="white" className="mb-6 text-center">
                 Avaliações de {evaluations[0]?.userName}
             </Typography>
-
-            <Card className="bg-purple-800 p-4 mb-6 shadow-lg">
-                <Typography
-                    variant="h6"
-                    color="white"
-                    className="text-center mb-4"
-                >
-                    Clique em uma avaliação para ver os detalhes
-                </Typography>
-                <Box className="flex flex-wrap gap-4 justify-center">
-                    {evaluations.map((evaluation) => (
-                        <Card
-                            key={evaluation.evaluationId}
-                            className="bg-purple-700 text-white p-4 shadow-md cursor-pointer"
-                            onClick={() => handleEvaluationClick(evaluation)}
-                            sx={{
-                                maxWidth: "300px",
-                                '&:hover': { boxShadow: 6 },
-                            }}
+            {loading ? (
+                <LoadingCard />
+            ) : error ?
+                (
+                    <Box className="flex justify-center items-center my-20">
+                        <Alert severity="error">{error}</Alert>
+                    </Box>
+                ) : evaluations.length === 0 ? (
+                    <Box className="flex justify-center items-center my-20">
+                        <Typography variant="h6" color="white">
+                            Nenhuma avaliação encontrada para este usuário.
+                        </Typography>
+                    </Box>
+                ) : (
+                    <Card className="bg-purple-800 p-4 mb-6 shadow-lg">
+                        <Typography
+                            variant="h6"
+                            color="white"
+                            className="text-center mb-4"
                         >
-                            <Typography variant="h6" className="mb-2">
-                                {dayjs(evaluation.date).format("DD/MM/YYYY")}
-                            </Typography>
-                            <Typography variant="body2">
-                                Realizada por: {evaluation.adminName}
-                            </Typography>
-                        </Card>
-                    ))}
-                </Box>
-            </Card>
+                            Clique em uma avaliação para ver os detalhes
+                        </Typography>
+                        <Box className="flex flex-wrap gap-4 justify-center">
+                            {evaluations.map((evaluation) => (
+                                <Card
+                                    key={evaluation.evaluationId}
+                                    className="bg-purple-700 text-white p-4 shadow-md cursor-pointer"
+                                    onClick={() => handleEvaluationClick(evaluation)}
+                                    sx={{
+                                        maxWidth: "300px",
+                                        '&:hover': { boxShadow: 6 },
+                                    }}
+                                >
+                                    <Typography variant="h6" className="mb-2">
+                                        {dayjs(evaluation.date).format("DD/MM/YYYY")}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        Realizada por: {evaluation.adminName}
+                                    </Typography>
+                                </Card>
+                            ))}
+                        </Box>
+                    </Card>
+                )}
 
             {selectedEvaluation && (
                 <Dialog

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import AnnouncementCard from './AnnouncementCard';
 import { getAllAnnouncements, toggleVisibility } from '../services/announcementService';
-import { Box, Card, CardContent, CircularProgress, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import LoadingCard from 'shared/ui/LoadingCard';
 
 const AnnouncementList = ({ onDeleteRequest, refreshKey }) => {
     const [announcements, setAnnouncements] = useState([]);
@@ -23,18 +24,6 @@ const AnnouncementList = ({ onDeleteRequest, refreshKey }) => {
         loadAnnouncements();
     };
 
-    if (loading) {
-        return (
-            <Card className="bg-white text-black shadow-lg lg:col-span-2">
-                <CardContent>
-                    <Box display="flex" justifyContent="center" my={10}>
-                        <CircularProgress size={24} color="inherit" />
-                    </Box>
-                </CardContent>
-            </Card>
-        );
-    }
-
     return (
         <div>
             <Typography variant="h5" className="text-[#c5e1e9]"
@@ -46,21 +35,26 @@ const AnnouncementList = ({ onDeleteRequest, refreshKey }) => {
                 }}>
                 Avisos Criados
             </Typography>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {announcements.map((a) => (
-                    <AnnouncementCard
-                        key={a.announcementId}
-                        title={a.title}
-                        content={a.content}
-                        category={a.category}
-                        date={a.date}
-                        isVisible={a.isVisible}
-                        showActions
-                        onDelete={() => onDeleteRequest?.(a.announcementId)}
-                        onToggle={(value) => handleToggle(a.announcementId, value)}
-                    />
-                ))}
-            </div>
+
+            {loading ? (
+                <LoadingCard />
+            ) :
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {announcements.map((a) => (
+                        <AnnouncementCard
+                            key={a.announcementId}
+                            title={a.title}
+                            content={a.content}
+                            category={a.category}
+                            date={a.date}
+                            isVisible={a.isVisible}
+                            showActions
+                            onDelete={() => onDeleteRequest?.(a.announcementId)}
+                            onToggle={(value) => handleToggle(a.announcementId, value)}
+                        />
+                    ))}
+                </div>
+            }
         </div>
     );
 };

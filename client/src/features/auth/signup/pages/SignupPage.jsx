@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { register } from "features/account/services/accountService";
 import Header from "layouts/Header";
 import Footer from "layouts/Footer";
-import { Box, CircularProgress } from "@mui/material";
 import SignupStepper from "../SignupStepper";
 
 const SignupPage = () => {
@@ -32,17 +31,12 @@ const SignupPage = () => {
     return (
         <div className="min-h-screen flex flex-col justify-between">
             <Header />
-            {loading ? (
-                <Box my={22} display="flex" flexDirection="column" alignItems="center">
-                    <CircularProgress color="primary" />
-                </Box>
-            ) : (
-                <SignupStepper
-                    onRegister={handleRegister}
-                    onLoginRedirect={handleLoginRedirect}
-                    error={error}
-                />
-            )}
+            <SignupStepper
+                onRegister={handleRegister}
+                onLoginRedirect={handleLoginRedirect}
+                error={error}
+                loading={loading}
+            />
             <Footer />
         </div>
     );

@@ -4,7 +4,6 @@ import { months } from "shared/utils/constants";
 import {
     Box,
     Typography,
-    CircularProgress,
     Alert,
     IconButton,
     Menu,
@@ -16,6 +15,7 @@ import { getUserId } from "features/auth/services/auth";
 import TopRankingCard from "../components/TopRankingCard";
 import RankingRow from "../components/RankingRow";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const RankingPage = () => {
     const [rankingData, setRankingData] = useState([]);
@@ -127,9 +127,7 @@ const RankingPage = () => {
             </Typography>
 
             {loading ? (
-                <Box display="flex" justifyContent="center" my={10}>
-                    <CircularProgress />
-                </Box>
+                <LoadingCard />
             ) : error ? (
                 <Alert severity="error">{error}</Alert>
             ) : (

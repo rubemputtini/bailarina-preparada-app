@@ -4,7 +4,6 @@ import { login } from "features/account/services/accountService";
 import Header from "layouts/Header";
 import Footer from "layouts/Footer";
 import LoginForm from "../components/LoginForm";
-import { Box, CircularProgress } from "@mui/material";
 import { setToken } from "features/auth/services/auth";
 
 const LoginPage = () => {
@@ -34,23 +33,17 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen flex flex-col justify-between">
             <Header />
-            {loading ? (
-                <Box my={22} display="flex" flexDirection="column" alignItems="center">
-                    <CircularProgress color="primary" />
-                </Box>
-            ) : (
-                <LoginForm
-                    title="Bem-vindo de volta"
-                    buttonText="Entrar"
-                    onSubmit={handleLogin}
-                    email={email}
-                    setEmail={setEmail}
-                    password={password}
-                    setPassword={setPassword}
-                    disableSubmit={loading}
-                    error={error}
-                />
-            )}
+            <LoginForm
+                title="Bem-vindo de volta"
+                buttonText="Entrar"
+                onSubmit={handleLogin}
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                disableSubmit={loading}
+                error={error}
+            />
             <Footer />
         </div>
     );

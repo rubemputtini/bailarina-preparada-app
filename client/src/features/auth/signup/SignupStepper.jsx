@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, Alert } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, Alert, CircularProgress } from "@mui/material";
 import { Person, Home, CheckCircle } from "@mui/icons-material";
 import AddressForm from "shared/forms/AddressForm";
 import PersonalInfoForm from "shared/forms/PersonalInfoForm";
@@ -16,7 +16,7 @@ const initialFormState = {
     state: "", country: "", postalCode: ""
 };
 
-const SignupStepper = ({ onRegister, onLoginRedirect, error }) => {
+const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [formData, setFormData] = useState(initialFormState);
     const [passwordRequisites, setPasswordRequisites] = useState(validatePassword(""));
@@ -121,6 +121,7 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error }) => {
                             <Button
                                 variant="contained"
                                 onClick={handleSubmit}
+                                disabled={loading}
                                 sx={{
                                     minWidth: "120px",
                                     backgroundColor: "#6c5c80",
@@ -129,7 +130,7 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error }) => {
                                     "&:hover": { backgroundColor: "#5b4c6c" }
                                 }}
                             >
-                                Registrar
+                                {loading ? <CircularProgress size={24} color="inherit" /> : "Registrar"}
                             </Button>
                         ) : (
                             <Button

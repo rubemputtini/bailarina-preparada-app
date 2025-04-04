@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { getUserDetails, updateUserDetails } from "../../../shared/services/userService";
 import "react-phone-input-2/lib/style.css";
 import { Edit, Check, Close } from "@mui/icons-material";
-import { Box, CardContent, CircularProgress, IconButton } from "@mui/material";
+import { CardContent, IconButton } from "@mui/material";
 import useAddressAutocomplete from "../../../hooks/useAddressAutocomplete";
 import Input from "shared/forms/Input";
 import PhoneInputStyled from "shared/forms/PhoneInputStyled";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const tabs = ["Informações Pessoais", "Endereço"];
 
@@ -98,9 +99,7 @@ const AccountPage = () => {
 
                     {loading ? (
                         <CardContent>
-                            <Box display="flex" justifyContent="center" my={10}>
-                                <CircularProgress size={24} sx={{ color: "#000" }} />
-                            </Box>
+                            <LoadingCard color="#000" />
                         </CardContent>
                     ) : (
                         <form className="space-y-4">

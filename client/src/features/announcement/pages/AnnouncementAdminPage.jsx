@@ -95,7 +95,7 @@ const AnnouncementAdminPage = () => {
                     message="Tem certeza que deseja excluir este aviso?"
                     onConfirm={handleConfirmDelete}
                     onCancel={() => setShowConfirm(false)}
-                    isLoading={deleting}
+                    loading={deleting}
                 />
             )}
         </PageLayout>

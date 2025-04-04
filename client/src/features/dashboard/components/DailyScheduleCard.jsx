@@ -1,20 +1,9 @@
-import { Card, CardContent, CircularProgress, Typography, Box } from '@mui/material'
+import { Card, CardContent, Typography } from '@mui/material'
 import { tasksColorsMap } from 'shared/utils/constants';
 import calendar from '../../../assets/calendar.png';
+import LoadingCard from 'shared/ui/LoadingCard';
 
 const DailyScheduleCard = ({ dailySchedule, loading }) => {
-    if (loading) {
-        return (
-            <Card className="bg-white text-black shadow-lg lg:col-span-2">
-                <CardContent>
-                    <Box display="flex" justifyContent="center" my={10}>
-                        <CircularProgress size={24} color="inherit" />
-                    </Box>
-                </CardContent>
-            </Card>
-        );
-    }
-
     return (
         <Card className="bg-white text-black shadow-lg lg:col-span-2">
             <CardContent>
@@ -22,7 +11,12 @@ const DailyScheduleCard = ({ dailySchedule, loading }) => {
                     <img src={calendar} alt="Calendário" className="w-6 h-6 mr-2" />
                     <Typography variant="h6" className="font-bold text-gray-800">Aulas do Dia</Typography>
                 </div>
-                {dailySchedule.length > 0 ? (
+
+                {loading ? (
+                    <LoadingCard marginY={5} />
+                ) : dailySchedule.length === 0 ? (
+                    <Typography variant="body2" className="text-gray-500">Nenhuma aula agendada para hoje.</Typography>
+                ) : (
                     <ul className="space-y-3">
                         {dailySchedule.map((classItem, index) => {
                             const colorClass = tasksColorsMap[classItem.color]?.tailwind || "bg-gray-200 border-gray-400";
@@ -38,8 +32,6 @@ const DailyScheduleCard = ({ dailySchedule, loading }) => {
                             );
                         })}
                     </ul>
-                ) : (
-                    <Typography variant="body2" className="text-gray-500">Nenhuma aula agendada para hoje.</Typography>
                 )}
             </CardContent>
         </Card>

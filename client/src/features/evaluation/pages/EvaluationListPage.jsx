@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, Typography, Button, Grid, Box, CircularProgress, Alert } from "@mui/material";
+import { Card, CardContent, Typography, Button, Grid, Alert } from "@mui/material";
 import { getUserEvaluations } from "features/admin/services/adminService";
 import { getUserId } from "features/auth/services/auth";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const EvaluationListPage = () => {
     const [evaluations, setEvaluations] = useState([]);
@@ -25,14 +26,6 @@ const EvaluationListPage = () => {
         fetchEvaluations();
     }, []);
 
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" my={22}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
     return (
         <PageLayout>
             <Typography
@@ -43,8 +36,13 @@ const EvaluationListPage = () => {
             >
                 Avaliações Registradas
             </Typography>
+
             <Grid container spacing={4}>
-                {evaluations.length === 0 ? (
+                {loading ? (
+                    <Grid item xs={12}>
+                        <LoadingCard />
+                    </Grid>
+                ) : evaluations.length === 0 ? (
                     <Grid item xs={12}>
                         <Alert severity="error" sx={{ width: "100%" }}>
                             Nenhuma avaliação encontrada.

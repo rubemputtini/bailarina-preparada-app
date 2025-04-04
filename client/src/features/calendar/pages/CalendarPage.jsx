@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import CalendarSummary from "../components/CalendarSummary";
 import { getCalendarSummary } from "../services/calendarService";
 import PageLayout from "layouts/PageLayout";
+import LoadingCard from "shared/ui/LoadingCard";
 
 const CalendarPage = () => {
     const [calendarData, setCalendarData] = useState([]);
@@ -73,46 +74,47 @@ const CalendarPage = () => {
             </Typography>
 
             {loading ? (
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        minHeight: "300px",
-                    }}
-                >
-                    <CircularProgress />
-                </Box>
+                <LoadingCard />
+            ) : error ? (
+                (
+                    <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
+                        <Typography variant="h6" color="error">
+                            {error}
+                        </Typography>
+                    </Box>
+                )
             ) : (
-                <Calendar
-                    tileClassName={getTileClassName}
-                    onActiveStartDateChange={handleNavigation}
-                    showNeighboringMonth={false}
-                    formatShortWeekday={(locale, date) =>
-                        date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
-                    }
-                    maxDate={new Date()}
-                    tileDisabled={() => true}
-                    navigationLabel={({ date }) => (
-                        <Box sx={{ textAlign: "center", lineHeight: 1.2 }}>
-                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "1rem", lineHeight: 1 }}>
-                                {date.getFullYear()}
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem", lineHeight: 1 }}>
-                                {date.toLocaleString("pt-BR", { month: "long" })}
-                            </Typography>
-                        </Box>
-                    )}
-                    prev2Label={null}
-                    next2Label={null}
-                    view="month"
-                    defaultView="month"
-                    allowPartialRange={false}
-                    value={currentMonth}
-                />
+                <>
+                    <Calendar
+                        tileClassName={getTileClassName}
+                        onActiveStartDateChange={handleNavigation}
+                        showNeighboringMonth={false}
+                        formatShortWeekday={(locale, date) =>
+                            date.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "")
+                        }
+                        maxDate={new Date()}
+                        tileDisabled={() => true}
+                        navigationLabel={({ date }) => (
+                            <Box sx={{ textAlign: "center", lineHeight: 1.2 }}>
+                                <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "1rem", lineHeight: 1 }}>
+                                    {date.getFullYear()}
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.875rem", lineHeight: 1 }}>
+                                    {date.toLocaleString("pt-BR", { month: "long" })}
+                                </Typography>
+                            </Box>
+                        )}
+                        prev2Label={null}
+                        next2Label={null}
+                        view="month"
+                        defaultView="month"
+                        allowPartialRange={false}
+                        value={currentMonth}
+                    />
+                    <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
+                </>
             )}
 
-            <CalendarSummary uniqueDaysTrained={uniqueDaysTrained} />
         </PageLayout>
     );
 };

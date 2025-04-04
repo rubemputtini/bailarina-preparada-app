@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Container, Grid, TextField, Typography } from "@mui/material";
 
 const LoginForm = ({
     title,
@@ -84,7 +84,7 @@ const LoginForm = ({
                                     "&:hover": { backgroundColor: "#5b4c6c" }
                                 }}
                             >
-                                {buttonText}
+                                {disableSubmit ? <CircularProgress size={24} color="inherit" /> : buttonText}
                             </Button>
                         </Grid>
                         {error && (

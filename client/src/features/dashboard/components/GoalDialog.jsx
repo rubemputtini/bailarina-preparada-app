@@ -3,7 +3,7 @@ import { CircularProgress } from "@mui/material";
 
 const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
     const [goal, setGoal] = useState(currentGoal || "");
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
     if (!open) return null;
@@ -16,10 +16,10 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
             return;
         }
 
-        setIsLoading(true);
+        setLoading(true);
         setError("");
         await onSave(parsedGoal);
-        setIsLoading(false);
+        setLoading(false);
     };
 
     return (
@@ -64,20 +64,20 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
 
                 <div className="flex justify-center gap-4 flex-col sm:flex-row-reverse mt-2">
                     <button
-                        className={`px-4 py-2 text-white rounded-xl w-full sm:w-auto ${isLoading
+                        className={`px-4 py-2 text-white rounded-xl w-full sm:w-auto ${loading
                             ? "bg-purple-300 cursor-not-allowed"
                             : "bg-purple-600 hover:bg-purple-700"
                             }`}
                         onClick={handleConfirm}
-                        disabled={isLoading}
+                        disabled={loading}
                     >
-                        {isLoading ? <CircularProgress size={24} color="inherit" /> : "SALVAR"}
+                        {loading ? <CircularProgress size={24} color="inherit" /> : "SALVAR"}
                     </button>
 
                     <button
                         className="px-4 py-2 border border-gray-400 text-gray-700 rounded-xl w-full sm:w-auto hover:bg-gray-100"
                         onClick={onClose}
-                        disabled={isLoading}
+                        disabled={loading}
                     >
                         CANCELAR
                     </button>
