@@ -69,6 +69,7 @@ namespace BailarinaPreparadaApp.Services
                 AdminName = e.Admin.Name,
                 UserName = e.User.Name,
                 Date = e.Date,
+                UserGender = e.UserGender,
                 Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
                 {
                     Exercise = new ExerciseResponse

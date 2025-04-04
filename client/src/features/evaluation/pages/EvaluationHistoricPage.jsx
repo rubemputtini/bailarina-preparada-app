@@ -1,229 +1,116 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserEvaluations } from "features/admin/services/adminService";
-import {
-    Box,
-    Card,
-    Typography,
-    Alert,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Avatar,
-    Divider,
-    IconButton
-} from "@mui/material";
-import dayjs from "dayjs";
-import { Edit } from "@mui/icons-material";
-import { updateEvaluation } from "../services/evaluationService";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
+import EvaluationCard from "../components/EvaluationCard";
+import { Typography, Alert } from "@mui/material";
+import { calculateAvgClassification } from "shared/utils/classificationUtils";
+import { calculateTotalFMSScore } from "shared/utils/fmsUtils";
+import { groupByCategory } from "shared/utils/exerciseUtils";
+import { fetchEvaluationDetails } from "shared/utils/evaluationUtils";
+import { getUserId } from "features/auth/services/auth";
 
 const EvaluationHistoricPage = () => {
-    const { userId } = useParams();
-    const [evaluations, setEvaluations] = useState([]);
-    const [selectedEvaluation, setSelectedEvaluation] = useState(null);
+    const params = useParams();
+    const isAdminView = !!params.userId;
+    const userId = isAdminView ? params.userId : getUserId();
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [updatedExercises, setUpdatedExercises] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
+    const [evaluations, setEvaluations] = useState([]);
+    const [userName, setUserName] = useState("");
 
     useEffect(() => {
-        const fetchEvaluations = async () => {
+        const fetchAllEvaluations = async () => {
             try {
-                const data = await getUserEvaluations(userId);
-                setEvaluations(data);
+                const rawEvaluations = await getUserEvaluations(userId);
+
+                if (isAdminView && rawEvaluations.length > 0) {
+                    setUserName(rawEvaluations[0].userName);
+                }
+
+                const detailed = await Promise.all(
+                    rawEvaluations.map(async (preview) => {
+                        const { evaluation, referenceMap } = await fetchEvaluationDetails(preview.evaluationId);
+                        if (!evaluation) return null;
+
+                        const grouped = groupByCategory(evaluation.exercises);
+                        const fmsScore = calculateTotalFMSScore(grouped.fms);
+                        const classification = calculateAvgClassification(grouped.physical, referenceMap);
+
+                        return {
+                            ...evaluation,
+                            fmsScore,
+                            physicalClassification: classification,
+                        };
+                    })
+                );
+
+                setEvaluations(detailed.filter(Boolean));
             } catch (error) {
-                setError("Erro ao carregar avaliações.");
+                setError("Erro ao carregar avaliações do usuário.");
+                console.error(error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchEvaluations();
-    }, [userId]);
-
-    const handleStartEditing = () => {
-        setIsEditing(true);
-    };
-
-    const handleEvaluationClick = (evaluation) => {
-        setSelectedEvaluation(evaluation);
-        setUpdatedExercises(
-            evaluation.exercises.map((exercise) => ({
-                exerciseId: exercise.exerciseId,
-                score: exercise.score,
-            }))
-        );
-    };
-
-    const handleUpdateScore = (index, newScore) => {
-        const updated = [...updatedExercises];
-        updated[index].score = newScore;
-        setUpdatedExercises(updated);
-    };
-
-    const handleSaveEdit = () => {
-        updateEvaluation(selectedEvaluation.evaluationId, updatedExercises);
-        const data = getUserEvaluations(userId);
-        setEvaluations(data);
-
-        setIsEditing(false);
-        setSelectedEvaluation(null);
-    };
-
-    const handleCancelEdit = () => {
-        setUpdatedExercises(
-            selectedEvaluation.exercises.map((exercise) => ({
-                exerciseId: exercise.exerciseId,
-                score: exercise.score,
-            }))
-        );
-        setIsEditing(false);
-    };
-
-    const handleCloseDialog = () => {
-        setSelectedEvaluation(null);
-    };
+        fetchAllEvaluations();
+    }, [userId, isAdminView]);
 
     return (
         <PageLayout>
-            <Typography variant="h4" color="white" className="mb-6 text-center">
-                Avaliações de {evaluations[0]?.userName}
-            </Typography>
-            {loading ? (
-                <LoadingCard />
-            ) : error ?
-                (
-                    <Box className="flex justify-center items-center my-20">
-                        <Alert severity="error">{error}</Alert>
-                    </Box>
-                ) : evaluations.length === 0 ? (
-                    <Box className="flex justify-center items-center my-20">
-                        <Typography variant="h6" color="white">
-                            Nenhuma avaliação encontrada para este usuário.
-                        </Typography>
-                    </Box>
-                ) : (
-                    <Card className="bg-purple-800 p-4 mb-6 shadow-lg">
-                        <Typography
-                            variant="h6"
-                            color="white"
-                            className="text-center mb-4"
-                        >
-                            Clique em uma avaliação para ver os detalhes
-                        </Typography>
-                        <Box className="flex flex-wrap gap-4 justify-center">
-                            {evaluations.map((evaluation) => (
-                                <Card
-                                    key={evaluation.evaluationId}
-                                    className="bg-purple-700 text-white p-4 shadow-md cursor-pointer"
-                                    onClick={() => handleEvaluationClick(evaluation)}
-                                    sx={{
-                                        maxWidth: "300px",
-                                        '&:hover': { boxShadow: 6 },
-                                    }}
-                                >
-                                    <Typography variant="h6" className="mb-2">
-                                        {dayjs(evaluation.date).format("DD/MM/YYYY")}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        Realizada por: {evaluation.adminName}
-                                    </Typography>
-                                </Card>
-                            ))}
-                        </Box>
-                    </Card>
+            <div className="text-center">
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "800",
+                        textAlign: "center",
+                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        fontSize: { xs: "2rem", md: "2.5rem" },
+                    }}
+                >
+                    Histórico de Avaliações
+                </Typography>
+
+                {isAdminView && userName && (
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            color: '#9575cd',
+                            fontSize: { xs: '20px', sm: '22px' },
+                            fontWeight: 500,
+                            marginTop: "0.5em"
+                        }}
+                    >
+                        {userName}
+                    </Typography>
                 )}
 
-            {selectedEvaluation && (
-                <Dialog
-                    open={Boolean(selectedEvaluation)}
-                    onClose={handleCloseDialog}
-                    maxWidth="md"
-                    fullWidth
-                >
-                    <DialogTitle>Detalhes da Avaliação</DialogTitle>
-                    <DialogContent>
-                        <Typography variant="h6" className="mb-4">
-                            Realizada por: {selectedEvaluation.adminName}
-                        </Typography>
-                        <Typography className="mb-4">
-                            Data:{" "}
-                            {dayjs(selectedEvaluation.date).format("DD/MM/YYYY")}
-                        </Typography>
-                        <Divider className="mb-4" />
-                        {selectedEvaluation.exercises.map((exercise, index) => (
-                            <Box
-                                key={index}
-                                className="flex items-center gap-4 mb-4"
-                            >
-                                <Avatar
-                                    src={exercise.exercise.photoUrl}
-                                    alt={exercise.exercise.name}
-                                    variant="rounded"
-                                    className="w-16 h-16"
+                {loading ? (
+                    <LoadingCard />
+                ) : error ? (
+                    <Alert severity="error">{error}</Alert>
+                ) : evaluations.length === 0 ? (
+                    <Typography align="center" color="white">Nenhuma avaliação encontrada.</Typography>
+                ) : (
+                    <div className="flex flex-wrap justify-center gap-6 mt-6">
+                        {evaluations
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .map((evaluation) => (
+                                <EvaluationCard
+                                    key={evaluation.evaluationId}
+                                    evaluation={evaluation}
+                                    fmsScore={evaluation.fmsScore}
+                                    classification={evaluation.physicalClassification}
                                 />
-                                <Box>
-                                    <Typography variant="body1" className="font-bold">
-                                        {exercise.exercise.name}
-                                    </Typography>
-                                    <Typography variant="body2" className="text-gray-600">
-                                        Categoria: {exercise.exercise.category}
-                                    </Typography>
-                                    {isEditing ? (
-                                        <Box display="flex" alignItems="center" gap={2}>
-                                            <Typography variant="body2" className="text-gray-600">
-                                                Pontuação:
-                                            </Typography>
-                                            <input
-                                                type="number"
-                                                value={updatedExercises[index]?.score || ''}
-                                                onChange={(e) =>
-                                                    handleUpdateScore(index, parseInt(e.target.value, 10))
-                                                }
-                                                style={{ width: "60px", textAlign: "center" }}
-                                            />
-                                        </Box>
-                                    ) : (
-                                        <Typography variant="body2" className="text-gray-600">
-                                            Pontuação: {exercise.score}
-                                        </Typography>
-                                    )}
-                                </Box>
-                            </Box>
-                        ))}
-                        <Box className="flex justify-between mt-4">
-                            {isEditing ? (
-                                <>
-                                    <Button
-                                        onClick={handleCancelEdit}
-                                        variant="outlined"
-                                        color="secondary"
-                                    >
-                                        Cancelar
-                                    </Button>
-                                    <Button
-                                        onClick={handleSaveEdit}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        Salvar
-                                    </Button>
-                                </>
-                            ) : (
-                                <IconButton
-                                    color="primary"
-                                    onClick={handleStartEditing}
-                                >
-                                    <Edit />
-                                </IconButton>
-                            )}
-                        </Box>
-                    </DialogContent>
-                </Dialog>
-            )}
+                            ))}
+                    </div>
+                )}
+            </div>
         </PageLayout>
     );
 };

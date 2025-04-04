@@ -99,7 +99,7 @@ const Nav = () => {
                         <ListItemIcon sx={{ color: "#302539" }}><SportsGymnastics /></ListItemIcon>
                         <ListItemText primary="Planejamento" />
                     </ListItem>
-                    <ListItem button component={Link} to="/avaliacao" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to="/avaliacoes" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><Star /></ListItemIcon>
                         <ListItemText primary="Avaliações" />
                     </ListItem>

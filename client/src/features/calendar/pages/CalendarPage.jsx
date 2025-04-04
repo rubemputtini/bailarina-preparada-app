@@ -46,16 +46,6 @@ const CalendarPage = () => {
         setCurrentMonth(activeStartDate);
     };
 
-    if (error) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
-                <Typography variant="h6" color="error">
-                    {error}
-                </Typography>
-            </Box>
-        );
-    }
-
     return (
         <PageLayout>
             <Typography

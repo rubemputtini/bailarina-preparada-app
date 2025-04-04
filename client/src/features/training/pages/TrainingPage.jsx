@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, LinearProgress, IconButton } from "@mui/material";
+import { Box, LinearProgress, IconButton, Alert } from "@mui/material";
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
@@ -55,8 +55,9 @@ const TrainingPage = () => {
         try {
             await createTraining(newTraining.date, newTraining.category, newTraining.description);
             setSuccess(true);
+            setError("");
         } catch (err) {
-            alert("Erro ao registrar treino. Tente novamente.");
+            setError("Erro ao registrar treino. Tente novamente.")
         } finally {
             setLoading(false);
         }
@@ -89,6 +90,14 @@ const TrainingPage = () => {
                         {step === 2 && <StepCategory newTraining={newTraining} setNewTraining={setNewTraining} error={error} setError={setError} trainingCategories={trainingCategories} />}
                         {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
                         {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} />}
+
+                        {error && (
+                            <Box mt={2}>
+                                <Alert severity="error" sx={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                    {error}
+                                </Alert>
+                            </Box>
+                        )}
 
                         <Box
                             display="flex"

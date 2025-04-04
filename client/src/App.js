@@ -10,9 +10,7 @@ import TrainingPage from './features/training/pages/TrainingPage';
 import CalendarPage from './features/calendar/pages/CalendarPage';
 import AccountPage from './features/account/pages/AccountPage';
 import AdminPage from './features/admin/pages/AdminPage';
-import EvaluationReportPage from './features/evaluation/pages/EvaluationListPage';
 import EvaluationDetailPage from './features/evaluation/pages/EvaluationDetailPage';
-import EvaluationListPage from './features/evaluation/pages/EvaluationListPage';
 import EvaluationHistoricPage from './features/evaluation/pages/EvaluationHistoricPage';
 import ScheduleAdminPage from './features/schedule/pages/ScheduleAdminPage';
 import AnnouncementAdminPage from './features/announcement/pages/AnnouncementAdminPage';
@@ -64,14 +62,6 @@ function App() {
               } 
           />
           <Route 
-              path="/avaliacao" 
-              element={
-                  <ProtectedRoute>
-                      <EvaluationListPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
               path="/avaliacao/:evaluationId" 
               element={
                   <ProtectedRoute>
@@ -80,10 +70,10 @@ function App() {
               } 
           />
           <Route 
-              path="/relatorio" 
+              path="/avaliacoes" 
               element={
                   <ProtectedRoute>
-                      <EvaluationReportPage />
+                      <EvaluationHistoricPage />
                   </ProtectedRoute>
               } 
           />
@@ -119,6 +109,14 @@ function App() {
                   </ProtectedRoute>
               } 
           />
+          <Route
+              path="/avisos"
+              element={
+                   <ProtectedRoute>
+                       <AnnouncementAdminPage />
+                   </ProtectedRoute>
+              }
+          />
           <Route 
               path="/admin" 
               element={
@@ -136,17 +134,9 @@ function App() {
               } 
           />
           <Route
-              path="/avisos"
+              path="/admin/avaliacoes/:userId"
               element={
-                  <ProtectedRoute>
-                      <AnnouncementAdminPage />
-                  </ProtectedRoute>
-              }
-          />
-          <Route
-              path="/admin/users/:userId"
-              element={
-                  <ProtectedRoute>
+                  <ProtectedRoute requireAdmin>
                       <EvaluationHistoricPage />
                   </ProtectedRoute>
               }

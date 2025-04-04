@@ -11,10 +11,11 @@ import {
     Delete,
     Visibility,
     CalendarMonth,
-    MoreVert
+    MoreVert,
+    NoteAlt
 } from "@mui/icons-material";
 
-const ActionMenuCell = ({ row, onView, onEdit, onSchedule, onDelete }) => {
+const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, onDelete }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -32,6 +33,11 @@ const ActionMenuCell = ({ row, onView, onEdit, onSchedule, onDelete }) => {
                 <Tooltip title="Editar usuário">
                     <IconButton sx={{ color: "#1976D2" }} onClick={() => onEdit(row.id)}>
                         <Edit />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Ver avaliações">
+                    <IconButton sx={{ color: "#00897B" }} onClick={() => onViewEvaluations(row.id)}>
+                        <NoteAlt />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Planejamento semanal">
@@ -80,6 +86,10 @@ const ActionMenuCell = ({ row, onView, onEdit, onSchedule, onDelete }) => {
                     <MenuItem onClick={() => { onEdit(row.id); handleClose(); }}>
                         <ListItemIcon sx={{ color: "#1976D2" }}><Edit fontSize="small" /></ListItemIcon>
                         Editar usuário
+                    </MenuItem>
+                    <MenuItem onClick={() => { onViewEvaluations(row.id); handleClose(); }}>
+                        <ListItemIcon sx={{ color: "#00897B" }}><NoteAlt fontSize="small" /></ListItemIcon>
+                        Ver avaliações
                     </MenuItem>
                     <MenuItem onClick={() => { onSchedule(row.id); handleClose(); }}>
                         <ListItemIcon sx={{ color: "#6A1B9A" }}><CalendarMonth fontSize="small" /></ListItemIcon>

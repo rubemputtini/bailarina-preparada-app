@@ -7,6 +7,7 @@ const UserTable = ({
     users,
     onView,
     onEdit,
+    onViewEvaluations,
     onSchedule,
     onDelete,
     page,
@@ -31,6 +32,7 @@ const UserTable = ({
                     row={params.row}
                     onView={onView}
                     onEdit={onEdit}
+                    onViewEvaluations={onViewEvaluations}
                     onSchedule={onSchedule}
                     onDelete={onDelete}
                 />
