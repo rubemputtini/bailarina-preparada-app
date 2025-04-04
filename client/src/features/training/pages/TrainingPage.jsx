@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, LinearProgress, IconButton } from "@mui/material";
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 import { useNavigate } from "react-router-dom";
 import { createTraining } from "../services/trainingService";
 import Nav from "../../../layouts/Nav";
@@ -26,6 +27,7 @@ const TrainingPage = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const { width, height } = useWindowSize();
 
     useEffect(() => {
         if (success) {
@@ -109,7 +111,7 @@ const TrainingPage = () => {
                 </Box>
             </Box>
             <Footer />
-            {success && <Confetti numberOfPieces={500} recycle={false} />}
+            {success && <Confetti numberOfPieces={500} recycle={false} width={width} height={height} />}
             <TrainingDialog showDialog={showDialog} setShowDialog={setShowDialog} />
         </>
     );
