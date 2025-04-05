@@ -13,6 +13,7 @@ import ExerciseCard from "../components/ExerciseCard";
 import EvaluationTabs from "../components/EvaluationTabs";
 import PageLayout from "layouts/PageLayout";
 import { ROUTES } from "shared/routes/routes";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const EvaluationAdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -247,9 +248,8 @@ const EvaluationAdminPage = () => {
             </div>
 
             {Object.keys(errors).length > 0 && (
-                <div className="mt-8 bg-red-100 text-red-900 border border-red-300 px-4 py-3 rounded-xl text-center font-medium max-w-lg mx-auto">
-                    Existem erros ou campos obrigatórios incompletos.
-                </div>
+                <ErrorCard message="Existem erros ou campos obrigatórios incompletos." />
+
             )}
 
             <div className="flex justify-center mt-12">

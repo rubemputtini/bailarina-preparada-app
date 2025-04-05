@@ -1,4 +1,5 @@
-import { Alert, Box, Button, CircularProgress, Container, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Grid, TextField, Typography } from "@mui/material";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const LoginForm = ({
     title,
@@ -87,13 +88,13 @@ const LoginForm = ({
                                 {disableSubmit ? <CircularProgress size={24} color="inherit" /> : buttonText}
                             </Button>
                         </Grid>
+
                         {error && (
-                            <Grid item xs={12} display="flex" justifyContent="center">
-                                <Alert severity="error"
-                                    sx={{
-                                        fontFamily: "'Montserrat', sans-serif",
-                                    }}
-                                >{error}</Alert>
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    message={error}
+                                    sx={{ mt: 2 }}
+                                />
                             </Grid>
                         )}
                     </Grid>

@@ -4,12 +4,13 @@ import { getUserEvaluations } from "features/admin/services/adminService";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import EvaluationCard from "../components/EvaluationCard";
-import { Typography, Alert } from "@mui/material";
+import { Typography } from "@mui/material";
 import { calculateAvgClassification } from "shared/utils/classificationUtils";
 import { calculateTotalFMSScore } from "shared/utils/fmsUtils";
 import { groupByCategory } from "shared/utils/exerciseUtils";
 import { fetchEvaluationDetails } from "shared/utils/evaluationUtils";
 import { getUserId } from "features/auth/services/auth";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const EvaluationHistoricPage = () => {
     const params = useParams();
@@ -49,7 +50,7 @@ const EvaluationHistoricPage = () => {
 
                 setEvaluations(detailed.filter(Boolean));
             } catch (error) {
-                setError("Erro ao carregar avaliações do usuário.");
+                setError("Não existem avaliações registradas para o usuário.");
                 console.error(error);
             } finally {
                 setLoading(false);
@@ -93,7 +94,7 @@ const EvaluationHistoricPage = () => {
                 {loading ? (
                     <LoadingCard />
                 ) : error ? (
-                    <Alert severity="error">{error}</Alert>
+                    <ErrorCard message={error} />
                 ) : evaluations.length === 0 ? (
                     <Typography align="center" color="white">Nenhuma avaliação encontrada.</Typography>
                 ) : (

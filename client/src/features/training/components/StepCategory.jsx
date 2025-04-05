@@ -1,7 +1,8 @@
 import { Box, Typography, Button } from "@mui/material";
+import ErrorCard from "shared/ui/ErrorCard";
 import { trainingCategories } from "shared/utils/constants";
 
-const StepCategory = ({ newTraining, setNewTraining, error, setError }) => {
+const StepCategory = ({ newTraining, setNewTraining, error }) => {
     return (
         <>
             <Typography variant="h6" sx={{ color: "#323232", marginBottom: "16px" }}>
@@ -31,9 +32,7 @@ const StepCategory = ({ newTraining, setNewTraining, error, setError }) => {
                 ))}
             </Box>
             {error && (
-                <Typography sx={{ color: "#FF5252", fontSize: "16px", marginTop: "8px" }}>
-                    Escolha uma categoria!
-                </Typography>
+                <ErrorCard message="Escolha uma categoria!" />
             )}
         </>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, LinearProgress, IconButton, Alert } from "@mui/material";
+import { Box, LinearProgress, IconButton } from "@mui/material";
 import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
@@ -41,10 +41,16 @@ const TrainingPage = () => {
     }, [success, navigate]);
 
     const handleNext = () => {
+        if (step === 1 && !newTraining.date) {
+            setError("Selecione uma data válida.");
+            return;
+        }
+
         if (step === 2 && !newTraining.category) {
             setError(true);
             return;
         }
+
         setError(false);
         setStep((prev) => prev + 1);
     };
@@ -87,18 +93,10 @@ const TrainingPage = () => {
                             }}
                         />
 
-                        {step === 1 && <StepDate newTraining={newTraining} setNewTraining={setNewTraining} today={today} />}
-                        {step === 2 && <StepCategory newTraining={newTraining} setNewTraining={setNewTraining} error={error} setError={setError} trainingCategories={trainingCategories} />}
+                        {step === 1 && <StepDate newTraining={newTraining} setNewTraining={setNewTraining} today={today} error={error} />}
+                        {step === 2 && <StepCategory newTraining={newTraining} setNewTraining={setNewTraining} error={error} trainingCategories={trainingCategories} />}
                         {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
-                        {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} />}
-
-                        {error && (
-                            <Box mt={2}>
-                                <Alert severity="error" sx={{ fontFamily: "'Montserrat', sans-serif" }}>
-                                    {error}
-                                </Alert>
-                            </Box>
-                        )}
+                        {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} error={error} />}
 
                         <Box
                             display="flex"

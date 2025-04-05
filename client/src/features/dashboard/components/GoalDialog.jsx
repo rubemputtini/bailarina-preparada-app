@@ -54,13 +54,13 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
                     className={`border-2 ${error ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-3 w-full mb-2 text-center text-5xl font-bold text-purple-700 outline-purple-500 transition-all`}
                 />
 
-                <p className="text-xs text-gray-500 italic mt-1">
-                    Quem treina hoje, dança melhor amanhã 💙
-                </p>
-
                 {error && (
                     <p className="text-sm text-red-600 mb-2">{error}</p>
                 )}
+
+                <p className="text-xs text-gray-500 italic mt-1">
+                    Quem treina hoje, dança melhor amanhã 💙
+                </p>
 
                 <div className="flex justify-center gap-4 flex-col sm:flex-row-reverse mt-2">
                     <button

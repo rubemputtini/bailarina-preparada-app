@@ -1,7 +1,8 @@
 import { Typography, Button, CircularProgress } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
+import ErrorCard from "shared/ui/ErrorCard";
 
-const StepConfirm = ({ handleSave, loading }) => {
+const StepConfirm = ({ handleSave, loading, error }) => {
     return (
         <>
             <Typography variant="h6" sx={{ color: "#323232", marginBottom: "16px" }}>
@@ -24,6 +25,10 @@ const StepConfirm = ({ handleSave, loading }) => {
             >
                 {loading ? <CircularProgress size={24} color="inherit" /> : "REGISTRAR AGORA"}
             </Button>
+
+            {error && (
+                <ErrorCard message={error} />
+            )}
         </>
     );
 };

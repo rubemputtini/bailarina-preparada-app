@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Alert } from "@mui/material";
+import { Typography } from "@mui/material";
 import { getUsers } from "../services/adminService";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
@@ -10,6 +10,7 @@ import UserTable from "../components/UserTable";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import { ROUTES } from "shared/routes/routes";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -108,16 +109,17 @@ const AdminPage = () => {
             >
                 Gerenciador de Usuários
             </Typography>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                <SearchField value={searchTerm} onChange={handleSearch} />
-            </div>
 
             {loading ? (
                 <LoadingCard />
             ) : error ? (
-                <Alert severity="error">{error}</Alert>
+                <ErrorCard message={error} />
             ) : (
                 <>
+                    <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                        <SearchField value={searchTerm} onChange={handleSearch} />
+                    </div>
+
                     {filteredUsers.length === 0 ? (
                         <Typography
                             variant="h6"

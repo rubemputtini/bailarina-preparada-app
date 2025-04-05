@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, Alert, CircularProgress } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, CircularProgress } from "@mui/material";
 import { Person, Home, CheckCircle } from "@mui/icons-material";
 import AddressForm from "shared/forms/AddressForm";
 import PersonalInfoForm from "shared/forms/PersonalInfoForm";
 import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "shared/utils/validators";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const steps = [
     { label: "Usuário", icon: <Person /> },
@@ -152,14 +153,12 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
                 </Grid>
 
                 {error && (
-                    <Grid item xs={12} display="flex" justifyContent="center">
-                        <Alert severity="error"
-                            sx={{
-                                fontFamily: "'Montserrat', sans-serif",
-                            }}
-                        >{error}</Alert>
-                    </Grid>
+                    <ErrorCard
+                        message={error}
+                        sx={{ mt: 3 }}
+                    />
                 )}
+
                 <Typography
                     variant="body2"
                     align="center"

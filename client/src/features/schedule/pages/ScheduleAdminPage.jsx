@@ -57,7 +57,7 @@ const ScheduleAdminPage = () => {
                 setInitialGoal(response.goal || "");
                 setInitialObservations(response.observations || "");
             } catch (error) {
-                console.error("Error fetching schedule:", error);
+                console.error("Erro ao buscar avaliações:", error);
             }
         };
 
@@ -229,12 +229,14 @@ const ScheduleAdminPage = () => {
                         onChange={(e) => setObservations(e.target.value)}
                     />
                 </div>
-                <div className="mt-6 text-center">
-                    <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
-                        <span>Próxima atualização sugerida:</span>
-                        <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
+                {events.length > 0 && (
+                    <div className="mt-6 text-center">
+                        <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
+                            <span>Próxima atualização sugerida:</span>
+                            <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
+                        </div>
                     </div>
-                </div>
+                )}
             </PageLayout>
         </DndProvider>
     );

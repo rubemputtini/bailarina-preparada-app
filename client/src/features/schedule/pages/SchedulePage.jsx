@@ -41,7 +41,7 @@ const SchedulePage = () => {
                 setEvents(formattedEvents);
 
             } catch (error) {
-                console.error("Error fetching schedule:", error);
+                console.error("Erro ao buscar avaliações:", error);
             }
         };
 
@@ -114,24 +114,44 @@ const SchedulePage = () => {
                         disabled
                     />
                 </div>
-                <div className="mt-6 text-center">
-                    <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
-                        <span>Próxima atualização sugerida:</span>
-                        <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center mt-2 text-gray-300 text-base">
-                        <span>Precisa de um novo planejamento?</span>
-                        <a
-                            href={scheduleForm}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#c5e1e9] font-bold underline hover:text-[#8ad9ee] sm:ml-2 sm:whitespace-nowrap"
-                        >
-                            Solicite aqui.
-                        </a>
+                {events.length > 0 ? (
+                    <div className="mt-6 text-center">
+                        <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
+                            <span>Próxima atualização sugerida:</span>
+                            <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center mt-2 text-gray-300 text-base">
+                            <span>Precisa de um novo planejamento?</span>
+                            <a
+                                href={scheduleForm}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#c5e1e9] font-bold underline hover:text-[#8ad9ee] sm:ml-2 sm:whitespace-nowrap"
+                            >
+                                Solicite aqui.
+                            </a>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="mt-6 text-center">
+                        <div className="text-gray-300 text-xl sm:text-2xl mb-2">
+                            Você ainda não tem um planejamento semanal.
+                        </div>
+                        <div className="text-gray-300 text-base">
+                            <span>Deseja começar agora?</span>
+                            <a
+                                href={scheduleForm}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#c5e1e9] font-bold underline hover:text-[#8ad9ee] sm:ml-2 sm:whitespace-nowrap"
+                            >
+                                Solicite aqui.
+                            </a>
+                        </div>
+                    </div>
+                )}
             </PageLayout>
         </DndProvider>
     );

@@ -6,6 +6,7 @@ import CalendarSummary from "../components/CalendarSummary";
 import { getCalendarSummary } from "../services/calendarService";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const CalendarPage = () => {
     const [calendarData, setCalendarData] = useState([]);
@@ -67,11 +68,7 @@ const CalendarPage = () => {
                 <LoadingCard />
             ) : error ? (
                 (
-                    <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
-                        <Typography variant="h6" color="error">
-                            {error}
-                        </Typography>
-                    </Box>
+                    <ErrorCard message={error} />
                 )
             ) : (
                 <>

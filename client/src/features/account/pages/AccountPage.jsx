@@ -8,6 +8,7 @@ import Input from "shared/forms/Input";
 import PhoneInputStyled from "shared/forms/PhoneInputStyled";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const tabs = ["Informações Pessoais", "Endereço"];
 
@@ -168,7 +169,13 @@ const AccountPage = () => {
                                     ))}
                                 </>
                             )}
-                            {error && <p className="text-red-500 text-center text-sm mt-2">{error}</p>}
+                            {error && (
+                                <ErrorCard
+                                    message={error}
+                                    sx={{ mt: 3 }}
+                                />
+                            )}
+
                         </form>
                     )}
                 </div>

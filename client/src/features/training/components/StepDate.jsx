@@ -1,6 +1,7 @@
 import { Box, Typography, TextField } from "@mui/material";
+import ErrorCard from "shared/ui/ErrorCard";
 
-const StepDate = ({ newTraining, setNewTraining, today }) => {
+const StepDate = ({ newTraining, setNewTraining, today, error }) => {
     return (
         <>
             <Typography variant="h6" sx={{ color: "#323232", marginBottom: "16px" }}>
@@ -28,6 +29,10 @@ const StepDate = ({ newTraining, setNewTraining, today }) => {
                     />
                 </Box>
             </Box>
+
+            {error && (
+                <ErrorCard message={error} />
+            )}
         </>
     );
 };
