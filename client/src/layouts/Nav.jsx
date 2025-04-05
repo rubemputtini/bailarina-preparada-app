@@ -3,13 +3,14 @@ import { Drawer, IconButton, List, ListItem, ListItemText, ListItemIcon, Menu, M
 import { Menu as MenuIcon, AccountCircle, Home, Star, EmojiEvents, Settings, ExitToApp, SportsGymnastics, CalendarMonth, Description, Person, EditNote, Campaign } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
-import { logout } from 'features/account/services/accountService';
-import { getUserRole } from 'features/auth/services/auth';
+import { useAuth } from 'features/auth/AuthContext';
+import { ROUTES } from 'shared/routes/routes';
 
 const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const isAdmin = getUserRole() === "admin";
+    const { role, logout } = useAuth();
+    const isAdmin = role === "admin";
     const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
@@ -26,27 +27,27 @@ const Nav = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/login");
+        navigate(ROUTES.login);
     };
 
     const handleAccountClick = () => {
         handleCloseAccountMenu();
-        navigate("/conta");
+        navigate(ROUTES.account);
     };
 
     const handleEvaluationClick = () => {
         handleCloseAccountMenu();
-        navigate("/criar-avaliacao");
-    }
+        navigate(ROUTES.adminCreateEvaluation);
+    };
 
     const handleAnnouncementClick = () => {
         handleCloseAccountMenu();
-        navigate("/avisos");
-    }
+        navigate(ROUTES.adminAnnouncements);
+    };
 
     const handleSettingsClick = () => {
         handleCloseAccountMenu();
-        navigate("/admin");
+        navigate(ROUTES.adminHome);
     };
 
     return (
@@ -91,27 +92,27 @@ const Nav = () => {
                     />
                 </div>
                 <List>
-                    <ListItem button component={Link} to="/dashboard" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.dashboard} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><Home /></ListItemIcon>
                         <ListItemText primary="Início" />
                     </ListItem>
-                    <ListItem button component={Link} to="/planejamento" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.schedule} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><SportsGymnastics /></ListItemIcon>
                         <ListItemText primary="Planejamento" />
                     </ListItem>
-                    <ListItem button component={Link} to="/avaliacoes" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.evaluationHistoric} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><Star /></ListItemIcon>
                         <ListItemText primary="Avaliações" />
                     </ListItem>
-                    <ListItem button component={Link} to="/ranking" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.ranking} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><EmojiEvents /></ListItemIcon>
                         <ListItemText primary="Ranking" />
                     </ListItem>
-                    <ListItem button component={Link} to="/calendario" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.calendar} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><CalendarMonth /></ListItemIcon>
                         <ListItemText primary="Calendário" />
                     </ListItem>
-                    <ListItem button component={Link} to="/treinos" sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
+                    <ListItem button component={Link} to={ROUTES.training} sx={{ '&:hover': { backgroundColor: '#A8BFC6' } }}>
                         <ListItemIcon sx={{ color: "#302539" }}><Description /></ListItemIcon>
                         <ListItemText primary="Treinos" />
                     </ListItem>

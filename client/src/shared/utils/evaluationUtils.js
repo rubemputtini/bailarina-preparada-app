@@ -6,21 +6,21 @@ import { calculateAge } from "shared/utils/dateUtils";
 export const fetchEvaluationDetails = async (evaluationId) => {
   
     try {
-      const evaluationData = await getEvaluationById(evaluationId);
-      const user = await getUserDetails(evaluationData.userId);
-      const age = calculateAge(user.dateOfBirth);
-      const gender = evaluationData.userGender;
+    const evaluationData = await getEvaluationById(evaluationId);
+    const user = await getUserDetails(evaluationData.userId);
+    const age = calculateAge(user.dateOfBirth);
+    const gender = evaluationData.userGender;
 
-      const referenceRequests = evaluationData.exercises.map(async (e) => {
-        const sideKey = e.side === 1 ? "R" : e.side === 2 ? "L" : "U";
+    const referenceRequests = evaluationData.exercises.map(async (e) => {
+      const sideKey = e.side === 1 ? "R" : e.side === 2 ? "L" : "U";
 
-        try {
-          const reference = await getClassificationForUser(e.exercise.exerciseId, age, gender, e.score);
+      try {
+        const reference = await getClassificationForUser(e.exercise.exerciseId, age, gender, e.score);
 
-          return { id: `${e.exercise.exerciseId}-${sideKey}`, reference };
-        } catch {
-          return { id: `${e.exercise.exerciseId}-${sideKey}`, reference: null };
-        }
+        return { id: `${e.exercise.exerciseId}-${sideKey}`, reference };
+      } catch {
+        return { id: `${e.exercise.exerciseId}-${sideKey}`, reference: null };
+      }
     });
 
     const results = await Promise.all(referenceRequests);
@@ -32,7 +32,7 @@ export const fetchEvaluationDetails = async (evaluationId) => {
 
     return { evaluation: evaluationData, referenceMap };
 
-    } catch (error) {
+  } catch (error) {
       console.error("Erro ao carregar avaliação:", error.message);
     }
-};
+  };

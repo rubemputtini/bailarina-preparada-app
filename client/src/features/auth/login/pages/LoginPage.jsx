@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "features/account/services/accountService";
+import { login as loginRequest } from "features/account/services/accountService";
 import Header from "layouts/Header";
 import Footer from "layouts/Footer";
 import LoginForm from "../components/LoginForm";
-import { setToken } from "features/auth/services/auth";
+import { useAuth } from "features/auth/AuthContext";
+import { ROUTES } from "shared/routes/routes";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const LoginPage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -19,10 +21,10 @@ const LoginPage = () => {
         setError(null);
 
         try {
-            const { token } = await login(email, password);
+            const { token } = await loginRequest(email, password);
 
-            setToken(token);
-            navigate("/dashboard");
+            login(token);
+            navigate(ROUTES.dashboard);
         } catch (error) {
             setError(error.message);
         } finally {

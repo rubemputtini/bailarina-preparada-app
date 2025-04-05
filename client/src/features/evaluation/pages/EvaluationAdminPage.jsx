@@ -12,6 +12,7 @@ import UserSelect from "../components/UserSelect";
 import ExerciseCard from "../components/ExerciseCard";
 import EvaluationTabs from "../components/EvaluationTabs";
 import PageLayout from "layouts/PageLayout";
+import { ROUTES } from "shared/routes/routes";
 
 const EvaluationAdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -275,7 +276,7 @@ const EvaluationAdminPage = () => {
                     onClose={() => {
                         setSuccessOpen(false);
                         if (createdEvaluationId) {
-                            navigate(`/avaliacao/${createdEvaluationId}`);
+                            navigate(ROUTES.evaluationDetail(createdEvaluationId));
                         }
                     }}
                 />

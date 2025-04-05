@@ -14,134 +14,138 @@ import EvaluationDetailPage from './features/evaluation/pages/EvaluationDetailPa
 import EvaluationHistoricPage from './features/evaluation/pages/EvaluationHistoricPage';
 import ScheduleAdminPage from './features/schedule/pages/ScheduleAdminPage';
 import AnnouncementAdminPage from './features/announcement/pages/AnnouncementAdminPage';
+import { ROUTES } from 'shared/routes/routes';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route path="/" element={<Navigate to="/signup" replace />} />
+        <Route path={ROUTES.home} element={<Navigate to={ROUTES.signup} replace />} />
 
-          <Route 
-              path="/signup" 
-              element={
-                  <ProtectedRoute publicRoute>
-                      <SignupPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/login" 
-              element={
-                  <ProtectedRoute publicRoute>
-                      <LoginPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/dashboard" 
-              element={
-                  <ProtectedRoute>
-                      <Dashboard />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/planejamento" 
-              element={
-                  <ProtectedRoute>
-                      <SchedulePage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/criar-avaliacao" 
-              element={
-                  <ProtectedRoute>
-                      <EvaluationAdminPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/avaliacao/:evaluationId" 
-              element={
-                  <ProtectedRoute>
-                      <EvaluationDetailPage /> 
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/avaliacoes" 
-              element={
-                  <ProtectedRoute>
-                      <EvaluationHistoricPage />
-                  </ProtectedRoute>
-              } 
-          />
-           <Route 
-              path="/ranking" 
-              element={
-                  <ProtectedRoute>
-                      <RankingPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/calendario" 
-              element={
-                  <ProtectedRoute>
-                      <CalendarPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/treinos" 
-              element={
-                  <ProtectedRoute>
-                      <TrainingPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/conta" 
-              element={
-                  <ProtectedRoute>
-                      <AccountPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route
-              path="/avisos"
-              element={
-                   <ProtectedRoute>
-                       <AnnouncementAdminPage />
-                   </ProtectedRoute>
-              }
-          />
-          <Route 
-              path="/admin" 
-              element={
-                  <ProtectedRoute>
-                      <AdminPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route 
-              path="/admin/planejamento/:userId" 
-              element={
-                  <ProtectedRoute requireAdmin>
-                      <ScheduleAdminPage />
-                  </ProtectedRoute>
-              } 
-          />
-          <Route
-              path="/admin/avaliacoes/:userId"
-              element={
-                  <ProtectedRoute requireAdmin>
-                      <EvaluationHistoricPage />
-                  </ProtectedRoute>
-              }
-          />
-          <Route path="*" element={<Navigate to="/" />} />    
+        <Route 
+          path={ROUTES.signup}
+          element={
+            <ProtectedRoute publicRoute>
+              <SignupPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.login}
+          element={
+            <ProtectedRoute publicRoute>
+              <LoginPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path={ROUTES.dashboard}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.schedule}
+          element={
+            <ProtectedRoute>
+              <SchedulePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.evaluationDetail()}
+          element={
+            <ProtectedRoute>
+              <EvaluationDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.evaluationHistoric}
+          element={
+            <ProtectedRoute>
+              <EvaluationHistoricPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.ranking}
+          element={
+            <ProtectedRoute>
+              <RankingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.calendar}
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.training}
+          element={
+            <ProtectedRoute>
+              <TrainingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.account}
+          element={
+            <ProtectedRoute>
+              <AccountPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path={ROUTES.adminHome}
+          element={
+            <ProtectedRoute requireAdmin>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.adminAnnouncements}
+          element={
+            <ProtectedRoute requireAdmin>
+              <AnnouncementAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.adminCreateEvaluation}
+          element={
+            <ProtectedRoute requireAdmin>
+              <EvaluationAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.adminUserSchedule()}
+          element={
+            <ProtectedRoute requireAdmin>
+              <ScheduleAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.adminUserEvaluations()}
+          element={
+            <ProtectedRoute requireAdmin>
+              <EvaluationHistoricPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path={ROUTES.fallback} element={<Navigate to={ROUTES.home} />} />
       </Routes>
     </BrowserRouter>
   );

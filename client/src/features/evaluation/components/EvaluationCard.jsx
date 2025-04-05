@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import Badge from "./Badge";
+import { ROUTES } from "shared/routes/routes";
 
 const EvaluationCard = ({ evaluation, fmsScore, classification }) => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const EvaluationCard = ({ evaluation, fmsScore, classification }) => {
 
             <button
                 className="bg-purple-700 text-white py-2 px-4 rounded-xl font-bold hover:bg-purple-800 transition text-sm mt-2 w-full"
-                onClick={() => navigate(`/avaliacao/${evaluation.evaluationId}`)}
+                onClick={() => navigate(ROUTES.evaluationDetail(evaluation.evaluationId))}
             >
                 VER DETALHES
             </button>

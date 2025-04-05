@@ -9,6 +9,7 @@ import SearchField from "../components/SearchField";
 import UserTable from "../components/UserTable";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
+import { ROUTES } from "shared/routes/routes";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -48,19 +49,19 @@ const AdminPage = () => {
     };
 
     const handleViewUser = (userId) => {
-        navigate(`/admin/users/${userId}`);
+        navigate(ROUTES.adminUserDetail(userId));
     };
 
     const handleEditUser = (userId) => {
-        console.log("Editar usuário", userId);
+        navigate(ROUTES.adminEditUser(userId));
     };
 
     const handleViewEvaluations = (userId) => {
-        navigate(`/admin/avaliacoes/${userId}`);
+        navigate(ROUTES.adminUserEvaluations(userId));
     };
 
     const handleScheduleUser = (userId) => {
-        navigate(`/admin/planejamento/${userId}`);
+        navigate(ROUTES.adminUserSchedule(userId));
     };
 
     const handleDeleteUser = (userId) => {
@@ -76,7 +77,7 @@ const AdminPage = () => {
         setUserDeleted(true);
         setShowDialog(false);
         setDeleteLoading(false);
-        navigate("/admin");
+        navigate(ROUTES.adminHome);
     };
 
     const handleDialogCancel = () => {

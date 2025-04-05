@@ -1,16 +1,19 @@
 import { Navigate } from 'react-router-dom';
-import { isLoggedIn, getUserRole } from './services/auth';
+import { useAuth } from './AuthContext';
 
 const ProtectedRoute = ({ children, publicRoute = false, requireAdmin = false }) => {
-    const loggedIn = isLoggedIn();
-    const role = getUserRole();
+    const { isAuthenticated, role, loading } = useAuth();
 
-    if (publicRoute) {
-        return loggedIn ? <Navigate to="/dashboard" replace /> : children;
+    if (loading) {
+        return null;
     }
 
-    if (!loggedIn) {
-        return <Navigate to="/signup" replace />;
+    if (publicRoute) {
+        return isAuthenticated ? <Navigate to="/dashboard" replace /> : children;
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
     }
 
     if (requireAdmin && role !== 'admin') {

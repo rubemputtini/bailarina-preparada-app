@@ -13,6 +13,7 @@ import StepDescription from "../components/StepDescription";
 import StepConfirm from "../components/StepConfirm";
 import TrainingDialog from "../components/TrainingDialog";
 import { trainingCategories } from "shared/utils/constants";
+import { ROUTES } from "shared/routes/routes";
 
 const TrainingPage = () => {
     const [step, setStep] = useState(1);
@@ -34,7 +35,7 @@ const TrainingPage = () => {
             setShowDialog(true);
             setTimeout(() => {
                 setShowDialog(false);
-                navigate("/dashboard");
+                navigate(ROUTES.dashboard);
             }, 5000);
         }
     }, [success, navigate]);

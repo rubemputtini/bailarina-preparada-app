@@ -1,4 +1,4 @@
-import { clearToken, setToken} from '../../auth/services/auth';
+import { clearToken } from '../../auth/services/auth';
 import api from 'shared/services/api';
 import { handleError } from 'shared/services/handleError';
 
@@ -34,11 +34,7 @@ export const register = async (formData) => {
         });
 
         const { token, message } = response.data;
-
-        if (token) {
-            setToken(token);
-        }
-        
+      
         return { token, message };
 
     } catch (error) {
