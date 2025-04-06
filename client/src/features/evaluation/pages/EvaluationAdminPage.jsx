@@ -214,7 +214,7 @@ const EvaluationAdminPage = () => {
                 </div>
             </div>
 
-            <EvaluationTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+            <EvaluationTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} showPhotosTab={false} />
 
             <div className="space-y-6">
                 {exercises

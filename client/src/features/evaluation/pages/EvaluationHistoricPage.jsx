@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserEvaluations } from "features/admin/services/adminService";
+import { getMyEvaluations } from "../services/evaluationService";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import EvaluationCard from "../components/EvaluationCard";
@@ -25,7 +26,9 @@ const EvaluationHistoricPage = () => {
     useEffect(() => {
         const fetchAllEvaluations = async () => {
             try {
-                const rawEvaluations = await getUserEvaluations(userId);
+                const rawEvaluations = isAdminView
+                    ? await getUserEvaluations(userId)
+                    : await getMyEvaluations();
 
                 if (isAdminView && rawEvaluations.length > 0) {
                     setUserName(rawEvaluations[0].userName);

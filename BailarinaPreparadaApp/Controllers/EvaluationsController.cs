@@ -27,6 +27,21 @@ namespace BailarinaPreparadaApp.Controllers
             return Ok(evaluations);
         }
 
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMyEvaluations()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "Usuário não autenticado." });
+            }
+
+            var evaluations = await _evaluationService.GetEvaluationsByUserIdAsync(userId);
+
+            return Ok(evaluations);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvaluationById(int id)
         {
@@ -46,7 +61,7 @@ namespace BailarinaPreparadaApp.Controllers
 
             if (!success)
             {
-                return BadRequest(new { message });
+                return NotFound(new { message });
             }
 
             return CreatedAtAction(nameof(GetEvaluationById), new { id = evaluationId }, new { message, evaluationId });
@@ -61,6 +76,20 @@ namespace BailarinaPreparadaApp.Controllers
             if (!success)
             {
                 return BadRequest(new { message });
+            }
+
+            return Ok(new { message });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPatch("{id}/photos")]
+        public async Task<IActionResult> UpdatePhotosUrl(int id, [FromBody] EvaluationPhotoUrlRequest request)
+        {
+            var (success, message) = await _evaluationService.UpdatePhotosUrlAsync(id, request.PhotosUrl);
+
+            if (!success)
+            {
+                return NotFound(new { message });
             }
 
             return Ok(new { message });

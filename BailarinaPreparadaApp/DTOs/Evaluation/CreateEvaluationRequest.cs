@@ -18,5 +18,7 @@ namespace BailarinaPreparadaApp.DTOs.Evaluation
 
         [Required(ErrorMessage = "A lista de exercícios é obrigatória.")]
         public List<EvaluationExerciseRequest> Exercises { get; set; } = new List<EvaluationExerciseRequest>();
+
+        public string? PhotosUrl { get; set; }
     }
 }

@@ -9,5 +9,6 @@
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public string UserGender { get; set; } = string.Empty;
         public List<EvaluationExerciseResponse> Exercises { get; set; } = new List<EvaluationExerciseResponse>();
+        public string? PhotosUrl { get; set; }
     }
 }

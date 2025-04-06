@@ -11,6 +11,16 @@ export const getEvaluations = async () => {
     }
 };
 
+export const getMyEvaluations = async () => {
+    try {
+        const response = await api.get("/api/v1/evaluations/me");
+
+        return response.data;
+    } catch (error) {
+        handleError(error, "Erro ao buscar as avaliações do usuário.");
+    }
+};
+
 export const getEvaluationById = async (evaluationId) => {
     try {
         const response = await api.get(`/api/v1/evaluations/${evaluationId}`);
@@ -38,6 +48,16 @@ export const updateEvaluation = async (evaluationId, updatedExercises) => {
         return response.data;
     } catch (error) {
         handleError(error, `Erro ao atualizar avaliação com ID ${evaluationId}.`);
+    }
+};
+
+export const updatePhotosUrl = async (evaluationId, payload) => {
+    try {
+        const response = await api.patch(`/api/v1/evaluations/${evaluationId}/photos`, payload);
+
+        return response.data;
+    } catch (error) {
+        handleError(error, `Erro ao atualizar link da avaliação com ID ${evaluationId}.`);
     }
 };
 

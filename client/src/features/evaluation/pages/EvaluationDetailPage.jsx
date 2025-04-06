@@ -14,6 +14,7 @@ import useEvaluationDetails from "../../../hooks/useEvaluationDetails";
 import { groupByCategory } from "../../../shared/utils/exerciseUtils";
 import LoadingCard from "shared/ui/LoadingCard";
 import PageLayout from "layouts/PageLayout";
+import PhotosTab from "../components/PhotosTab";
 
 const EvaluationDetailPage = () => {
     const { evaluationId } = useParams();
@@ -85,6 +86,10 @@ const EvaluationDetailPage = () => {
                     <PhysicalScoreCard averageClassification={avgClassification} />
                     <EvaluationGrid items={groupUnilateralExercises(grouped.physical, referenceMap)} />
                 </>
+            )}
+
+            {selectedTab === "FOTOS" && (
+                <PhotosTab evaluationId={evaluationId} photosUrl={evaluation.photosUrl} />
             )}
         </PageLayout>
     );

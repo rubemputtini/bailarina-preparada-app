@@ -25,31 +25,20 @@ namespace BailarinaPreparadaApp.Services
                     .ThenInclude(ee => ee.Exercise)
                 .ToListAsync();
 
-            var response = evaluations.Select(e => new EvaluationResponse
-            {
-                EvaluationId = e.EvaluationId,
-                AdminName = e.Admin.Name,
-                UserName = e.User.Name,
-                Date = e.Date,
-                UserGender = e.UserGender,
-                Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
-                {
-                    Exercise = new ExerciseResponse
-                    {
-                        ExerciseId = ex.ExerciseId,
-                        Name = ex.Exercise.Name,
-                        Category = ex.Exercise.ExerciseCategory.ToString(),
-                        PhotoUrl = ex.Exercise.PhotoUrl,
-                        VideoUrl = ex.Exercise.VideoUrl,
-                        IsUnilateral = ex.Exercise.IsUnilateral
-                    },
-                    Side = ex.Side,
-                    Score = ex.Score,
-                    Observation = ex.Observation
-                }).ToList()
-            });
+            return evaluations.Select(MapToEvaluationResponse);
+        }
 
-            return response;
+        public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsByUserIdAsync(string userId)
+        {
+            var evaluations = await _dbContext.Evaluations
+                .Include(e => e.Admin)
+                .Include(e => e.User)
+                .Include(e => e.Exercises)
+                    .ThenInclude(ee => ee.Exercise)
+                .Where(e => e.UserId == userId)
+                .ToListAsync();
+
+            return evaluations.Select(MapToEvaluationResponse);
         }
 
         public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id, string currentUserId, bool isAdmin)
@@ -71,31 +60,7 @@ namespace BailarinaPreparadaApp.Services
                 throw new ForbiddenException("Você não tem permissão para acessar essa avaliação.");
             }
 
-            var response = new EvaluationResponse
-            {
-                EvaluationId = evaluation.EvaluationId,
-                AdminName = evaluation.Admin.Name,
-                UserName = evaluation.User.Name,
-                Date = evaluation.Date,
-                UserGender = evaluation.UserGender,
-                Exercises = evaluation.Exercises.Select(ex => new EvaluationExerciseResponse
-                {
-                    Exercise = new ExerciseResponse
-                    {
-                        ExerciseId = ex.ExerciseId,
-                        Name = ex.Exercise.Name,
-                        Category = ex.Exercise.ExerciseCategory.ToString(),
-                        PhotoUrl = ex.Exercise.PhotoUrl,
-                        VideoUrl = ex.Exercise.VideoUrl,
-                        IsUnilateral = ex.Exercise.IsUnilateral
-                    },
-                    Side = ex.Side,
-                    Score = ex.Score,
-                    Observation = ex.Observation
-                }).ToList()
-            };
-
-            return response;
+            return MapToEvaluationResponse(evaluation);
         }
 
         public async Task<(bool Success, string Message, int? EvaluationId)> CreateEvaluationAsync(CreateEvaluationRequest request)
@@ -116,7 +81,8 @@ namespace BailarinaPreparadaApp.Services
                 Admin = admin,
                 User = user,
                 UserGender = request.UserGender,
-                Exercises = new List<EvaluationExercise>()
+                Exercises = new List<EvaluationExercise>(),
+                PhotosUrl = request.PhotosUrl
             };
 
             foreach (var exerciseRequest in request.Exercises)
@@ -183,6 +149,21 @@ namespace BailarinaPreparadaApp.Services
             return (true, "Avaliação atualizada com sucesso.");
         }
 
+        public async Task<(bool Success, string Message)> UpdatePhotosUrlAsync(int evaluationId, string photosUrl)
+        {
+            var evaluation = await _dbContext.Evaluations.FindAsync(evaluationId);
+
+            if (evaluation == null)
+            {
+                return (false, "Avaliação não encontrada.");
+            }
+
+            evaluation.PhotosUrl = photosUrl;
+            await _dbContext.SaveChangesAsync();
+
+            return (true, "Link de fotos atualizado com sucesso.");
+        }
+
         public async Task<(bool Success, string Message)> DeleteEvaluationAsync(int id)
         {
             var evaluation = await _dbContext.Evaluations.FindAsync(id);
@@ -197,6 +178,34 @@ namespace BailarinaPreparadaApp.Services
             await _dbContext.SaveChangesAsync();
 
             return (true, "Avaliação excluída com sucesso.");
+        }
+
+        private static EvaluationResponse MapToEvaluationResponse(Evaluation e)
+        {
+            return new EvaluationResponse
+            {
+                EvaluationId = e.EvaluationId,
+                AdminName = e.Admin.Name,
+                UserName = e.User.Name,
+                Date = e.Date,
+                UserGender = e.UserGender,
+                PhotosUrl = e.PhotosUrl,
+                Exercises = e.Exercises.Select(ex => new EvaluationExerciseResponse
+                {
+                    Exercise = new ExerciseResponse
+                    {
+                        ExerciseId = ex.ExerciseId,
+                        Name = ex.Exercise.Name,
+                        Category = ex.Exercise.ExerciseCategory.ToString(),
+                        PhotoUrl = ex.Exercise.PhotoUrl,
+                        VideoUrl = ex.Exercise.VideoUrl,
+                        IsUnilateral = ex.Exercise.IsUnilateral
+                    },
+                    Side = ex.Side,
+                    Score = ex.Score,
+                    Observation = ex.Observation
+                }).ToList()
+            };
         }
     }
 }
