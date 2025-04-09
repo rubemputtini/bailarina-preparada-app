@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import DialogButton from "shared/buttons/DialogButton";
 
 const InputDialog = ({
     open,
@@ -46,23 +46,20 @@ const InputDialog = ({
                 )}
 
                 <div className="flex justify-center gap-4 mt-6">
-                    <button
-                        className="px-4 py-2 bg-gray-500 text-white rounded-xl w-full sm:w-auto hover:bg-gray-600"
+                    <DialogButton
                         onClick={onClose}
-                        disabled={saving}
+                        variant="secondary"
+                        loading={saving}
                     >
                         CANCELAR
-                    </button>
-                    <button
-                        className={`px-4 py-2 text-white rounded-xl w-full sm:w-auto ${saving || !validate(value)
-                            ? "bg-purple-300 cursor-not-allowed"
-                            : "bg-purple-600 hover:bg-purple-700"
-                            }`}
+                    </DialogButton>
+                    <DialogButton
                         onClick={onSave}
-                        disabled={saving || !validate(value)}
+                        disabled={!validate(value)}
+                        loading={saving}
                     >
-                        {saving ? <CircularProgress size={24} color="inherit" /> : "SALVAR"}
-                    </button>
+                        SALVAR
+                    </DialogButton>
                 </div>
             </div>
         </div>

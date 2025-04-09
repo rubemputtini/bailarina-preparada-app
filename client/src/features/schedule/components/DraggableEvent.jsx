@@ -2,7 +2,7 @@ import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
 import { tasksColorsMap } from "../../../shared/utils/constants";
 
-const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds }) => {
+const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds, onDelete }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "EVENT",
         item: {
@@ -10,6 +10,8 @@ const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds }) => {
             title: event.title,
             color: event.color,
             notes: event.notes,
+            link: event.link,
+            activityLinkId: event.activityLinkId,
             dayOfWeek: event.dayOfWeek,
             period: event.period,
             row: event.row,
@@ -19,12 +21,9 @@ const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds }) => {
         }),
     }));
 
-    const handleDelete = () => {
-        setEvents((prevEvents) => prevEvents.filter(e => e.id !== event.id));
-
-        if (event.id) {
-            setDeletedIds((prev) => [...prev, event.id]);
-        }
+    const handleDelete = (e) => {
+        e.stopPropagation();
+        onDelete?.();
     };
 
     return (

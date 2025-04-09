@@ -27,9 +27,7 @@ namespace BailarinaPreparadaApp.Services
 
             var schedule = await _dbContext.Schedules
                 .Include(s => s.Entries)
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.ScheduleId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (schedule == null)
             {
@@ -37,7 +35,9 @@ namespace BailarinaPreparadaApp.Services
                 {
                     UserId = userId,
                     User = user,
-                    Entries = new List<ScheduleTask>()
+                    Entries = new List<ScheduleTask>(),
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 };
 
                 _dbContext.Schedules.Add(schedule);
@@ -62,7 +62,8 @@ namespace BailarinaPreparadaApp.Services
                     Period = e.Period,
                     Activity = e.Activity,
                     Notes = e.Notes,
-                    Color = e.Color
+                    Color = e.Color,
+                    ActivityLinkId = e.ActivityLinkId
                 }).ToList()
             };
 
@@ -83,7 +84,8 @@ namespace BailarinaPreparadaApp.Services
                     Period = e.Period,
                     Activity = e.Activity,
                     Notes = e.Notes,
-                    Color = e.Color
+                    Color = e.Color,
+                    ActivityLinkId = e.ActivityLinkId
                 })
                 .OrderBy(e => e.Period == "Manhã" ? 1 : e.Period == "Tarde" ? 2 : e.Period == "Noite" ? 3 : 99)
                 .ThenBy(e => e.Slot)
@@ -106,6 +108,38 @@ namespace BailarinaPreparadaApp.Services
                 throw new NotFoundException("Usuário não encontrado.");
             }
 
+            var existingSchedule = await _dbContext.Schedules
+                .Include(s => s.Entries)
+                .FirstOrDefaultAsync(s => s.UserId == request.UserId);
+
+            if (existingSchedule != null)
+            {
+                existingSchedule.UpdatedAt = DateTime.UtcNow;
+                existingSchedule.Goal = request.Goal;
+                existingSchedule.Observations = request.Observations;
+                existingSchedule.Entries.Clear();
+
+                foreach (var task in request.Tasks)
+                {
+                    var newTask = new ScheduleTask
+                    {
+                        DayOfWeek = task.DayOfWeek,
+                        Slot = task.Slot,
+                        Period = task.Period,
+                        Activity = task.Activity,
+                        Notes = task.Notes,
+                        Color = task.Color,
+                        ActivityLinkId = task.ActivityLinkId
+                    };
+
+                    existingSchedule.Entries.Add(newTask);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return await GetUserScheduleAsync(request.UserId);
+            }
+
             var schedule = new Schedule
             {
                 UserId = request.UserId,
@@ -121,7 +155,8 @@ namespace BailarinaPreparadaApp.Services
                     Period = t.Period,
                     Activity = t.Activity,
                     Notes = t.Notes,
-                    Color = t.Color
+                    Color = t.Color,
+                    ActivityLinkId = t.ActivityLinkId
                 }).ToList()
             };
 
@@ -146,7 +181,7 @@ namespace BailarinaPreparadaApp.Services
 
             var incomingTaskIds = request.Tasks
                 .Where(t => t.ScheduleTaskId.HasValue && t.ScheduleTaskId.Value > 0)
-                .Select(t => t.ScheduleTaskId.Value)
+                .Select(t => t.ScheduleTaskId)
                 .ToHashSet();
 
             var tasksToRemove = schedule.Entries
@@ -166,8 +201,10 @@ namespace BailarinaPreparadaApp.Services
                         Period = taskRequest.Period,
                         Activity = taskRequest.Activity,
                         Notes = taskRequest.Notes,
-                        Color = taskRequest.Color
+                        Color = taskRequest.Color,
+                        ActivityLinkId = taskRequest.ActivityLinkId
                     };
+
                     schedule.Entries.Add(newTask);
                 }
                 else if (taskMap.TryGetValue(taskRequest.ScheduleTaskId.Value, out var existingTask))
@@ -178,6 +215,7 @@ namespace BailarinaPreparadaApp.Services
                     existingTask.Activity = taskRequest.Activity;
                     existingTask.Notes = taskRequest.Notes;
                     existingTask.Color = taskRequest.Color;
+                    existingTask.ActivityLinkId = taskRequest.ActivityLinkId;
                 }
             }
 

@@ -9,6 +9,7 @@ namespace BailarinaPreparadaApp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<ActivityLink> ActivityLinks { get; set; }
         public DbSet<Evaluation> Evaluations { get; set; }
         public DbSet<EvaluationExercise> EvaluationExercises { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
@@ -54,6 +55,12 @@ namespace BailarinaPreparadaApp.Data
                 .WithMany()
                 .HasForeignKey(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ScheduleTask>()
+                .HasOne(t => t.ActivityLink)
+                .WithMany(a => a.ScheduleTasks)
+                .HasForeignKey(t => t.ActivityLinkId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

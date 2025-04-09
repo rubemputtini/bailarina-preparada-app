@@ -5,7 +5,6 @@ namespace BailarinaPreparadaApp.Models
     public class ScheduleTask
     {
         public int ScheduleTaskId { get; set; }
-        public int ScheduleEntryId { get; set; }
         public int ScheduleId { get; set; }
 
         [JsonIgnore]
@@ -16,5 +15,7 @@ namespace BailarinaPreparadaApp.Models
         public string Activity { get; set; } = string.Empty;
         public string? Notes { get; set; }
         public string Color { get; set; } = string.Empty;
+        public int? ActivityLinkId { get; set; }
+        public ActivityLink? ActivityLink { get; set; }
     }
 }

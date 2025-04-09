@@ -19,6 +19,7 @@ namespace BailarinaPreparadaApp.Extensions
 
             services.AddScoped<AccountService>();
             services.AddScoped<AdminService>();
+            services.AddScoped<ActivityLinkService>();
             services.AddScoped<CalendarService>();
             services.AddScoped<EvaluationService>();
             services.AddScoped<ExerciseService>();
