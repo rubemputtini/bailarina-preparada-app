@@ -27,6 +27,7 @@ namespace BailarinaPreparadaApp.Services
 
             var schedule = await _dbContext.Schedules
                 .Include(s => s.Entries)
+                    .ThenInclude(e => e.ActivityLink)
                 .FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (schedule == null)
@@ -63,7 +64,8 @@ namespace BailarinaPreparadaApp.Services
                     Activity = e.Activity,
                     Notes = e.Notes,
                     Color = e.Color,
-                    ActivityLinkId = e.ActivityLinkId
+                    ActivityLinkId = e.ActivityLinkId,
+                    Link = e.ActivityLink?.Link
                 }).ToList()
             };
 

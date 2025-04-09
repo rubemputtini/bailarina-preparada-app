@@ -81,14 +81,50 @@ export const trainingCategories = [
 ];
 
 export const tasksColorsMap = {
-  lightBlue: { tailwind: "bg-[var(--color-light-blue)] border-[var(--color-light-blue)]", hex: "#c5e1e9" },
-  blue: { tailwind: "bg-[var(--color-blue)] border-[var(--color-blue)]", hex: "#9bb1ff" },
-  darkPurple: { tailwind: "bg-[var(--color-dark-purple)] border-[var(--color-dark-purple)] text-white", hex: "#6a1b9a" },
-  lightPurple: { tailwind: "bg-[var(--color-light-purple)] border-[var(--color-light-purple)]", hex: "#9575cd" },
-  teal: { tailwind: "bg-[var(--color-teal)] border-[var(--color-teal)]", hex: "#80cbc4" },
-  peach: { tailwind: "bg-[var(--color-peach)] border-[var(--color-peach)]", hex: "#ffab91" },
-  softYellow: { tailwind: "bg-[var(--color-soft-yellow)] border-[var(--color-soft-yellow)]", hex: "#fff59d" },
-  pink: { tailwind: "bg-[var(--color-pink)] border-[var(--color-pink)]", hex: "#f48fb1" },
+  sky: {
+    tailwind: "bg-[var(--color-sky)] border-[color:#7dd3fc]",
+    hex: "#bae6fd", // FORÇA
+  },
+  rose: {
+    tailwind: "bg-[var(--color-rose)] border-[color:#f472b6]",
+    hex: "#fbcfe8", // FLEX
+  },
+  indigo: {
+    tailwind: "bg-[var(--color-indigo)] border-[color:#818cf8]",
+    hex: "#c7d2fe", // CARDIO
+  },
+  lavender: {
+    tailwind: "bg-[var(--color-lavender)] border-[color:#d8b4fe]",
+    hex: "#e9d5ff", // PBT
+  },
+  purple: {
+    tailwind: "bg-[var(--color-purple)] border-[color:#a855f7]",
+    hex: "#c084fc", // POTÊNCIA
+  },
+  emerald: {
+    tailwind: "bg-[var(--color-emerald)] border-[color:#34d399]",
+    hex: "#bbf7d0", // SOLO
+  },
+  peach: {
+    tailwind: "bg-[var(--color-peach)] border-[color:#fb923c]",
+    hex: "#fed7aa", // CORE
+  },
+  amber: {
+    tailwind: "bg-[var(--color-amber)] border-[color:#fbbf24]",
+    hex: "#fde68a", // EN DEHORS
+  },
+  teal: {
+    tailwind: "bg-[var(--color-teal)] border-[color:#2dd4bf]",
+    hex: "#99f6e4", // PÉS
+  },
+  violet: {
+    tailwind: "bg-[var(--color-violet)] border-[color:#a78bfa]",
+    hex: "#ddd6fe", // ESPECÍFICO
+  },
+  slate: {
+    tailwind: "bg-[var(--color-slate)] border-[color:#cbd5e1]",
+    hex: "#e2e8f0", // slots vazios
+  },
 };
 
 export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";

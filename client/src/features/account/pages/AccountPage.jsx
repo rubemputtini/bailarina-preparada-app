@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { getUserDetails, updateUserDetails } from "../../../shared/services/userService";
 import "react-phone-input-2/lib/style.css";
-import { Edit, Check, Close } from "@mui/icons-material";
+import {
+    PencilSquareIcon,
+    CheckIcon,
+    XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { CardContent, IconButton } from "@mui/material";
 import useAddressAutocomplete from "../../../hooks/useAddressAutocomplete";
 import Input from "shared/forms/Input";
@@ -68,16 +72,16 @@ const AccountPage = () => {
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-bold text-purple-800">Minha Conta</h2>
                         {!editing ? (
-                            <IconButton onClick={() => setEditing(true)} sx={{ color: "#4A148C" }}>
-                                <Edit />
+                            <IconButton onClick={() => setEditing(true)}>
+                                <PencilSquareIcon className="h-6 w-6 text-purple-800 hover:text-purple-900 transition-colors" />
                             </IconButton>
                         ) : (
                             <div className="flex gap-2">
-                                <IconButton onClick={handleCancel} sx={{ color: "#F44336" }}>
-                                    <Close />
+                                <IconButton onClick={handleCancel}>
+                                    <XMarkIcon className="h-6 w-6 text-red-600 hover:text-red-700 transition-colors" />
                                 </IconButton>
-                                <IconButton onClick={handleSave} sx={{ color: "#4CAF50" }}>
-                                    <Check />
+                                <IconButton onClick={handleSave}>
+                                    <CheckIcon className="h-6 w-6 text-emerald-600 hover:text-emerald-700 transition-colors" />
                                 </IconButton>
                             </div>
                         )}

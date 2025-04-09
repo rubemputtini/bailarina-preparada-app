@@ -10,5 +10,6 @@
         public string? Notes { get; set; }
         public string Color { get; set; } = string.Empty;
         public int? ActivityLinkId { get; set; }
+        public string? Link { get; set; }
     }
 }

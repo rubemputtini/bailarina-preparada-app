@@ -12,10 +12,18 @@
   --color-blue: #9bb1ff;
   --color-dark-purple: #6a1b9a;
   --color-light-purple: #9575cd;
-  --color-teal: #80cbc4;
-  --color-peach: #ffab91;
-  --color-soft-yellow: #fff59d;
-  --color-pink: #f48fb1;
+
+  --color-sky: #bae6fd; /* FORÇA */
+  --color-rose: #fbcfe8; /* FLEX */
+  --color-indigo: #c7d2fe; /* CARDIO */
+  --color-lavender: #e9d5ff; /* PBT */
+  --color-purple: #c084fc; /* POTÊNCIA */
+  --color-emerald: #bbf7d0; /* SOLO */
+  --color-peach: #fed7aa; /* CORE */
+  --color-amber: #fde68a; /* EN DEHORS */
+  --color-teal: #99f6e4; /* PÉS */
+  --color-violet: #ddd6fe; /* ESPECÍFICO */
+  --color-slate: #e2e8f0; /* VAZIO */
 }
 
 @layer utilities {
@@ -30,6 +38,39 @@
   }
   .bg-light-purple {
     background-color: var(--color-light-purple);
+  }
+  .bg-sky {
+    background-color: var(--color-sky);
+  }
+  .bg-rose {
+    background-color: var(--color-rose);
+  }
+  .bg-indigo {
+    background-color: var(--color-indigo);
+  }
+  .bg-lavender {
+    background-color: var(--color-lavender);
+  }
+  .bg-purple {
+    background-color: var(--color-purple);
+  }
+  .bg-emerald {
+    background-color: var(--color-emerald);
+  }
+  .bg-peach {
+    background-color: var(--color-peach);
+  }
+  .bg-amber {
+    background-color: var(--color-amber);
+  }
+  .bg-teal {
+    background-color: var(--color-teal);
+  }
+  .bg-violet {
+    background-color: var(--color-violet);
+  }
+  .bg-slate {
+    background-color: var(--color-slate);
   }
 }
 

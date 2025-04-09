@@ -7,7 +7,7 @@ const medals = ["🥇", "🥈", "🥉"];
 
 const RankingTop5Card = ({ ranking, loading }) => {
     return (
-        <Card className="bg-gradient-to-b from-purple-100 via-white to-white shadow-xl rounded-2xl lg:col-span-1">
+        <Card className="bg-white shadow-xl rounded-2xl lg:col-span-1">
             <CardContent>
                 <div className="flex items-center mb-2">
                     <img src={trophy} alt="Troféu" className="w-6 h-6 mr-2" />

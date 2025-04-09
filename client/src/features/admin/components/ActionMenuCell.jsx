@@ -4,16 +4,16 @@ import {
     Tooltip,
     Menu,
     MenuItem,
-    ListItemIcon
+    Divider
 } from "@mui/material";
 import {
-    Edit,
-    Delete,
-    Visibility,
-    CalendarMonth,
-    MoreVert,
-    NoteAlt
-} from "@mui/icons-material";
+    EyeIcon,
+    PencilSquareIcon,
+    ClipboardDocumentListIcon,
+    CalendarDaysIcon,
+    TrashIcon,
+    EllipsisVerticalIcon
+} from "@heroicons/react/24/outline";
 
 const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, onDelete }) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -26,35 +26,36 @@ const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, on
         <div className="flex items-center justify-start">
             <div className="hidden md:flex gap-2">
                 <Tooltip title="Ver detalhes">
-                    <IconButton sx={{ color: "#388E3C" }} onClick={() => onView(row.id)}>
-                        <Visibility />
+                    <IconButton onClick={() => onView(row.id)}>
+                        <EyeIcon className="h-5 w-5 text-emerald-600 hover:text-emerald-700 transition-colors" />
                     </IconButton>
                 </Tooltip>
+
                 <Tooltip title="Editar usuário">
-                    <IconButton sx={{ color: "#1976D2" }} onClick={() => onEdit(row.id)}>
-                        <Edit />
+                    <IconButton onClick={() => onEdit(row.id)}>
+                        <PencilSquareIcon className="h-5 w-5 text-blue-600 hover:text-blue-700 transition-colors" />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Ver avaliações">
-                    <IconButton sx={{ color: "#00897B" }} onClick={() => onViewEvaluations(row.id)}>
-                        <NoteAlt />
+                    <IconButton onClick={() => onViewEvaluations(row.id)} >
+                        <ClipboardDocumentListIcon className="h-5 w-5 text-cyan-700 hover:text-cyan-800 transition-colors" />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Planejamento semanal">
-                    <IconButton sx={{ color: "#6A1B9A" }} onClick={() => onSchedule(row.id)}>
-                        <CalendarMonth />
+                    <IconButton onClick={() => onSchedule(row.id)} >
+                        <CalendarDaysIcon className="h-5 w-5 text-purple-700 hover:text-purple-800 transition-colors" />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Excluir usuário">
-                    <IconButton sx={{ color: "#D32F2F" }} onClick={() => onDelete(row.id)}>
-                        <Delete />
+                    <IconButton onClick={() => onDelete(row.id)}>
+                        <TrashIcon className="h-5 w-5 text-red-600 hover:text-red-700 transition-colors" />
                     </IconButton>
                 </Tooltip>
             </div>
 
             <div className="block md:hidden">
                 <IconButton onClick={handleMenuClick}>
-                    <MoreVert />
+                    <EllipsisVerticalIcon className="h-5 w-5 text-gray-700" />
                 </IconButton>
                 <Menu
                     anchorEl={anchorEl}
@@ -80,23 +81,25 @@ const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, on
                     }}
                 >
                     <MenuItem onClick={() => { onView(row.id); handleClose(); }}>
-                        <ListItemIcon sx={{ color: "#388E3C" }}><Visibility fontSize="small" /></ListItemIcon>
+                        <EyeIcon className="h-5 w-5 text-emerald-600 mr-2" />
                         Ver detalhes
                     </MenuItem>
                     <MenuItem onClick={() => { onEdit(row.id); handleClose(); }}>
-                        <ListItemIcon sx={{ color: "#1976D2" }}><Edit fontSize="small" /></ListItemIcon>
+                        <PencilSquareIcon className="h-5 w-5 text-blue-600 mr-2" />
                         Editar usuário
                     </MenuItem>
                     <MenuItem onClick={() => { onViewEvaluations(row.id); handleClose(); }}>
-                        <ListItemIcon sx={{ color: "#00897B" }}><NoteAlt fontSize="small" /></ListItemIcon>
+                        <ClipboardDocumentListIcon className="h-5 w-5 text-cyan-700 mr-2" />
                         Ver avaliações
                     </MenuItem>
                     <MenuItem onClick={() => { onSchedule(row.id); handleClose(); }}>
-                        <ListItemIcon sx={{ color: "#6A1B9A" }}><CalendarMonth fontSize="small" /></ListItemIcon>
+                        <CalendarDaysIcon className="h-5 w-5 text-purple-700 mr-2" />
                         Planejamento
                     </MenuItem>
+                    <Divider />
+
                     <MenuItem onClick={() => { onDelete(row.id); handleClose(); }}>
-                        <ListItemIcon sx={{ color: "#D32F2F" }}><Delete fontSize="small" /></ListItemIcon>
+                        <TrashIcon className="h-5 w-5 text-red-600 mr-2" />
                         Excluir usuário
                     </MenuItem>
                 </Menu>

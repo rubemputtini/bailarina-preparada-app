@@ -35,7 +35,8 @@ const SchedulePage = () => {
                     period: task.period,
                     row: task.slot,
                     notes: task.notes,
-                    color: task.color
+                    color: task.color,
+                    link: task.link
                 }));
 
                 setEvents(formattedEvents);
