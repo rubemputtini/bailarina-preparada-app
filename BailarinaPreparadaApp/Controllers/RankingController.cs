@@ -7,7 +7,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/ranking")]
     [Authorize]
-    public class RankingController : ControllerBase
+    public class RankingController : BaseController
     {
         private readonly RankingService _rankingService;
 

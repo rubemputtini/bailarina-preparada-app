@@ -2,14 +2,13 @@
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/evaluations")]
     [Authorize]
-    public class EvaluationsController : ControllerBase
+    public class EvaluationsController : BaseController
     {
         private readonly EvaluationService _evaluationService;
 
@@ -29,15 +28,8 @@ namespace BailarinaPreparadaApp.Controllers
 
         [HttpGet("me")]
         public async Task<IActionResult> GetMyEvaluations()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { message = "Usuário não autenticado." });
-            }
-
-            var evaluations = await _evaluationService.GetEvaluationsByUserIdAsync(userId);
+        {           
+            var evaluations = await _evaluationService.GetEvaluationsByUserIdAsync(CurrentUserId);
 
             return Ok(evaluations);
         }
@@ -45,10 +37,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvaluationById(int id)
         {
-            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var isAdmin = User.IsInRole("admin");
-
-            var evaluation = await _evaluationService.GetEvaluationByIdAsync(id, currentUserId, isAdmin);
+            var evaluation = await _evaluationService.GetEvaluationByIdAsync(id, CurrentUserId, IsAdmin);
 
             return Ok(evaluation);
         }

@@ -8,7 +8,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/activity-links")]
     [Authorize(Roles = "admin")]
-    public class ActivityLinksController : ControllerBase
+    public class ActivityLinksController : BaseController
     {
         private readonly ActivityLinkService _activityLinkService;
 

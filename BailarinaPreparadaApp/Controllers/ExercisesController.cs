@@ -7,7 +7,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/exercises")]
     [Authorize(Roles = "admin")]
-    public class ExercisesController : ControllerBase
+    public class ExercisesController : BaseController
     {
         private readonly ExerciseService _exerciseService;
 

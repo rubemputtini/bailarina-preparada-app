@@ -7,7 +7,7 @@ namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/account")]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {       
         private readonly AccountService _accountService;
 

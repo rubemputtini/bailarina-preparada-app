@@ -2,14 +2,13 @@
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/announcements")]
     [Authorize]
-    public class AnnouncementsController : ControllerBase
+    public class AnnouncementsController : BaseController
     {
         private readonly AnnouncementService _announcementService;
 
@@ -39,14 +38,7 @@ namespace BailarinaPreparadaApp.Controllers
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<AnnouncementResponse>> CreateAnnouncement([FromBody] CreateAnnouncementRequest request)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return BadRequest(new { message = "Usuário não encontrado." });
-            }
-
-            var created = await _announcementService.CreateAnnouncementAsync(userId, request);
+            var created = await _announcementService.CreateAnnouncementAsync(CurrentUserId, request);
 
             return CreatedAtAction(nameof(GetAllAnnouncements), new { id = created.AnnouncementId }, created);
         }

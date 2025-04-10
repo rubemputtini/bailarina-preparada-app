@@ -48,7 +48,7 @@ namespace BailarinaPreparadaApp.Services
             return (userResponses, totalUsers);
         }
 
-        public async Task<List<EvaluationResponse>?> GetUserEvaluationsAsync(string userId)
+        public async Task<List<EvaluationResponse>> GetUserEvaluationsAsync(string userId)
         {
             var evaluations = await _dbContext.Evaluations
                 .Where(e => e.User.Id == userId)
@@ -57,11 +57,6 @@ namespace BailarinaPreparadaApp.Services
                 .Include(e => e.Exercises)
                 .ThenInclude(ee => ee.Exercise)
                 .ToListAsync();
-
-            if (evaluations.Count == 0)
-            {
-                return null;
-            }
 
             var response = evaluations.Select(e => new EvaluationResponse
             {

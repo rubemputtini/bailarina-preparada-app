@@ -1,16 +1,14 @@
 ﻿using BailarinaPreparadaApp.DTOs.Training;
-using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/trainings")]
     [Authorize]
-    public class TrainingsController : ControllerBase
+    public class TrainingsController : BaseController
     {
         private readonly TrainingService _trainingService;
 
@@ -22,14 +20,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingRequest request)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            await _trainingService.CreateTrainingAsync(userId, request);
+            await _trainingService.CreateTrainingAsync(CurrentUserId, request);
 
             return Ok(new { message = "Treino registrado com sucesso!" });
         }
@@ -37,14 +28,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("completed")]
         public async Task<IActionResult> GetCompletedTrainingsByUser([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? category)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            var trainings = await _trainingService.GetCompletedTrainingsAsync(userId, startDate, endDate, category);
+            var trainings = await _trainingService.GetCompletedTrainingsAsync(CurrentUserId, startDate, endDate, category);
 
             return Ok(trainings);
         }
@@ -52,14 +36,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("yearly-days-count")]
         public async Task<IActionResult> GetYearlyTrainingDaysCount([FromQuery] int year)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            var trainingDaysCount = await _trainingService.GetYearlyTrainingDaysCountAsync(userId, year);
+            var trainingDaysCount = await _trainingService.GetYearlyTrainingDaysCountAsync(CurrentUserId, year);
 
             return Ok(trainingDaysCount);
         }
@@ -67,14 +44,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpDelete("{trainingId}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            await _trainingService.DeleteTrainingAsync(userId, trainingId);
+            await _trainingService.DeleteTrainingAsync(CurrentUserId, trainingId);
 
             return Ok(new { message = "Treino excluído com sucesso!" });
         }

@@ -1,16 +1,15 @@
 ﻿using BailarinaPreparadaApp.DTOs.Schedule;
-using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BailarinaPreparadaApp.Controllers
 {
     [ApiController]
     [Route("api/v1/schedules")]
     [Authorize]
-    public class SchedulesController : ControllerBase
+    public class SchedulesController : BaseController
     {
         private readonly ScheduleService _scheduleService;
 
@@ -22,13 +21,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserSchedule(string userId)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isAdmin = User.IsInRole("admin");
-
-            if (!isAdmin && currentUserId != userId)
-            {
-                throw new UnauthorizedException("Usuário não autorizado.");
-            }
+            PermissionHelper.CheckUserPermission(userId, CurrentUserId, IsAdmin);
 
             var schedule = await _scheduleService.GetUserScheduleAsync(userId);
 
@@ -38,14 +31,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetMySchedule()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            var schedule = await _scheduleService.GetUserScheduleAsync(userId);
+            var schedule = await _scheduleService.GetUserScheduleAsync(CurrentUserId);
 
             return Ok(schedule);
         }
@@ -53,14 +39,7 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpGet("daily")]
         public async Task<IActionResult> GetDailySchedule()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedException("Usuário não autenticado.");
-            }
-
-            var dailySchedule = await _scheduleService.GetDailyScheduleAsync(userId);
+            var dailySchedule = await _scheduleService.GetDailyScheduleAsync(CurrentUserId);
 
             return Ok(dailySchedule);
         }

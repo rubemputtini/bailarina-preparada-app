@@ -8,7 +8,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/exercise-references")]
     [Authorize]
-    public class ExerciseReferencesController : ControllerBase
+    public class ExerciseReferencesController : BaseController
     {
         private readonly ExerciseReferenceService _exerciseReferenceService;
 

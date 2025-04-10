@@ -24,7 +24,7 @@ const AnnouncementsFeedCard = () => {
             <CardContent>
                 <div className="flex items-center mb-2">
                     <img src={loudspeaker} alt="Aviso" className="w-6 h-6 mr-2" />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1f2937' }}>
+                    <Typography variant="h6" className="font-bold text-gray-800">
                         Avisos do Clube
                     </Typography>
                 </div>

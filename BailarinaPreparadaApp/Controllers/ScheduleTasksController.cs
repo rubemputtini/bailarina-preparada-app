@@ -7,7 +7,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/schedule-tasks")]
     [Authorize(Roles = "admin")]
-    public class ScheduleTasksController : ControllerBase
+    public class ScheduleTasksController : BaseController
     {
         private readonly ScheduleTaskService _scheduleTaskService;
 

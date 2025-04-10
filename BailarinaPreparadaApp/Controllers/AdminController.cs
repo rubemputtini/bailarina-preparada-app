@@ -7,7 +7,7 @@ namespace BailarinaPreparadaApp.Controllers
     [ApiController]
     [Route("api/v1/admin")]
     [Authorize(Roles = "admin")]
-    public class AdminController : ControllerBase
+    public class AdminController : BaseController
     {
         private readonly AdminService _adminService;
 

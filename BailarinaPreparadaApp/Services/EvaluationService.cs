@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.DTOs.Evaluation;
 using BailarinaPreparadaApp.DTOs.Exercise;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,10 +56,7 @@ namespace BailarinaPreparadaApp.Services
                 throw new NotFoundException("Avaliação não encontrada.");
             }
 
-            if (!isAdmin && evaluation.UserId != currentUserId)
-            {
-                throw new ForbiddenException("Você não tem permissão para acessar essa avaliação.");
-            }
+            PermissionHelper.CheckUserPermission(evaluation.UserId, currentUserId, isAdmin);
 
             return MapToEvaluationResponse(evaluation);
         }

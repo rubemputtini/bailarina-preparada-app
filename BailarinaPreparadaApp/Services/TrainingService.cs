@@ -38,10 +38,8 @@ namespace BailarinaPreparadaApp.Services
 
         public async Task<IEnumerable<TrainingResponse>> GetCompletedTrainingsAsync(string userId, DateTime? startDate, DateTime? endDate, string? category)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-
             var trainingsQuery = _dbContext.Trainings
-                .Where(t => t.UserId == user!.Id && t.IsCompleted)
+                .Where(t => t.UserId == userId && t.IsCompleted)
                 .AsQueryable();
 
             if (startDate.HasValue)
@@ -86,8 +84,6 @@ namespace BailarinaPreparadaApp.Services
 
         public async Task DeleteTrainingAsync(string userId, int trainingId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-
             var training = await _dbContext.Trainings
                 .SingleOrDefaultAsync(t => t.TrainingId == trainingId && t.UserId == userId);
 
