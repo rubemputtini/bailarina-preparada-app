@@ -36,7 +36,7 @@ const UserSelect = ({ users, selectedUser, setSelectedUser, error }) => {
                 placeholder="Digite para buscar"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className={`w-full mt-1 p-3 rounded-xl bg-white text-black border ${error ? "border-red-500" : "border-gray-600"
+                className={`w-full mt-1 p-3 h-[52px] rounded-xl bg-white text-black border ${error ? "border-red-500" : "border-gray-600"
                     } focus:outline-none`}
             />
 

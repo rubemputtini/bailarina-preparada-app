@@ -178,7 +178,7 @@ const EvaluationAdminPage = () => {
                 <div>
                     <label className="text-sm text-gray-300">Sexo</label>
                     <select
-                        className="w-full mt-1 rounded-xl bg-white text-black p-3 border border-gray-600 focus:outline-none"
+                        className="w-full mt-1 rounded-xl bg-white text-black p-3 h-[52px] border border-gray-600 focus:outline-none"
                         value={userGender}
                         onChange={(e) => setUserGender(e.target.value)}
                     >
