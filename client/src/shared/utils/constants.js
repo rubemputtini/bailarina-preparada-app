@@ -1,11 +1,18 @@
-import {
-  DirectionsRun, FitnessCenter, SelfImprovement, TheaterComedy, SportsGymnastics, ElectricBolt, AutoStories, Category
-} from "@mui/icons-material";
-
 import instagram from "../../assets/instagram.svg";
 import youtube from "../../assets/youtube.svg";
-import facebook from "../../assets/facebook.svg"   
-import telegram from "../../assets/telegram.svg"   
+import facebook from "../../assets/facebook.svg";   
+import telegram from "../../assets/telegram.svg";
+import strength from "../../assets/strength.png";
+import flex from "../../assets/flex.png";
+import cardio from "../../assets/cardio.png";
+import pbt from "../../assets/pbt.png";
+import power from "../../assets/power.png";
+import solo from "../../assets/solo.png";
+import core from "../../assets/core.png";
+import endehors from "../../assets/endehors.png";
+import feet from "../../assets/feet.png";
+import specific from "../../assets/specific.png";
+//import others from "../../assets/others.png";
 
 export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5103";
 
@@ -69,15 +76,17 @@ export const periods = [
 ];
 
 export const trainingCategories = [
-  { name: "Alongamento", icon: <SelfImprovement fontSize="large" /> },
-  { name: "Ballet", icon: <TheaterComedy fontSize="large" /> },
-  { name: "Cardio", icon: <DirectionsRun fontSize="large" /> },
-  { name: "Contemporâneo", icon: <SportsGymnastics fontSize="large" /> },
-  { name: "Jazz", icon: <TheaterComedy fontSize="large" /> },
-  { name: "Musculação", icon: <FitnessCenter fontSize="large" /> },
-  { name: "PBT", icon: <AutoStories fontSize="large" /> },
-  { name: "Potência", icon: <ElectricBolt fontSize="large" /> },
-  { name: "Outros", icon: <Category fontSize="large" /> },
+  { name: "FORÇA", icon: <img src={strength} alt="Força" className="w-6 h-6" /> },
+  { name: "FLEX", icon: <img src={flex} alt="Flex" className="w-6 h-6" /> },
+  { name: "CARDIO", icon: <img src={cardio} alt="Cardio" className="w-6 h-6" /> },
+  { name: "PBT", icon: <img src={pbt} alt="PBT" className="w-6 h-6" /> },
+  { name: "POTÊNCIA", icon: <img src={power} alt="Potência" className="w-6 h-6" /> },
+  { name: "SOLO", icon: <img src={solo} alt="Solo" className="w-6 h-6" /> },
+  { name: "CORE", icon: <img src={core} alt="Core" className="w-6 h-6" /> },
+  { name: "EN DEHORS", icon: <img src={endehors} alt="En Dehors" className="w-6 h-6" /> },
+  { name: "PÉS", icon: <img src={feet} alt="Pés" className="w-6 h-6" /> },
+  { name: "ESPECÍFICO", icon: <img src={specific} alt="Específico" className="w-6 h-6" /> },
+  // { name: "OUTROS", icon: <img src={others} alt="Outros" className="w-6 h-6" /> }, // ative se quiser
 ];
 
 export const tasksColorsMap = {
@@ -125,6 +134,24 @@ export const tasksColorsMap = {
     tailwind: "bg-[var(--color-slate)] border-[color:#cbd5e1]",
     hex: "#e2e8f0", // slots vazios
   },
+};
+
+export const getCategoryColor = (category) => {
+  const categoryToColorKey = {
+    "FORÇA": "sky",
+    "FLEX": "rose",
+    "CARDIO": "indigo",
+    "PBT": "lavender",
+    "POTÊNCIA": "purple",
+    "SOLO": "emerald",
+    "CORE": "peach",
+    "EN DEHORS": "amber",
+    "PÉS": "teal",
+    "ESPECÍFICO": "violet",
+  };
+
+  const key = categoryToColorKey[category];
+  return tasksColorsMap[key]?.hex || "#e4e4e4";
 };
 
 export const scheduleForm = "https://docs.google.com/forms/d/1Hh6xR_t3IvojICZ3Wy_26suKt8lLThkIkB4v7wgtIFA/viewform?edit_requested=true";

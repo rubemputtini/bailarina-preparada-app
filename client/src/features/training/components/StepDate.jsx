@@ -4,7 +4,7 @@ import ErrorCard from "shared/ui/ErrorCard";
 const StepDate = ({ newTraining, setNewTraining, today, error }) => {
     return (
         <>
-            <Typography variant="h6" sx={{ color: "#323232", marginBottom: "16px" }}>
+            <Typography variant="h6" sx={{ color: "#323232", marginBottom: "16px", textAlign: "center" }}>
                 Quando foi seu treino?
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDrop } from "react-dnd";
-import { FaPlus } from "react-icons/fa";
 import DraggableEvent from "./DraggableEvent";
 import ScheduleActivityDialog from "./ScheduleActivityDialog";
 import { tasksColorsMap } from "../../../shared/utils/constants";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events, setDeletedIds }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -117,7 +117,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events, se
                     className="text-gray-400 text-lg hover:text-green-600"
                     onClick={openAddDialog}
                 >
-                    <FaPlus />
+                    <PlusIcon className="w-6 h-6" />
                 </button>
             )}
 

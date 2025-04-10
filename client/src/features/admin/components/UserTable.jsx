@@ -5,7 +5,6 @@ import ActionMenuCell from "./ActionMenuCell";
 
 const UserTable = ({
     users,
-    onView,
     onEdit,
     onViewEvaluations,
     onSchedule,
@@ -17,11 +16,11 @@ const UserTable = ({
     totalUsers,
 }) => {
     const columns = [
-        { field: "name", headerName: "Nome", flex: 1, minWidth: 200 },
-        { field: "email", headerName: "Email", flex: 1, minWidth: 150 },
+        { field: "name", headerName: "NOME", flex: 1, minWidth: 200 },
+        { field: "email", headerName: "EMAIL", flex: 1, minWidth: 150 },
         {
             field: "actions",
-            headerName: "Ações",
+            headerName: "AÇÕES",
             flex: 0.5,
             minWidth: 200,
             sortable: false,
@@ -30,7 +29,6 @@ const UserTable = ({
             renderCell: (params) => (
                 <ActionMenuCell
                     row={params.row}
-                    onView={onView}
                     onEdit={onEdit}
                     onViewEvaluations={onViewEvaluations}
                     onSchedule={onSchedule}
@@ -59,44 +57,55 @@ const UserTable = ({
                     minWidth: "800px",
                     fontFamily: "var(--primary-font)",
                     backgroundColor: "#fff",
-                    borderRadius: "12px",
-                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                    border: "1px solid #ddd",
+                    borderRadius: "16px",
+                    boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.05)",
+                    border: "none",
+
                     "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: "var(--color-light-blue)",
-                        color: "#333",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        textTransform: "uppercase",
-                        borderTopLeftRadius: "12px",
-                        borderTopRightRadius: "12px",
-                        borderBottom: "2px solid var(--color-blue)",
+                        backgroundColor: "#eae4f9",
+                        color: "#322b47",
+                        fontSize: "13px",
+                        fontWeight: 800,
+                        borderTopLeftRadius: "16px",
+                        borderTopRightRadius: "16px",
+                        borderBottom: "2px solid #a78bfa"
                     },
+
                     "& .MuiDataGrid-cell": {
                         color: "#333",
-                        fontSize: "14px",
+                        fontSize: "13.5px",
+                        paddingLeft: "12px",
+                        paddingRight: "12px",
+                        borderBottom: "1px solid #e3e3e3",
                         "&:focus": { outline: "none" },
+                        paddingY: "10px",
+                        paddingX: "16px",
+
                     },
+
                     "& .MuiDataGrid-row": {
                         backgroundColor: "#fff",
-                        "&:nth-of-type(even)": { backgroundColor: "#f5f5f5" },
-                        "&:hover": { backgroundColor: "#e0e0e0" },
+                        "&:nth-of-type(even)": { backgroundColor: "#f9f9f9" },
+                        "&:hover": { backgroundColor: "#f1effa" },
                     },
+
                     "& .MuiDataGrid-footerContainer": {
                         backgroundColor: "#fff",
                         color: "#333",
-                        borderBottomLeftRadius: "12px",
-                        borderBottomRightRadius: "12px",
-                        borderTop: "2px solid #ddd",
-                        fontSize: "14px",
+                        borderBottomLeftRadius: "16px",
+                        borderBottomRightRadius: "16px",
+                        borderTop: "2px solid #eee",
+                        fontSize: "13.5px",
                         padding: "8px 16px",
                     },
+
                     "& .MuiTablePagination-root, & .MuiTablePagination-caption, & .MuiTablePagination-selectLabel": {
                         fontFamily: "var(--primary-font) !important",
-                        fontSize: "14px !important",
+                        fontSize: "13px !important",
                         color: "#333 !important",
                     },
                 }}
+
             />
         </Box>
     );

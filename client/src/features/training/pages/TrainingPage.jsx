@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, LinearProgress, IconButton } from "@mui/material";
-import { ArrowBackIosNew, ArrowForwardIos } from "@mui/icons-material";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { useNavigate } from "react-router-dom";
@@ -75,21 +75,27 @@ const TrainingPage = () => {
             <Nav />
             <Box sx={{ minHeight: "100vh", padding: "24px" }}>
                 <Box sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
-                    <Box sx={{
-                        backgroundColor: "#c5e1e9",
-                        borderRadius: "32px",
-                        padding: "24px",
-                        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
-                    }}>
+                    <Box
+                        sx={{
+                            backgroundColor: "#f4f0fa",
+                            borderRadius: "32px",
+                            padding: "24px",
+                            boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
+                        }}
+                    >
                         <LinearProgress
                             variant="determinate"
                             value={(step / 4) * 100}
                             sx={{
-                                marginBottom: "16px",
-                                borderRadius: "8px",
-                                height: "8px",
-                                backgroundColor: "#FFFFFF",
-                                "& .MuiLinearProgress-bar": { backgroundColor: "#00C853" }
+                                height: 10,
+                                borderRadius: "10px",
+                                backgroundColor: "#e0e0e0",
+                                "& .MuiLinearProgress-bar": {
+                                    borderRadius: "10px",
+                                    background: "linear-gradient(90deg, #6C3DB4 0%, #B388FF 100%)",
+                                    transition: "all 0.3s ease-in-out",
+                                },
+                                marginBottom: "24px",
                             }}
                         />
 
@@ -106,12 +112,12 @@ const TrainingPage = () => {
                         >
                             {step > 1 && (
                                 <IconButton onClick={handleBack} sx={{ color: "#323232" }}>
-                                    <ArrowBackIosNew fontSize="large" />
+                                    <ChevronLeftIcon className="w-6 h-6" />
                                 </IconButton>
                             )}
                             {step < 4 && (
                                 <IconButton onClick={handleNext} sx={{ color: "#323232" }}>
-                                    <ArrowForwardIos fontSize="large" />
+                                    <ChevronRightIcon className="w-6 h-6" />
                                 </IconButton>
                             )}
                         </Box>

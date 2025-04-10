@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Account;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace BailarinaPreparadaApp.Services
             _userManager = userManager;
         }
 
-        public async Task<UserDetailsResponse> GetUserDetailsAsync(string? userId, string? currentUserEmail)
+        public async Task<UserDetailsResponse> GetUserDetailsAsync(string? userId, string? currentUserEmail, string currentUserId, bool isAdmin)
         {
             var user = userId == null
                 ? await _userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Email == currentUserEmail)
@@ -28,6 +29,8 @@ namespace BailarinaPreparadaApp.Services
             {
                 throw new NotFoundException("Usuário não encontrado.");
             }
+
+            PermissionHelper.CheckUserPermission(user.Id, currentUserId, isAdmin);
 
             var response = new UserDetailsResponse
             {
@@ -51,7 +54,7 @@ namespace BailarinaPreparadaApp.Services
             return response;
         }
 
-        public async Task<UserResponse> EditUserAsync(string userId, EditUserRequest request)
+        public async Task<UserResponse> EditUserAsync(string userId, EditUserRequest request, string currentUserId, bool isAdmin)
         {
             var user = await _userManager.Users
                 .Include(u => u.Address)
@@ -61,6 +64,8 @@ namespace BailarinaPreparadaApp.Services
             {
                 throw new NotFoundException("Usuário não encontrado.");
             }
+
+            PermissionHelper.CheckUserPermission(userId, currentUserId, isAdmin);
 
             user.Name = request.Name ?? user.Name;
             user.Email = request.Email ?? user.Email;

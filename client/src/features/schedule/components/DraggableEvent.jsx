@@ -1,8 +1,8 @@
 import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
 import { tasksColorsMap } from "../../../shared/utils/constants";
-import LaunchIcon from '@mui/icons-material/Launch';
 import { IconButton, Tooltip } from "@mui/material";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds, onDelete }) => {
     const bgColor = tasksColorsMap[event.color]?.hex || "#ffffff";
@@ -63,7 +63,7 @@ const DraggableEvent = ({ event, isEditing, setEvents, setDeletedIds, onDelete }
                                 }
                             }}
                         >
-                            <LaunchIcon fontSize="inherit" />
+                            <ArrowTopRightOnSquareIcon className="w-4 h-4" />
                         </IconButton>
                     </Tooltip>
                 </div>

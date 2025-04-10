@@ -49,10 +49,6 @@ const AdminPage = () => {
         setSearchTerm(event.target.value);
     };
 
-    const handleViewUser = (userId) => {
-        navigate(ROUTES.adminUserDetail(userId));
-    };
-
     const handleEditUser = (userId) => {
         navigate(ROUTES.adminEditUser(userId));
     };
@@ -143,11 +139,12 @@ const AdminPage = () => {
                                     color: "white",
                                 }}
                             >
-                                {filteredUsers.length} usuário(s) encontrado(s)
+                                {filteredUsers.length === 1
+                                    ? "1 usuário encontrado"
+                                    : `${filteredUsers.length} usuários encontrados`}
                             </Typography>
                             <UserTable
                                 users={filteredUsers}
-                                onView={handleViewUser}
                                 onEdit={handleEditUser}
                                 onViewEvaluations={handleViewEvaluations}
                                 onSchedule={handleScheduleUser}

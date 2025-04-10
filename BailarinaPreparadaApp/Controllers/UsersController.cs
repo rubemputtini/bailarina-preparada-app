@@ -22,8 +22,10 @@ namespace BailarinaPreparadaApp.Controllers
         public async Task<IActionResult> GetUserDetails(string? userId = null)
         {
             var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var isAdmin = User.IsInRole("admin");
 
-            var userDetails = await _userService.GetUserDetailsAsync(userId, currentUserEmail);
+            var userDetails = await _userService.GetUserDetailsAsync(userId, currentUserEmail, currentUserId, isAdmin);
             
             return Ok(userDetails);
         }
@@ -31,7 +33,10 @@ namespace BailarinaPreparadaApp.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> EditUser(string userId, [FromBody] EditUserRequest request)
         {
-            var updatedUser = await _userService.EditUserAsync(userId, request);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var isAdmin = User.IsInRole("admin");
+
+            var updatedUser = await _userService.EditUserAsync(userId, request, currentUserId, isAdmin);
 
             return Ok(updatedUser);
         }

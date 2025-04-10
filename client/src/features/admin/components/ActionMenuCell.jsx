@@ -7,7 +7,6 @@ import {
     Divider
 } from "@mui/material";
 import {
-    EyeIcon,
     PencilSquareIcon,
     ClipboardDocumentListIcon,
     CalendarDaysIcon,
@@ -15,7 +14,7 @@ import {
     EllipsisVerticalIcon
 } from "@heroicons/react/24/outline";
 
-const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, onDelete }) => {
+const ActionMenuCell = ({ row, onEdit, onViewEvaluations, onSchedule, onDelete }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -25,12 +24,6 @@ const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, on
     return (
         <div className="flex items-center justify-start">
             <div className="hidden md:flex gap-2">
-                <Tooltip title="Ver detalhes">
-                    <IconButton onClick={() => onView(row.id)}>
-                        <EyeIcon className="h-5 w-5 text-emerald-600 hover:text-emerald-700 transition-colors" />
-                    </IconButton>
-                </Tooltip>
-
                 <Tooltip title="Editar usuário">
                     <IconButton onClick={() => onEdit(row.id)}>
                         <PencilSquareIcon className="h-5 w-5 text-blue-600 hover:text-blue-700 transition-colors" />
@@ -80,10 +73,6 @@ const ActionMenuCell = ({ row, onView, onEdit, onViewEvaluations, onSchedule, on
                         },
                     }}
                 >
-                    <MenuItem onClick={() => { onView(row.id); handleClose(); }}>
-                        <EyeIcon className="h-5 w-5 text-emerald-600 mr-2" />
-                        Ver detalhes
-                    </MenuItem>
                     <MenuItem onClick={() => { onEdit(row.id); handleClose(); }}>
                         <PencilSquareIcon className="h-5 w-5 text-blue-600 mr-2" />
                         Editar usuário
