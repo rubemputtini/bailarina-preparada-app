@@ -158,3 +158,26 @@ h3 {
   border: none !important;
   cursor: default;
 }
+
+.react-calendar,
+.react-calendar *,
+.react-calendar__tile,
+.react-calendar__navigation button,
+.react-calendar__month-view__weekdays__weekday {
+  font-family: var(--primary-font) !important;
+}
+
+/* Forçando Montserrat nos inputs */
+input,
+textarea,
+.MuiInputBase-input,
+.MuiOutlinedInput-input,
+.MuiInputLabel-root {
+  font-family: var(--primary-font) !important;
+}
+
+/* Fonte do Date Picker (MUI X) */
+.MuiPickersPopper-root,
+.MuiPickersPopper-root * {
+  font-family: var(--primary-font) !important;
+}
