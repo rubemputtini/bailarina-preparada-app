@@ -18,10 +18,9 @@ export const ROUTES = {
     adminHome: "/admin",
     adminAnnouncements: "/admin/avisos",
     adminCreateEvaluation: "/admin/criar-avaliacao",
-    adminEditUser: (userId = ":userId") => `/admin/editar-usuario/${userId}`,
+    adminEditUser: (userId = ":userId") => `/admin/users/${userId}`,
     adminUserSchedule: (userId = ":userId") => `/admin/planejamento/${userId}`,
     adminUserEvaluations: (userId = ":userId") => `/admin/avaliacoes/${userId}`,
-    adminUserDetail: (id) => `/admin/users/${id}`,
     
     // Rota fallback
     fallback: "*"

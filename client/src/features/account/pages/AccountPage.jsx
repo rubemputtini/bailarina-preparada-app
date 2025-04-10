@@ -13,6 +13,8 @@ import PhoneInputStyled from "shared/forms/PhoneInputStyled";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import ErrorCard from "shared/ui/ErrorCard";
+import { useParams } from "react-router-dom";
+import { useAuth } from "features/auth/AuthContext";
 
 const tabs = ["Informações Pessoais", "Endereço"];
 
@@ -23,6 +25,10 @@ const AccountPage = () => {
     const [error, setError] = useState("");
     const [formValues, setFormValues] = useState({});
     const [originalValues, setOriginalValues] = useState({});
+    const { userId: routeUserId } = useParams();
+    const { role } = useAuth();
+    const isAdminEditing = role === "admin" && routeUserId;
+    const userIdToLoad = isAdminEditing ? routeUserId : undefined;
 
     const handleChange = (field, value) => {
         setFormValues((prev) => ({ ...prev, [field]: value }));
@@ -33,7 +39,7 @@ const AccountPage = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const data = await getUserDetails();
+                const data = await getUserDetails(userIdToLoad);
                 setFormValues(data);
                 setOriginalValues(data);
             } catch {
@@ -43,7 +49,7 @@ const AccountPage = () => {
             }
         };
         fetchUser();
-    }, []);
+    }, [userIdToLoad]);
 
     const handleSave = async () => {
         try {
@@ -70,7 +76,10 @@ const AccountPage = () => {
             <div className="max-w-3xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold text-purple-800">Minha Conta</h2>
+                        <h2 className="text-2xl font-bold text-purple-800">
+                            {isAdminEditing ? `Editando: ${formValues.name || "usuário"}` : "Minha Conta"}
+                        </h2>
+
                         {!editing ? (
                             <IconButton onClick={() => setEditing(true)}>
                                 <PencilSquareIcon className="h-6 w-6 text-purple-800 hover:text-purple-900 transition-colors" />

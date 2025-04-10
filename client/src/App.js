@@ -103,7 +103,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route 
+          path={ROUTES.adminEditUser()}
+          element={
+            <ProtectedRoute requireAdmin>
+              <AccountPage />
+            </ProtectedRoute>
+          }
+        />
         <Route 
           path={ROUTES.adminHome}
           element={
