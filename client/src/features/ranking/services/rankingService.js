@@ -9,6 +9,6 @@ export const getRanking = async (month, year, limit) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar ranking.");
+        throw handleError(error, "Erro ao buscar ranking.");
     }
 }

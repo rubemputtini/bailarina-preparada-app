@@ -7,7 +7,7 @@ export const getUserSchedule = async (userId) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar planejamento do usuário.");
+        throw handleError(error, "Erro ao buscar planejamento do usuário.");
     }
 };
 
@@ -17,7 +17,7 @@ export const getMySchedule = async () => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar seu planejamento.");
+        throw handleError(error, "Erro ao buscar seu planejamento.");
     }
 };
 
@@ -27,7 +27,7 @@ export const createSchedule = async (payload) => {
 
         return response.data.schedule;
     } catch (error) {
-        handleError(error, "Erro ao criar planejamento do usuário.");
+        throw handleError(error, "Erro ao criar planejamento do usuário.");
     }
 };
 
@@ -36,7 +36,7 @@ export const updateSchedule = async (scheduleId, payload) => {
         await api.put(`/api/v1/schedules/${scheduleId}`, payload);
 
     } catch (error) {
-        handleError(error, "Erro ao atualizar planejamento do usuário.");
+        throw handleError(error, "Erro ao atualizar planejamento do usuário.");
     }
 };
 
@@ -45,6 +45,6 @@ export const deleteSchedule = async (scheduleId) => {
         await api.delete(`/api/v1/schedules/${scheduleId}`);
 
     } catch (error) {
-        handleError(error, "Erro ao excluir planejamento do usuário.");
+        throw handleError(error, "Erro ao excluir planejamento do usuário.");
     }
 };

@@ -8,7 +8,7 @@ export const getMyGoals = async () => {
         return response.data;
         
     } catch (error) {
-        handleError(error, "Erro ao buscar metas do usuário.");
+        throw handleError(error, "Erro ao buscar metas do usuário.");
     }
 };
 
@@ -19,7 +19,7 @@ export const getMyGoalByYear = async (year) => {
         return response.data;
         
     } catch (error) {
-        handleError(error, "Erro ao buscar metas por ano do usuário.");
+        throw handleError(error, "Erro ao buscar metas por ano do usuário.");
     }
 };
 
@@ -30,6 +30,6 @@ export const setMyGoal = async (goal) => {
         return response.data;
         
     } catch (error) {
-        handleError(error, "Erro ao definir meta do usuário.");
+        throw handleError(error, "Erro ao definir meta do usuário.");
     }
 };

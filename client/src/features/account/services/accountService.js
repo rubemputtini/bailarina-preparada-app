@@ -9,7 +9,7 @@ export const login = async (email, password) => {
       return response.data;
 
     } catch (error) {
-        handleError(error, "Erro ao fazer login.");
+        throw handleError(error, "Erro ao fazer login.");
     }
 };
 
@@ -38,7 +38,7 @@ export const register = async (formData) => {
         return { token, message };
 
     } catch (error) {
-        handleError(error, "Erro ao registrar usuário.");
+        throw handleError(error, "Erro ao registrar usuário.");
     } 
 };
 
@@ -57,6 +57,6 @@ export const deleteUser = async (userId) => {
         return response.data;
 
     } catch (error) {
-        handleError(error, "Erro ao excluir usuário.");
+        throw handleError(error, "Erro ao excluir usuário.");
     }
 };

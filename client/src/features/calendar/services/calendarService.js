@@ -8,6 +8,6 @@ export const getCalendarSummary = async (startDate, endDate) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar resumo do calendário.");
+        throw handleError(error, "Erro ao buscar resumo do calendário.");
     }
 };

@@ -7,7 +7,7 @@ export const getAllReferences = async () => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar todas os valores de referências dos exercícios.");
+        throw handleError(error, "Erro ao buscar todas os valores de referências dos exercícios.");
     }
 };
 
@@ -17,7 +17,7 @@ export const getByExerciseId = async (exerciseId) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId}.`);
+        throw handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId}.`);
     }
 };
 
@@ -27,6 +27,6 @@ export const getClassificationForUser = async (exerciseId, age, gender, score) =
 
         return response.data;
     } catch (error) {
-        handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId} para ${age} anos e sexo ${gender}.`);
+        throw handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId} para ${age} anos e sexo ${gender}.`);
     }
 };

@@ -7,6 +7,6 @@ export const getExercises = async () => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar exercícios.");
+        throw handleError(error, "Erro ao buscar exercícios.");
     }
 }

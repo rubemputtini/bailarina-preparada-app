@@ -9,7 +9,7 @@ export const getUserDetails = async (userId = null) => {
         return response.data;
         
     } catch (error) {
-        handleError(error, "Erro ao buscar detalhes do usuário.");
+        throw handleError(error, "Erro ao buscar detalhes do usuário.");
     }
 };
 
@@ -24,6 +24,6 @@ export const updateUserDetails = async (userId, userData) => {
         return response.data;
 
     } catch (error) {
-        handleError(error, "Erro ao atualizar detalhes do usuário.");
+        throw handleError(error, "Erro ao atualizar detalhes do usuário.");
     }
 };

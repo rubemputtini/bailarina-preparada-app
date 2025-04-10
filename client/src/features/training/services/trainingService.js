@@ -10,7 +10,7 @@ export const createTraining = async (date, category, description) => {
         });
 
     } catch (error) {
-        handleError(error, "Erro ao criar treino.");
+        throw handleError(error, "Erro ao criar treino.");
     }
 };
 
@@ -26,7 +26,7 @@ export const getTrainingsByUser = async (startDate, endDate, category) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar treinos do usuário.");
+        throw handleError(error, "Erro ao buscar treinos do usuário.");
     }
 };
 
@@ -34,6 +34,6 @@ export const deleteTraining = async (trainingId) => {
     try {
         await api.delete(`/api/v1/trainings/${trainingId}`)
     } catch (error) {
-        handleError(error, "Erro ao excluir treino.");
+        throw handleError(error, "Erro ao excluir treino.");
     }
 };

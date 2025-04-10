@@ -29,7 +29,7 @@ export const createAnnouncement = async (payload) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao criar aviso.");
+        throw handleError(error, "Erro ao criar aviso.");
     }
 };
 
@@ -39,7 +39,7 @@ export const toggleVisibility = async (announcementId, isVisible) => {
 
         return response.data.message;
     } catch (error) {
-        handleError(error, "Erro ao alterar visibilidade do aviso.");
+        throw handleError(error, "Erro ao alterar visibilidade do aviso.");
     }
 };
 
@@ -49,6 +49,6 @@ export const deleteAnnouncement = async (announcementId) => {
 
         return response.data.message;
     } catch (error) {
-        handleError(error, "Erro ao excluir aviso.");
+        throw handleError(error, "Erro ao excluir aviso.");
     }
 };

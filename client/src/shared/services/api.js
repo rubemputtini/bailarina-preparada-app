@@ -25,10 +25,13 @@ api.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
         const errorMessage = error.response?.data?.message || "Erro desconhecido.";
+        const requestUrl = error.config?.url;
 
-        if (status === 401) {
+        // Só bloqueia o erro se não for a rota de login
+        if (status === 401 && !requestUrl.includes("/login")) {    
             clearToken();
-            return Promise.reject({ status, message: errorMessage });
+            window.location.href = "/login"; 
+            return new Promise(() => {});  
         }
 
         if (status === 403) {

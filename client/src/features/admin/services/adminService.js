@@ -7,7 +7,7 @@ export const getUsers = async (page = 1, pageSize = 10) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar usuários.");
+        throw handleError(error, "Erro ao buscar usuários.");
     }
 };
 
@@ -17,6 +17,6 @@ export const getUserEvaluations = async (userId) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar avaliações do usuário.");
+        throw handleError(error, "Erro ao buscar avaliações do usuário.");
     }
 }

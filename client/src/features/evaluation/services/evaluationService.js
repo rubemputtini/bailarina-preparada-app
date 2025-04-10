@@ -7,7 +7,7 @@ export const getEvaluations = async () => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar avaliações.");
+        throw handleError(error, "Erro ao buscar avaliações.");
     }
 };
 
@@ -17,7 +17,7 @@ export const getMyEvaluations = async () => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao buscar as avaliações do usuário.");
+        throw handleError(error, "Erro ao buscar as avaliações do usuário.");
     }
 };
 
@@ -27,7 +27,7 @@ export const getEvaluationById = async (evaluationId) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, `Erro ao buscar avaliação com ID ${evaluationId}.`);
+        throw handleError(error, `Erro ao buscar avaliação com ID ${evaluationId}.`);
     }
 };
 
@@ -37,7 +37,7 @@ export const createEvaluation = async (payload) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, "Erro ao criar avaliação.");
+        throw handleError(error, "Erro ao criar avaliação.");
     }
 };
 
@@ -47,7 +47,7 @@ export const updateEvaluation = async (evaluationId, updatedExercises) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, `Erro ao atualizar avaliação com ID ${evaluationId}.`);
+        throw handleError(error, `Erro ao atualizar avaliação com ID ${evaluationId}.`);
     }
 };
 
@@ -57,7 +57,7 @@ export const updatePhotosUrl = async (evaluationId, payload) => {
 
         return response.data;
     } catch (error) {
-        handleError(error, `Erro ao atualizar link da avaliação com ID ${evaluationId}.`);
+        throw handleError(error, `Erro ao atualizar link da avaliação com ID ${evaluationId}.`);
     }
 };
 
@@ -66,6 +66,6 @@ export const deleteEvaluation = async (evaluationId) => {
         await api.delete(`/api/v1/evaluations/${evaluationId}`);
         
     } catch (error) {
-        handleError(error, `Erro ao apagar avaliação com ID ${evaluationId}.`);
+        throw handleError(error, `Erro ao apagar avaliação com ID ${evaluationId}.`);
     }
 };
