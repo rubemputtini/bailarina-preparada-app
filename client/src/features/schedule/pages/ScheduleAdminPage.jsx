@@ -49,6 +49,7 @@ const ScheduleAdminPage = () => {
                     row: task.slot,
                     notes: task.notes,
                     color: task.color,
+                    link: task.link,
                     activityLinkId: task.activityLinkId ?? null
                 }));
 

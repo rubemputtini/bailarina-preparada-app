@@ -110,7 +110,10 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events, se
                 backgroundColor:
                     events.length > 0 ? tasksColorsMap[events[0].color]?.hex || "transparent" : "transparent",
             }}
-            onClick={openEditDialog}
+            onClick={(e) => {
+                e.stopPropagation();
+                if (!isDialogOpen) openEditDialog();
+            }}
         >
             {events.length === 0 && isEditing && (
                 <button

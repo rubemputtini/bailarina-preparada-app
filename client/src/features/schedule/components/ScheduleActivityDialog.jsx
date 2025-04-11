@@ -17,15 +17,16 @@ const ScheduleActivityDialog = ({ open, onClose, onSave, initialData }) => {
     useEffect(() => {
         if (open) {
             fetchSuggestions();
+            setTitle(initialData?.title || "");
+            setLink(initialData?.link || "");
+            setColor(initialData?.color || "lightBlue");
+            setActivityLinkId(initialData?.activityLinkId || null);
             setTimeout(() => inputRef.current?.focus(), 100);
         } else {
-            const resetFields = () => {
-                setTitle(initialData?.title || "");
-                setLink(initialData?.link || "");
-                setColor(initialData?.color || "lightBlue");
-                setActivityLinkId(initialData?.activityLinkId || null);
-            };
-            resetFields();
+            setTitle("");
+            setLink("");
+            setColor("lightBlue");
+            setActivityLinkId(null);
         }
     }, [open, initialData]);
 
