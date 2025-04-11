@@ -12,7 +12,7 @@ import core from "../../assets/core.png";
 import endehors from "../../assets/endehors.png";
 import feet from "../../assets/feet.png";
 import specific from "../../assets/specific.png";
-//import others from "../../assets/others.png";
+import others from "../../assets/others.png";
 
 export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5103";
 
@@ -86,7 +86,7 @@ export const trainingCategories = [
   { name: "EN DEHORS", icon: <img src={endehors} alt="En Dehors" className="w-6 h-6" /> },
   { name: "PÉS", icon: <img src={feet} alt="Pés" className="w-6 h-6" /> },
   { name: "ESPECÍFICO", icon: <img src={specific} alt="Específico" className="w-6 h-6" /> },
-  // { name: "OUTROS", icon: <img src={others} alt="Outros" className="w-6 h-6" /> }, // ative se quiser
+  { name: "OUTROS", icon: <img src={others} alt="Outros" className="w-6 h-6" /> },
 ];
 
 export const tasksColorsMap = {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL } from "shared/utils/constants";
 import { getToken, clearToken } from "features/auth/services/auth";
+import { ROUTES } from "shared/routes/routes";
 
 const api = axios.create({
     baseURL: API_URL,
@@ -28,9 +29,12 @@ api.interceptors.response.use(
         const requestUrl = error.config?.url;
 
         // Só bloqueia o erro se não for a rota de login
-        if (status === 401 && !requestUrl.includes("/login")) {    
+        if (status === 401 && 
+            !requestUrl.includes(ROUTES.login) &&
+            !requestUrl.includes(ROUTES.signup)
+        ) {    
             clearToken();
-            window.location.href = "/login"; 
+            window.location.href = ROUTES.login; 
             return new Promise(() => {});  
         }
 

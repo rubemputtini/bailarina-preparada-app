@@ -1,4 +1,7 @@
-import { Box, Button, CircularProgress, Container, Grid, TextField, Typography } from "@mui/material";
+import { Box, Container, Grid, TextField, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import DialogButton from "shared/buttons/DialogButton";
+import { ROUTES } from "shared/routes/routes";
 import ErrorCard from "shared/ui/ErrorCard";
 
 const LoginForm = ({
@@ -12,6 +15,8 @@ const LoginForm = ({
     disableSubmit,
     error
 }) => {
+    const navigate = useNavigate();
+
     return (
         <Container
             maxWidth="xs"
@@ -72,22 +77,32 @@ const LoginForm = ({
                             />
                         </Grid>
                         <Grid item xs={12} display="flex" justifyContent="center">
-                            <Button
+                            <DialogButton
                                 type="submit"
-                                variant="contained"
-                                size="medium"
-                                disabled={disableSubmit}
-                                sx={{
-                                    minWidth: "120px",
-                                    backgroundColor: "#6c5c80",
-                                    color: "#fff",
-                                    fontWeight: 600,
-                                    "&:hover": { backgroundColor: "#5b4c6c" }
-                                }}
+                                loading={disableSubmit}
+                                fullWidthOnMobile={false}
                             >
-                                {disableSubmit ? <CircularProgress size={24} color="inherit" /> : buttonText}
-                            </Button>
+                                {buttonText}
+                            </DialogButton>
                         </Grid>
+                        <Grid item xs={12} textAlign="center">
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    fontFamily: "'Inter', sans-serif",
+                                    fontSize: "0.875rem",
+                                    color: "#6c5c80",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                    "&:hover": { color: "#403b4d" },
+                                }}
+                                onClick={() => navigate(ROUTES.forgotPassword)}
+                            >
+                                Esqueci minha senha
+                            </Typography>
+                        </Grid>
+
 
                         {error && (
                             <Grid item xs={12}>

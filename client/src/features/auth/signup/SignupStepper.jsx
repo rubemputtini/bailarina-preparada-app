@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Stepper, Step, StepLabel, Box, Button, Container, Grid, Typography, CircularProgress } from "@mui/material";
+import { Stepper, Step, StepLabel, Box, Container, Grid, Typography } from "@mui/material";
 import { Person, Home, CheckCircle } from "@mui/icons-material";
 import AddressForm from "shared/forms/AddressForm";
 import PersonalInfoForm from "shared/forms/PersonalInfoForm";
 import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "shared/utils/validators";
 import ErrorCard from "shared/ui/ErrorCard";
+import DialogButton from "shared/buttons/DialogButton";
 
 const steps = [
     { label: "Usuário", icon: <Person /> },
@@ -102,52 +103,32 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
                 >
                     {activeStep > 0 && (
                         <Grid item>
-                            <Button
-                                variant="outlined"
+                            <DialogButton
                                 onClick={handleBack}
-                                sx={{
-                                    minWidth: "120px",
-                                    borderColor: "#6c5c80",
-                                    color: "#6c5c80",
-                                    fontWeight: 600,
-                                    "&:hover": { backgroundColor: "#f0e6ff" }
-                                }}
+                                variant="secondary"
+                                fullWidthOnMobile={false}
                             >
                                 Voltar
-                            </Button>
+                            </DialogButton>
                         </Grid>
                     )}
                     <Grid item>
                         {activeStep === steps.length - 1 ? (
-                            <Button
-                                variant="contained"
+                            <DialogButton
                                 onClick={handleSubmit}
-                                disabled={loading}
-                                sx={{
-                                    minWidth: "120px",
-                                    backgroundColor: "#6c5c80",
-                                    color: "#fff",
-                                    fontWeight: 600,
-                                    "&:hover": { backgroundColor: "#5b4c6c" }
-                                }}
+                                loading={loading}
+                                fullWidthOnMobile={false}
                             >
-                                {loading ? <CircularProgress size={24} color="inherit" /> : "Registrar"}
-                            </Button>
+                                Registrar
+                            </DialogButton>
                         ) : (
-                            <Button
-                                variant="contained"
+                            <DialogButton
                                 onClick={handleNext}
                                 disabled={!isFormValid}
-                                sx={{
-                                    minWidth: "120px",
-                                    backgroundColor: "#6c5c80",
-                                    color: "#fff",
-                                    fontWeight: 600,
-                                    "&:hover": { backgroundColor: "#5b4c6c" }
-                                }}
+                                fullWidthOnMobile={false}
                             >
                                 Próximo
-                            </Button>
+                            </DialogButton>
                         )}
                     </Grid>
                 </Grid>

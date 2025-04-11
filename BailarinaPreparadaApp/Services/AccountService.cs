@@ -9,15 +9,17 @@ namespace BailarinaPreparadaApp.Services
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly EmailService _emailService;
         private readonly TokenService _tokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _dbContext;
 
-        public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, TokenService tokenService, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext dbContext)
+        public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, EmailService emailService, TokenService tokenService, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext dbContext)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
             _tokenService = tokenService;
             _roleManager = roleManager;
             _configuration = configuration;
@@ -137,6 +139,71 @@ namespace BailarinaPreparadaApp.Services
 
                 return (false, $"Erro interno: {ex.Message}");
             }
+        }
+
+        public async Task<(bool Success, string Message)> ForgotPasswordAsync(ForgotPasswordRequest request)
+        {
+            const string GENERIC_MESSAGE = "Se o e-mail for válido, enviaremos um link para redefinir a senha.";
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                return (true, GENERIC_MESSAGE);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Uri.EscapeDataString(token);
+
+            var resetLink = $"{_configuration["AppSettings:FrontendUrl"]}/redefinir-senha?token={encodedToken}&email={request.Email}";
+
+            var templateData = new Dictionary<string, string>
+            {
+                { "Name", user.Name },
+                { "ResetLink", resetLink }
+            };
+
+            await _emailService.SendEmailAsync(
+               toName: user.Name,
+               toEmail: user.Email!,
+               subject: "Redefinição de Senha - App Bailarina Preparada",
+               templateName: "PasswordResetTemplate",
+               templateData: templateData
+            );
+
+            return (true, GENERIC_MESSAGE);
+        }
+
+        public async Task<(bool Success, string Message)> ResetPasswordAsync(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                return (false, "Usuário não encontrado.");
+            }
+
+            if (string.IsNullOrEmpty(request.Token))
+            {
+                return (false, "Token inválido.");
+            }
+
+            if (string.IsNullOrEmpty(request.NewPassword))
+            {
+                return (false, "A nova senha não pode ser vazia.");
+            }
+
+            var token = Uri.UnescapeDataString(request.Token);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+
+                return (false, $"Não foi possível redefinir a senha: {errors}");
+            }
+
+            return (true, "Senha redefinida com sucesso.");
         }
     }
 }

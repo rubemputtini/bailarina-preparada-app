@@ -31,10 +31,11 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<UserService>();
             services.AddScoped<UserGoalService>();
             services.AddScoped<AnnouncementService>();
+            services.AddScoped<EmailService>();
 
             services.AddTransient<TokenService>();
 
-            //services.Configure<SmtpConfiguration>(configuration.GetSection("Smtp"));
+            services.Configure<SmtpConfiguration>(configuration.GetSection("Smtp"));
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();

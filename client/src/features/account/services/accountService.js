@@ -60,3 +60,25 @@ export const deleteUser = async (userId) => {
         throw handleError(error, "Erro ao excluir usuário.");
     }
 };
+
+export const forgotPassword = async (email) => {
+    try {
+        const response = await api.post('/api/v1/account/forgot-password', { email });
+
+        return response.data;
+
+    } catch (error) {
+        throw handleError(error, "Erro ao solicitar redefinição de senha.");
+    }
+};
+
+export const resetPassword = async ({ email, token, newPassword }) => {
+    try {
+        const response = await api.post('/api/v1/account/reset-password', { email, token, newPassword });
+
+        return response.data;
+
+    } catch (error) {
+        throw handleError(error, "Erro ao redefinir nova senha.");
+    }
+};

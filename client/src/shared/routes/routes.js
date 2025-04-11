@@ -3,6 +3,8 @@ export const ROUTES = {
     home: "/",
     signup: "/signup",
     login: "/login",
+    forgotPassword: "/esqueci-senha",
+    resetPassword: "/redefinir-senha",
   
     // Usuário autenticado
     dashboard: "/dashboard",

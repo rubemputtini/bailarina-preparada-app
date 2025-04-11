@@ -15,6 +15,8 @@ import EvaluationHistoricPage from './features/evaluation/pages/EvaluationHistor
 import ScheduleAdminPage from './features/schedule/pages/ScheduleAdminPage';
 import AnnouncementAdminPage from './features/announcement/pages/AnnouncementAdminPage';
 import { ROUTES } from 'shared/routes/routes';
+import ForgotPasswordPage from 'features/account/pages/ForgotPasswordPage';
+import ResetPasswordPage from 'features/account/pages/ResetPasswordPage';
 
 function App() {
   return (
@@ -35,6 +37,22 @@ function App() {
           element={
             <ProtectedRoute publicRoute>
               <LoginPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.forgotPassword}
+          element={
+            <ProtectedRoute publicRoute>
+              <ForgotPasswordPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.resetPassword}
+          element={
+            <ProtectedRoute publicRoute>
+              <ResetPasswordPage />
             </ProtectedRoute>
           }
         />
