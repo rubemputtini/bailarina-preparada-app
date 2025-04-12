@@ -65,7 +65,7 @@ namespace BailarinaPreparadaApp.Services
                     Notes = e.Notes,
                     Color = e.Color,
                     ActivityLinkId = e.ActivityLinkId,
-                    Link = e.ActivityLink?.Link
+                    Link = e.Link ?? e.ActivityLink?.Link
                 }).ToList()
             };
 
@@ -87,6 +87,7 @@ namespace BailarinaPreparadaApp.Services
                     Activity = e.Activity,
                     Notes = e.Notes,
                     Color = e.Color,
+                    Link = e.Link,
                     ActivityLinkId = e.ActivityLinkId
                 })
                 .OrderBy(e => e.Period == "Manhã" ? 1 : e.Period == "Tarde" ? 2 : e.Period == "Noite" ? 3 : 99)
@@ -123,6 +124,8 @@ namespace BailarinaPreparadaApp.Services
 
                 foreach (var task in request.Tasks)
                 {
+                    var validatedActivityLinkId = await ValidateActivityLinkAssociation(task.ActivityLinkId, task.Link, task.Color);
+
                     var newTask = new ScheduleTask
                     {
                         DayOfWeek = task.DayOfWeek,
@@ -131,7 +134,8 @@ namespace BailarinaPreparadaApp.Services
                         Activity = task.Activity,
                         Notes = task.Notes,
                         Color = task.Color,
-                        ActivityLinkId = task.ActivityLinkId
+                        Link = task.Link,
+                        ActivityLinkId = validatedActivityLinkId
                     };
 
                     existingSchedule.Entries.Add(newTask);
@@ -158,6 +162,7 @@ namespace BailarinaPreparadaApp.Services
                     Activity = t.Activity,
                     Notes = t.Notes,
                     Color = t.Color,
+                    Link = t.Link,
                     ActivityLinkId = t.ActivityLinkId
                 }).ToList()
             };
@@ -166,6 +171,20 @@ namespace BailarinaPreparadaApp.Services
             await _dbContext.SaveChangesAsync();
 
             return await GetUserScheduleAsync(request.UserId);
+        }
+
+        private async Task<int?> ValidateActivityLinkAssociation(int? activityLinkId, string? link, string color)
+        {
+            if (activityLinkId == null) return null;
+
+            var original = await _dbContext.ActivityLinks.FindAsync(activityLinkId.Value);
+
+            if (original != null && original.Link == link && original.DefaultColor == color)
+            {
+                return activityLinkId;
+            }
+
+            return null;
         }
 
         public async Task UpdateScheduleAsync(int scheduleId, UpdateScheduleRequest request)
@@ -204,6 +223,7 @@ namespace BailarinaPreparadaApp.Services
                         Activity = taskRequest.Activity,
                         Notes = taskRequest.Notes,
                         Color = taskRequest.Color,
+                        Link = taskRequest.Link,
                         ActivityLinkId = taskRequest.ActivityLinkId
                     };
 
@@ -217,7 +237,8 @@ namespace BailarinaPreparadaApp.Services
                     existingTask.Activity = taskRequest.Activity;
                     existingTask.Notes = taskRequest.Notes;
                     existingTask.Color = taskRequest.Color;
-                    existingTask.ActivityLinkId = taskRequest.ActivityLinkId;
+                    existingTask.Link = taskRequest.Link;
+                    existingTask.ActivityLinkId = await ValidateActivityLinkAssociation(taskRequest.ActivityLinkId, taskRequest.Link, taskRequest.Color);
                 }
             }
 

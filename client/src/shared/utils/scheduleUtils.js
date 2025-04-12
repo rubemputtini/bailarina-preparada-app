@@ -7,6 +7,7 @@ export const buildTaskPayload = (events) => {
         activity: event.title,
         notes: event.notes,
         color: event.color,
+        link: event.link || null,
         activityLinkId: event.activityLinkId ?? null
     }));
 };
@@ -28,7 +29,8 @@ export const areEventsEqual = (a, b) => {
             event.period === other.period &&
             event.row === other.row &&
             event.color === other.color &&
-            event.notes === other.notes
+            event.notes === other.notes &&
+            event.link === other.link
         );
     });
 };

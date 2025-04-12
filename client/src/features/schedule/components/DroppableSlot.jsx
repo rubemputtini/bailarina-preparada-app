@@ -48,7 +48,7 @@ const DroppableSlot = ({ colIndex, period, row, isEditing, setEvents, events, se
         const newEvent = {
             id: editingEvent?.id ?? null,
             title,
-            link,
+            link: link || null,
             dayOfWeek: colIndex,
             period: period.label,
             row,
