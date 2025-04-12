@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.DTOs.Account;
 using BailarinaPreparadaApp.DTOs.Evaluation;
 using BailarinaPreparadaApp.DTOs.Exercise;
+using BailarinaPreparadaApp.DTOs.User;
 using BailarinaPreparadaApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +82,64 @@ namespace BailarinaPreparadaApp.Services
             }).ToList();
 
             return response;
+        }
+
+        public async Task<List<BirthdayResponse>> GetRecentBirthdaysAsync(int rangeInDays = 7)
+        {
+            var today = DateTime.Today;
+
+            var users = await _userManager.Users
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Name,
+                    u.DateOfBirth,
+                    u.PhoneNumber
+                }).ToListAsync();
+
+            var result = users
+                .Select(u =>
+                {
+                    var nextBirthday = GetNextBirthday(u.DateOfBirth, today);
+                    var daysUntilBirthday = (nextBirthday - today).Days;
+                    var ageAtNextBirthday = nextBirthday.Year - u.DateOfBirth.Year;
+
+                    return new
+                    {
+                        u.Id,
+                        u.Name,
+                        u.DateOfBirth,
+                        u.PhoneNumber,
+                        Age = ageAtNextBirthday,
+                        DaysUntilBirthday = daysUntilBirthday
+                    };
+                })
+                .Where(b => b.DaysUntilBirthday >= 0 && b.DaysUntilBirthday <= rangeInDays)
+                .OrderBy(b => b.DaysUntilBirthday)
+                .Select(b => new BirthdayResponse
+                {
+                    UserId = b.Id,
+                    Name = b.Name,
+                    DateOfBirth = b.DateOfBirth,
+                    Age = b.Age,
+                    DaysUntilBirthday = b.DaysUntilBirthday,
+                    PhoneNumber = b.PhoneNumber!
+                })
+                .ToList();
+
+            return result;
+        }
+
+        private static DateTime GetNextBirthday(DateTime birthDate, DateTime today)
+        {
+            var nextBirthday = new DateTime(today.Year, birthDate.Month, birthDate.Day);
+
+            if (nextBirthday < today)
+            {
+                nextBirthday = nextBirthday.AddYears(1);
+            }
+
+            return nextBirthday;
         }
     }
 }

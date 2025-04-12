@@ -1,10 +1,10 @@
-import { useAuth } from "features/auth/AuthContext";
 import { useState } from "react";
 import { updatePhotosUrl } from "../services/evaluationService";
 import InputDialog from "shared/dialogs/InputDialog";
+import useIsAdmin from "hooks/useIsAdmin";
 
 const PhotosCard = ({ photosUrl: initialUrl, evaluationId }) => {
-    const { role } = useAuth();
+    const isAdmin = useIsAdmin();
     const [photosUrl, setPhotosUrl] = useState(initialUrl || "");
     const [localPhotosUrl, setLocalPhotosUrl] = useState(initialUrl || "");
     const [openDialog, setOpenDialog] = useState(false);
@@ -64,7 +64,7 @@ const PhotosCard = ({ photosUrl: initialUrl, evaluationId }) => {
                 </p>
             )}
 
-            {role === "admin" && (
+            {isAdmin && (
                 <div className="text-center mt-6">
                     <div className="border-t border-purple-200 pt-4 mt-6 text-center">
                         <button

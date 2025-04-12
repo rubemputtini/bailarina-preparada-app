@@ -7,12 +7,13 @@ import footer from "../assets/footer-logo.webp";
 import { useAuth } from 'features/auth/AuthContext';
 import { ROUTES } from 'shared/routes/routes';
 import { useUserData } from 'hooks/useUserData';
+import useIsAdmin from 'hooks/useIsAdmin';
 
 const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const { role, logout } = useAuth();
-    const isAdmin = role === "admin";
+    const { logout } = useAuth();
+    const isAdmin = useIsAdmin();
     const user = useUserData();
     const navigate = useNavigate();
     const location = useLocation();

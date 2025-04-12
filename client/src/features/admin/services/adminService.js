@@ -19,4 +19,14 @@ export const getUserEvaluations = async (userId) => {
     } catch (error) {
         throw handleError(error, "Erro ao buscar avaliações do usuário.");
     }
-}
+};
+
+export const getRecentBirthdays = async () => {
+    try {
+        const response = await api.get("/api/v1/admin/users/birthdays/recent");
+
+        return response.data;
+    } catch (error) {
+        throw handleError(error, "Erro ao buscar aniversários recentes.");
+    }
+};

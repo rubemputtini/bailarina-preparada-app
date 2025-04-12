@@ -14,7 +14,7 @@ import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import ErrorCard from "shared/ui/ErrorCard";
 import { useParams } from "react-router-dom";
-import { useAuth } from "features/auth/AuthContext";
+import useIsAdmin from "hooks/useIsAdmin";
 
 const tabs = ["Informações Pessoais", "Endereço"];
 
@@ -26,8 +26,7 @@ const AccountPage = () => {
     const [formValues, setFormValues] = useState({});
     const [originalValues, setOriginalValues] = useState({});
     const { userId: routeUserId } = useParams();
-    const { role } = useAuth();
-    const isAdminEditing = role === "admin" && routeUserId;
+    const isAdminEditing = useIsAdmin() && routeUserId;
     const userIdToLoad = isAdminEditing ? routeUserId : undefined;
 
     const handleChange = (field, value) => {

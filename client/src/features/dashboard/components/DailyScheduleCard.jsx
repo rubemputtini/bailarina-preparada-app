@@ -2,10 +2,11 @@ import { Card, CardContent, Typography } from '@mui/material'
 import { tasksColorsMap } from 'shared/utils/constants';
 import calendar from '../../../assets/calendar.png';
 import LoadingCard from 'shared/ui/LoadingCard';
+import useIsAdmin from 'hooks/useIsAdmin';
 
 const DailyScheduleCard = ({ dailySchedule, loading }) => {
     return (
-        <Card className="bg-white text-black shadow-lg lg:col-span-2">
+        <Card className={`bg-white text-black shadow-lg ${useIsAdmin() ? "lg:col-span-1" : "lg:col-span-2"}`}>
             <CardContent>
                 <div className="flex items-center mb-2">
                     <img src={calendar} alt="Calendário" className="w-6 h-6 mr-2" />

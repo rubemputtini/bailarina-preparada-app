@@ -21,6 +21,11 @@ namespace BailarinaPreparadaApp.Controllers
         {
             var (users, totalUsers) = await _adminService.GetUsersAsync(page, pageSize);
 
+            if (!users.Any())
+            {
+                return NotFound(new { message = "Nenhum usuário encontrado." });
+            }
+
             return Ok(new { users, totalUsers });
         }
 
@@ -35,6 +40,19 @@ namespace BailarinaPreparadaApp.Controllers
             }
 
             return Ok(evaluations);
+        }
+
+        [HttpGet("users/birthdays/recent")]
+        public async Task<IActionResult> GetRecentBirthdays()
+        {
+            var birthdays = await _adminService.GetRecentBirthdaysAsync();
+
+            if (!birthdays.Any())
+            {
+                return NotFound(new { message = "Nenhum aniversário encontrado." });
+            }
+
+            return Ok(birthdays);
         }
     }
 }
