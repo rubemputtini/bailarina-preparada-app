@@ -3,7 +3,6 @@ import { Box, LinearProgress, IconButton } from "@mui/material";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import { useNavigate } from "react-router-dom";
 import { createTraining } from "../services/trainingService";
 import Nav from "../../../layouts/Nav";
 import Footer from "../../../layouts/Footer";
@@ -13,7 +12,7 @@ import StepDescription from "../components/StepDescription";
 import StepConfirm from "../components/StepConfirm";
 import TrainingDialog from "../components/TrainingDialog";
 import { trainingCategories } from "shared/utils/constants";
-import { ROUTES } from "shared/routes/routes";
+import useTrainingDaysCount from "hooks/useTrainingDaysCount";
 
 const TrainingPage = () => {
     const [step, setStep] = useState(1);
@@ -27,18 +26,14 @@ const TrainingPage = () => {
     const [success, setSuccess] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
     const { width, height } = useWindowSize();
+    const { trainingDaysCount, refetch } = useTrainingDaysCount();
 
     useEffect(() => {
         if (success) {
             setShowDialog(true);
-            setTimeout(() => {
-                setShowDialog(false);
-                navigate(ROUTES.dashboard);
-            }, 5000);
         }
-    }, [success, navigate]);
+    }, [success]);
 
     const handleNext = () => {
         if (step === 1 && !newTraining.date) {
@@ -61,6 +56,8 @@ const TrainingPage = () => {
         setLoading(true);
         try {
             await createTraining(newTraining.date, newTraining.category, newTraining.description);
+            await refetch();
+
             setSuccess(true);
             setError("");
         } catch (err) {
@@ -126,7 +123,12 @@ const TrainingPage = () => {
             </Box>
             <Footer />
             {success && <Confetti numberOfPieces={500} recycle={false} width={width} height={height} />}
-            <TrainingDialog showDialog={showDialog} setShowDialog={setShowDialog} />
+            <TrainingDialog
+                showDialog={showDialog}
+                setShowDialog={setShowDialog}
+                category={newTraining.category}
+                trainingDaysCount={trainingDaysCount}
+            />
         </>
     );
 };

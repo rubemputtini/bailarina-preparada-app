@@ -5,25 +5,23 @@ const useTrainingDaysCount = () => {
   const [trainingDaysCount, setTrainingDaysCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const fetch = async () => {
+    setLoading(true);
+    try {
+      const result = await getYearlyTrainingDaysCount();
+      setTrainingDaysCount(result);
+    } catch (err) {
+      console.error("Erro ao carregar dias treinados:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const result = await getYearlyTrainingDaysCount();
-        setTrainingDaysCount(result);
-
-      } catch (err) {
-        console.error("Erro ao carregar dias treinados:", err);
-
-      } finally {
-        setLoading(false);
-
-      }
-    };
-    
     fetch();
   }, []);
 
-  return { trainingDaysCount, loading };
+  return { trainingDaysCount, loading, refetch: fetch };
 };
 
 export default useTrainingDaysCount;
