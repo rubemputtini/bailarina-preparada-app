@@ -1,4 +1,13 @@
-﻿using BailarinaPreparadaApp.Models;
+﻿using BailarinaPreparadaApp.Models.ActivityLinks;
+using BailarinaPreparadaApp.Models.Addresses;
+using BailarinaPreparadaApp.Models.Announcements;
+using BailarinaPreparadaApp.Models.Evaluations;
+using BailarinaPreparadaApp.Models.Exercises;
+using BailarinaPreparadaApp.Models.ExerciseReferences;
+using BailarinaPreparadaApp.Models.Schedules;
+using BailarinaPreparadaApp.Models.ScheduleTasks;
+using BailarinaPreparadaApp.Models.Trainings;
+using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +25,6 @@ namespace BailarinaPreparadaApp.Data
         public DbSet<ExerciseReference> ExerciseReferences { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
-        public DbSet<ClassEvent> ClassEvents { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ScheduleTask> ScheduleTasks { get; set; }
         public DbSet<UserGoal> UserGoals { get; set; }
