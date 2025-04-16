@@ -17,6 +17,7 @@ import useTrainingDaysCount from "hooks/useTrainingDaysCount";
 const TrainingPage = () => {
     const [step, setStep] = useState(1);
     const today = new Date().toISOString().split("T")[0];
+    const [isDateValid, setIsDateValid] = useState(true);
     const [newTraining, setNewTraining] = useState({
         date: today,
         category: "",
@@ -36,7 +37,7 @@ const TrainingPage = () => {
     }, [success]);
 
     const handleNext = () => {
-        if (step === 1 && !newTraining.date) {
+        if (step === 1 && (!newTraining.date || !isDateValid)) {
             setError("Selecione uma data válida.");
             return;
         }
@@ -96,7 +97,7 @@ const TrainingPage = () => {
                             }}
                         />
 
-                        {step === 1 && <StepDate newTraining={newTraining} setNewTraining={setNewTraining} today={today} error={error} />}
+                        {step === 1 && <StepDate newTraining={newTraining} setNewTraining={setNewTraining} today={today} error={error} onValidityChange={setIsDateValid} />}
                         {step === 2 && <StepCategory newTraining={newTraining} setNewTraining={setNewTraining} error={error} trainingCategories={trainingCategories} />}
                         {step === 3 && <StepDescription newTraining={newTraining} setNewTraining={setNewTraining} />}
                         {step === 4 && <StepConfirm handleSave={handleSave} loading={loading} error={error} />}

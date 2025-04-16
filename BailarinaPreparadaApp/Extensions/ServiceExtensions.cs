@@ -18,6 +18,7 @@ using BailarinaPreparadaApp.Services.Trainings;
 using BailarinaPreparadaApp.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BailarinaPreparadaApp.Services.Achievements;
 
 namespace BailarinaPreparadaApp.Extensions
 {
@@ -47,6 +48,8 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<UserGoalService>();
             services.AddScoped<AnnouncementService>();
             services.AddScoped<EmailService>();
+            services.AddScoped<AchievementService>();
+            services.AddAchievementRules();
 
             services.AddTransient<TokenService>();
 

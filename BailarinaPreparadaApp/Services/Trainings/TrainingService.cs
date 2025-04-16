@@ -2,8 +2,7 @@
 using BailarinaPreparadaApp.DTOs.Trainings;
 using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.Trainings;
-using BailarinaPreparadaApp.Models.Users;
-using Microsoft.AspNetCore.Identity;
+using BailarinaPreparadaApp.Services.Achievements;
 using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Services.Trainings
@@ -11,16 +10,21 @@ namespace BailarinaPreparadaApp.Services.Trainings
     public class TrainingService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<User> _userManager;
+        private readonly AchievementService _achievementService;
 
-        public TrainingService(ApplicationDbContext dbContext, UserManager<User> userManager)
+        public TrainingService(ApplicationDbContext dbContext, AchievementService achievementService)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
+            _achievementService = achievementService;
         }
 
         public async Task CreateTrainingAsync(string userId, CreateTrainingRequest request)
         {
+            if (request.Date.Date > DateTime.UtcNow.Date)
+            {
+                throw new ValidationException("Não é possível registrar treinos em datas futuras.");
+            }
+
             var user = await _dbContext.Users.FindAsync(userId);
 
             var training = new Training
@@ -35,6 +39,8 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             _dbContext.Trainings.Add(training);
             await _dbContext.SaveChangesAsync();
+
+            await _achievementService.EvaluateAllRulesAsync(userId);
         }
 
         public async Task<IEnumerable<TrainingResponse>> GetCompletedTrainingsAsync(string userId, DateTime? startDate, DateTime? endDate, string? category)

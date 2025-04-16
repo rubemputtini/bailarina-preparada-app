@@ -1,8 +1,12 @@
-import { Card, CardContent, Typography } from "@mui/material";
-import { EmojiEvents } from "@mui/icons-material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { TrophyIcon } from "@heroicons/react/24/solid";
+import AchievementBadge from "shared/components/AchievementBadge";
 
 const TopRankingCard = ({ user, index, getMedalColor }) => {
+    const color = getMedalColor(index);
+    const achievements = user.achievements || [];
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -10,11 +14,11 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
             transition={{ delay: index * 0.2 }}
         >
             <Card
-                className={`shadow-xl rounded-2xl h-full border-2`}
-                style={{ borderColor: getMedalColor(index) }}
+                className="shadow-xl rounded-2xl h-full border-2 flex flex-col justify-between"
+                style={{ borderColor: color }}
             >
                 <CardContent className="text-center p-6 flex flex-col items-center justify-center">
-                    <EmojiEvents sx={{ fontSize: 48, color: getMedalColor(index) }} />
+                    <TrophyIcon style={{ width: 48, height: 48, fill: color }} />
                     <Typography variant="h6" className="font-bold mt-2">
                         {user.userName}
                     </Typography>
@@ -30,6 +34,15 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
                         {user.trainingsCompleted === 1 ? "treino" : "treinos"}
                     </Typography>
                 </CardContent>
+
+                <Box
+                    className="w-full"
+                    sx={{ display: "flex", justifyContent: "center", gap: 1 }}
+                >
+                    {achievements.map((a) => (
+                        <AchievementBadge key={a.achievementId} title={a.title} />
+                    ))}
+                </Box>
             </Card>
         </motion.div>
     );

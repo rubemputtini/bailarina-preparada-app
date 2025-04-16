@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import AchievementBadge from "shared/components/AchievementBadge";
 
 const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
     return (
@@ -13,6 +14,12 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
                 <Typography className="font-medium text-sm truncate">
                     {user.userName}
                 </Typography>
+                <Box className="flex justify-center mt-2">
+                    {user.achievements?.map((a) => (
+                        <AchievementBadge key={a.achievementId} title={a.title} />
+                    ))}
+
+                </Box>
             </Box>
             <Box className="text-right leading-tight">
                 <Typography

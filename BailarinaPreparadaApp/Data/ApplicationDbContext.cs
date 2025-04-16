@@ -10,6 +10,7 @@ using BailarinaPreparadaApp.Models.Trainings;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BailarinaPreparadaApp.Models.Achievements;
 
 namespace BailarinaPreparadaApp.Data
 {
@@ -28,6 +29,8 @@ namespace BailarinaPreparadaApp.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ScheduleTask> ScheduleTasks { get; set; }
         public DbSet<UserGoal> UserGoals { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+        public DbSet<AchievementDefinition> AchievementDefinitions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -15,7 +15,7 @@ const CalendarPage = () => {
     const [error, setError] = useState(null);
 
     const uniqueDaysTrained = useMemo(() => {
-        return new Set(calendarData.map((item) => item.date.split("T")[0])).size;
+        return new Set(calendarData.map((item) => new Date(item.date).toLocaleDateString("sv-SE"))).size;
     }, [calendarData]);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const CalendarPage = () => {
     }, [currentMonth]);
 
     const getTileClassName = ({ date }) => {
-        const formattedDate = date.toISOString().split("T")[0];
+        const formattedDate = date.toLocaleDateString("sv-SE"); // formato 'YYYY-MM-DD' sem problemas de fuso
         return calendarData.some((item) => item.date.split("T")[0] === formattedDate) ? "training-day" : null;
     };
 

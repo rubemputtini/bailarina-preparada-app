@@ -1,4 +1,6 @@
-﻿namespace BailarinaPreparadaApp.DTOs.Rankings
+﻿using BailarinaPreparadaApp.DTOs.Achievements;
+
+namespace BailarinaPreparadaApp.DTOs.Rankings
 {
     public class RankingResponse
     {
@@ -8,5 +10,6 @@
         public int DaysTrained { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public List<AchievementResponse> Achievements { get; set; } = new List<AchievementResponse>();
     }
 }

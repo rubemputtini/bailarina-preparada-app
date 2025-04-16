@@ -99,7 +99,7 @@ const EvaluationHistoricPage = () => {
                 ) : error ? (
                     <ErrorCard message={error} />
                 ) : evaluations.length === 0 ? (
-                    <Typography align="center" color="white">Nenhuma avaliação encontrada.</Typography>
+                    <Typography align="center" color="white" sx={{ marginTop: 6 }}>Nenhuma avaliação encontrada.</Typography>
                 ) : (
                     <div className="flex flex-wrap justify-center gap-6 mt-6">
                         {evaluations

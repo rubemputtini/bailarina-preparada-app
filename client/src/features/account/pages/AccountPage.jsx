@@ -15,8 +15,9 @@ import LoadingCard from "shared/ui/LoadingCard";
 import ErrorCard from "shared/ui/ErrorCard";
 import { useParams } from "react-router-dom";
 import useIsAdmin from "hooks/useIsAdmin";
+import AchievementsSection from "../components/AchievementSection";
 
-const tabs = ["Informações Pessoais", "Endereço"];
+const tabs = ["Informações Pessoais", "Endereço", "Conquistas"];
 
 const AccountPage = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -95,19 +96,21 @@ const AccountPage = () => {
                         )}
                     </div>
 
-                    <div className="flex border-b border-gray-200 mb-6">
-                        {tabs.map((tab, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setActiveTab(i)}
-                                className={`py-2 px-4 text-sm font-medium transition-all duration-200 border-b-2 focus:outline-none focus:ring-0 rounded-none ${activeTab === i
-                                    ? "border-purple-700 text-purple-700"
-                                    : "border-transparent text-gray-500 hover:text-purple-700"
-                                    }`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
+                    <div className="overflow-x-auto -mx-4 px-4 mb-6">
+                        <div className="flex border-b border-gray-200">
+                            {tabs.map((tab, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setActiveTab(i)}
+                                    className={`py-2 px-4 text-sm font-medium transition-all duration-200 border-b-2 focus:outline-none focus:ring-0 rounded-none ${activeTab === i
+                                        ? "border-purple-700 text-purple-700"
+                                        : "border-transparent text-gray-500 hover:text-purple-700"
+                                        }`}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {loading ? (
@@ -181,6 +184,10 @@ const AccountPage = () => {
                                     ))}
                                 </>
                             )}
+                            {activeTab === 2 && (
+                                <AchievementsSection />
+                            )}
+
                             {error && (
                                 <ErrorCard
                                     message={error}
