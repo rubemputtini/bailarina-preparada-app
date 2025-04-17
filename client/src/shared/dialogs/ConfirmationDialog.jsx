@@ -8,7 +8,6 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel, loading }) => (
                 <DialogButton
                     onClick={onCancel}
                     variant="secondary"
-                    loading={loading}
                 >
                     CANCELAR
                 </DialogButton>

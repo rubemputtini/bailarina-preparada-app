@@ -1,9 +1,11 @@
-﻿using BailarinaPreparadaApp.Data;
+﻿using Azure.Core;
+using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Schedules;
 using BailarinaPreparadaApp.DTOs.ScheduleTasks;
 using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.Schedules;
 using BailarinaPreparadaApp.Models.ScheduleTasks;
+using BailarinaPreparadaApp.Services.Emails;
 using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Services.Schedules
@@ -11,10 +13,14 @@ namespace BailarinaPreparadaApp.Services.Schedules
     public class ScheduleService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public ScheduleService(ApplicationDbContext dbContext)
+        public ScheduleService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<ScheduleResponse> GetUserScheduleAsync(string userId)
@@ -186,6 +192,32 @@ namespace BailarinaPreparadaApp.Services.Schedules
             }
 
             return null;
+        }
+
+        public async Task SendScheduleReadyEmailAsync(string userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("Usuário não encontrado.");
+            }
+
+            var scheduleLink = $"{_configuration["AppSettings:FrontendUrl"]}/planejamento";
+
+            var templateData = new Dictionary<string, string>
+            {
+                { "Name", user.Name },
+                { "ScheduleLink", scheduleLink }
+            };
+
+            await _emailService.SendEmailAsync(
+                toName: user.Name,
+                toEmail: user.Email!,
+                subject: "Seu planejamento está pronto! - App Bailarina Preparada",
+                templateName: "ScheduleReadyTemplate",
+                templateData: templateData
+            );
         }
 
         public async Task UpdateScheduleAsync(int scheduleId, UpdateScheduleRequest request)

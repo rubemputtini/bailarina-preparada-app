@@ -1,4 +1,4 @@
-﻿namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules
+﻿namespace BailarinaPreparadaApp.Services.Achievements
 {
     public interface IProgressiveAchievement
     {

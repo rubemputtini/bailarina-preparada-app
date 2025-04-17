@@ -46,6 +46,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
                     AchievedAt = unlocked.OrderByDescending(x => x.AchievedAt).FirstOrDefault()?.AchievedAt,
                     TimesAchieved = unlocked.Count
                 };
+                
                 await EvaluateAchievementProgress(userId, def, response);
 
                 result.Add(response);

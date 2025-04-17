@@ -57,6 +57,15 @@ namespace BailarinaPreparadaApp.Controllers.Schedules
             });
         }
 
+        [HttpPost("{userId}/send-schedule-email")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> SendScheduleEmail(string userId)
+        {
+            await _scheduleService.SendScheduleReadyEmailAsync(userId);
+
+            return Ok(new { message = "E-mail de planejamento enviado com sucesso!" });
+        }
+
         [HttpPut("{scheduleId}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateSchedule(int scheduleId, UpdateScheduleRequest request)

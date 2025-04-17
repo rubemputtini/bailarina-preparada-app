@@ -18,7 +18,7 @@ const UserInfo = ({ name, age, goal, setGoal, isEditing }) => {
             <div className="flex items-center space-x-2">
                 <label className="text-sm text-gray-300 whitespace-nowrap">Objetivo:</label>
                 <textarea
-                    className="p-1 rounded bg-gray-800 text-white text-sm w-96 resize-none"
+                    className="p-1 rounded bg-gray-800 text-white text-sm w-full sm:w-96 resize-none"
                     rows={1}
                     disabled={!isEditing}
                     value={goal}

@@ -21,6 +21,16 @@ export const getMySchedule = async () => {
     }
 };
 
+export const sendScheduleEmail = async (userId) => {
+    try {
+        const response = await api.post(`/api/v1/schedules/${userId}/send-schedule-email`);
+
+        return response.data;
+    } catch (error) {
+        throw handleError(error, "Erro ao enviar email de planejamento do usuário.");
+    }
+};
+
 export const createSchedule = async (payload) => {
     try {
         const response = await api.post("/api/v1/schedules", payload);

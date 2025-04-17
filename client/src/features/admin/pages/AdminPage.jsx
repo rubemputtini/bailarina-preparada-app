@@ -162,7 +162,7 @@ const AdminPage = () => {
 
             {showDialog && (
                 <ConfirmationDialog
-                    message="Tem certeza de que deseja excluir este usuário?"
+                    message="Tem certeza que deseja excluir este usuário?"
                     onConfirm={handleDialogConfirm}
                     onCancel={handleDialogCancel}
                     loading={deleteLoading}
