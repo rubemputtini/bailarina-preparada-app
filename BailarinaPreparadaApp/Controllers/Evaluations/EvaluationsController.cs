@@ -1,5 +1,6 @@
 ﻿using BailarinaPreparadaApp.DTOs.Evaluations;
 using BailarinaPreparadaApp.Services.Evaluations;
+using BailarinaPreparadaApp.Services.Schedules;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,15 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
             }
 
             return CreatedAtAction(nameof(GetEvaluationById), new { id = evaluationId }, new { message, evaluationId });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("{evaluationId}/send-evaluation-email")]
+        public async Task<IActionResult> SendEvaluationEmail(int evaluationId)
+        {
+            await _evaluationService.SendEvaluationReadyEmailAsync(evaluationId);
+
+            return Ok(new { message = "E-mail de avaliação enviado com sucesso!" });
         }
 
         [Authorize(Roles = "admin")]

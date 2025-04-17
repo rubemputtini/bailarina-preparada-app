@@ -5,6 +5,7 @@ using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Evaluations;
 using BailarinaPreparadaApp.Models.Exercises;
+using BailarinaPreparadaApp.Services.Emails;
 using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Services.Evaluations
@@ -12,10 +13,14 @@ namespace BailarinaPreparadaApp.Services.Evaluations
     public class EvaluationService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public EvaluationService(ApplicationDbContext dbContext)
+        public EvaluationService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsAsync()
@@ -108,6 +113,41 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             await _dbContext.SaveChangesAsync();
 
             return (true, "Avaliação criada com sucesso.", evaluation.EvaluationId);
+        }
+
+        public async Task SendEvaluationReadyEmailAsync(int evaluationId)
+        {
+            var evaluation = await _dbContext.Evaluations
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(e => e.EvaluationId == evaluationId);
+
+            if (evaluation == null)
+            {
+                throw new NotFoundException("Avaliação não encontrada.");
+            }
+
+            var user = evaluation.User;
+
+            if (user == null)
+            {
+                throw new NotFoundException("Usuário não encontrado.");
+            }
+
+            var evaluationLink = $"{_configuration["AppSettings:FrontendUrl"]}/avaliacoes/{evaluationId}";
+
+            var templateData = new Dictionary<string, string>
+            {
+                { "Name", user.Name },
+                { "EvaluationLink", evaluationLink }
+            };
+
+            await _emailService.SendEmailAsync(
+                toName: user.Name,
+                toEmail: user.Email!,
+                subject: "Sua avaliação física está pronta! - App Bailarina Preparada",
+                templateName: "EvaluationReadyTemplate",
+                templateData: templateData
+            );
         }
 
         public async Task<(bool Success, string Message)> UpdateEvaluationAsync(int id, List<EvaluationExerciseRequest> updatedExercises)

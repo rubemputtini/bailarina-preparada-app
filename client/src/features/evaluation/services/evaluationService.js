@@ -41,6 +41,16 @@ export const createEvaluation = async (payload) => {
     }
 };
 
+export const sendEvaluationEmail = async (evaluationId) => {    
+    try {
+        const response = await api.post(`/api/v1/evaluations/${evaluationId}/send-evaluation-email`);
+
+        return response.data;
+    } catch (error) {
+        throw handleError(error, "Erro ao enviar email de avaliação.");
+    }
+};
+
 export const updateEvaluation = async (evaluationId, updatedExercises) => {
     try {
         const response = await api.put(`/api/v1/evaluations/${evaluationId}`, updatedExercises);

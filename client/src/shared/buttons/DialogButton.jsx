@@ -21,7 +21,7 @@ const DialogButton = ({
         <button
             className={`${baseStyles} ${widthStyles} ${variantStyles}`}
             onClick={onClick}
-            disabled={disabled || loading}
+            disabled={disabled}
         >
             {loading ? <CircularProgress size={24} color="inherit" /> : children}
         </button>
