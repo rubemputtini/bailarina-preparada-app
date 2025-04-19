@@ -89,13 +89,17 @@ const LoginForm = ({
                             <Typography
                                 variant="body2"
                                 sx={{
-                                    fontFamily: "'Inter', sans-serif",
-                                    fontSize: "0.875rem",
-                                    color: "#6c5c80",
-                                    fontWeight: 700,
+                                    color: "#8e24aa",
+                                    fontWeight: "bold",
+                                    background: "none",
+                                    border: "none",
+                                    padding: 0,
                                     cursor: "pointer",
+                                    fontSize: "0.875rem",
                                     textDecoration: "underline",
-                                    "&:hover": { color: "#403b4d" },
+                                    '&:hover': {
+                                        opacity: 0.8
+                                    }
                                 }}
                                 onClick={() => navigate(ROUTES.forgotPassword)}
                             >

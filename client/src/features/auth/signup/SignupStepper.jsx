@@ -140,24 +140,39 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
                     />
                 )}
 
-                <Typography
-                    variant="body2"
-                    align="center"
-                    sx={{
-                        marginTop: "1rem",
-                        color: "#6c5c80",
-                    }}
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexWrap="wrap"
+                    mt={2}
+                    textAlign="center"
                 >
-                    <div className="flex items-center justify-center mt-4">
-                        <p className="text-gray-400">Já possui uma conta?{' '}</p>
-                        <button
-                            onClick={onLoginRedirect}
-                            className="text-fuchsia-800 hover:underline font-bold ml-1"
-                        >
-                            Entre aqui
-                        </button>
-                    </div>
-                </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Já possui uma conta?
+                    </Typography>
+                    <Box
+                        component="button"
+                        onClick={onLoginRedirect}
+                        sx={{
+                            ml: 1,
+                            color: "#8e24aa",
+                            fontWeight: "bold",
+                            background: "none",
+                            border: "none",
+                            padding: 0,
+                            cursor: "pointer",
+                            fontSize: "0.875rem",
+                            textDecoration: "underline",
+                            '&:hover': {
+                                opacity: 0.8
+                            }
+                        }}
+                    >
+                        Entre aqui
+                    </Box>
+                </Box>
+
             </Box>
         </Container>
     );
