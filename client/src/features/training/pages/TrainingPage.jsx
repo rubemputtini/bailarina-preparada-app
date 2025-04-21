@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, LinearProgress, IconButton } from "@mui/material";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Confetti from "react-confetti";
@@ -13,6 +13,8 @@ import StepConfirm from "../components/StepConfirm";
 import TrainingDialog from "../components/TrainingDialog";
 import { trainingCategories } from "shared/utils/constants";
 import useTrainingDaysCount from "hooks/useTrainingDaysCount";
+import { getUserAchievements } from "features/ranking/services/achievementService";
+import AchievementShareDialog from "features/account/components/AchievementShareDialog";
 
 const TrainingPage = () => {
     const [step, setStep] = useState(1);
@@ -24,17 +26,12 @@ const TrainingPage = () => {
         description: "",
     });
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const [error, setError] = useState(false);
+    const [achievementToShare, setAchievementToShare] = useState(null);
+
     const { width, height } = useWindowSize();
     const { trainingDaysCount, refetch } = useTrainingDaysCount();
-
-    useEffect(() => {
-        if (success) {
-            setShowDialog(true);
-        }
-    }, [success]);
 
     const handleNext = () => {
         if (step === 1 && (!newTraining.date || !isDateValid)) {
@@ -56,13 +53,26 @@ const TrainingPage = () => {
     const handleSave = async () => {
         setLoading(true);
         try {
+            const before = await getUserAchievements();
+            const unlockedBefore = before.filter(a => a.unlocked).map(a => a.achievementId);
+
             await createTraining(newTraining.date, newTraining.category, newTraining.description);
             await refetch();
 
-            setSuccess(true);
+            const after = await getUserAchievements();
+            const newAchievements = after.filter(
+                a => a.unlocked && !unlockedBefore.includes(a.achievementId)
+            );
+
+            if (newAchievements.length > 0) {
+                setAchievementToShare(newAchievements[0]);
+            } else {
+                setShowDialog(true);
+            }
+
             setError("");
         } catch (err) {
-            setError("Erro ao registrar treino. Tente novamente.")
+            setError("Erro ao registrar treino. Tente novamente.");
         } finally {
             setLoading(false);
         }
@@ -123,12 +133,23 @@ const TrainingPage = () => {
                 </Box>
             </Box>
             <Footer />
-            {success && <Confetti numberOfPieces={500} recycle={false} width={width} height={height} />}
+
+            {showDialog && <Confetti numberOfPieces={500} recycle={false} width={width} height={height} />}
+
             <TrainingDialog
                 showDialog={showDialog}
                 setShowDialog={setShowDialog}
                 category={newTraining.category}
                 trainingDaysCount={trainingDaysCount}
+            />
+
+            <AchievementShareDialog
+                open={!!achievementToShare}
+                achievement={achievementToShare}
+                onClose={() => {
+                    setAchievementToShare(null);
+                    setShowDialog(true);
+                }}
             />
         </>
     );

@@ -19,7 +19,6 @@ const AchievementCardPremium = ({ achievement }) => {
         goalTarget
     } = achievement;
 
-
     const glow = unlocked ? "shadow-[0_0_16px_rgba(139,92,246,0.6)]" : "";
     const imageStyle = unlocked ? "" : "opacity-30 grayscale";
 

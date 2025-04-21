@@ -19,7 +19,7 @@ const ShareImageCard = ({ category = 'FORÇA', trainingDaysCount = 0 }) => {
                     <div className="flex flex-col items-center">
                         <img src={logo} alt="Logo" className="h-28 rounded-full bg-white/10 p-2 mb-4" />
 
-                        <h2 className="text-3xl font-bold text-white mb-2">Treino feito! 💪</h2>
+                        <h2 className="text-3xl font-bold text-white mb-2">Treino feito!</h2>
 
                         <p className="text-base px-6 leading-relaxed text-white mb-7">
                             Finalizei mais um treino com o <span className="font-semibold">Clube Bailarina Preparada</span>
