@@ -1,11 +1,14 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import { TrophyIcon } from "@heroicons/react/24/solid";
 import AchievementBadge from "shared/components/AchievementBadge";
+import { getShortName } from "shared/utils/nameUtils";
 
 const TopRankingCard = ({ user, index, getMedalColor }) => {
     const color = getMedalColor(index);
     const achievements = user.achievements || [];
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
         <motion.div
@@ -19,9 +22,14 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
             >
                 <CardContent className="text-center p-6 flex flex-col items-center justify-center">
                     <TrophyIcon style={{ width: 48, height: 48, fill: color }} />
-                    <Typography variant="h6" className="font-bold mt-2">
-                        {user.userName}
+                    <Typography
+                        variant="h6"
+                        className="font-bold truncate max-w-[200px] md:max-w-none mx-auto text-center"
+                        title={user.userName}
+                    >
+                        {isMobile ? getShortName(user.userName) : user.userName}
                     </Typography>
+
                     <Typography
                         variant="h5"
                         className="mt-3"
