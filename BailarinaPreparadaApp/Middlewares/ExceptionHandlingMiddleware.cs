@@ -23,7 +23,8 @@ namespace BailarinaPreparadaApp.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro inesperado na API");
+                _logger.LogError(ex, "Erro inesperado na API | Path: {Path} | Trace: {TraceId}", 
+                    context.Request.Path, context.TraceIdentifier);
 
                 context.Response.ContentType = "application/json";
                 var response = new { message = "Erro interno do servidor." };

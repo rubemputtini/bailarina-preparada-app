@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.Services.Accounts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BailarinaPreparadaApp.Controllers.Accounts
 {
@@ -16,6 +17,7 @@ namespace BailarinaPreparadaApp.Controllers.Accounts
             _accountService = accountService;
         }
 
+        [EnableRateLimiting("LoginLimiter")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -29,6 +31,7 @@ namespace BailarinaPreparadaApp.Controllers.Accounts
             return Ok(response);
         }
 
+        [EnableRateLimiting("LoginLimiter")]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -56,6 +59,7 @@ namespace BailarinaPreparadaApp.Controllers.Accounts
             return Ok(new { message });
         }
 
+        [EnableRateLimiting("LoginLimiter")]
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {

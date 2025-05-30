@@ -16,7 +16,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+}
+
 app.UseHttpsRedirection();
+app.UseRateLimiter();
+
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    
+    await next();
+});
 
 app.UseStaticFiles();
 app.UseCors("AllowSpecificOrigins");
