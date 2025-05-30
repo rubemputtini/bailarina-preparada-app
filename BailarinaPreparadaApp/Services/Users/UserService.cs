@@ -22,8 +22,14 @@ namespace BailarinaPreparadaApp.Services.Users
         public async Task<UserDetailsResponse> GetUserDetailsAsync(string? userId, string? currentUserEmail, string currentUserId, bool isAdmin)
         {
             var user = userId == null
-                ? await _userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Email == currentUserEmail)
-                : await _userManager.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Id == userId);
+                ? await _userManager.Users
+                    .AsNoTracking()
+                    .Include(u => u.Address)
+                    .FirstOrDefaultAsync(u => u.Email == currentUserEmail)
+                : await _userManager.Users
+                    .AsNoTracking()
+                    .Include(u => u.Address)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {

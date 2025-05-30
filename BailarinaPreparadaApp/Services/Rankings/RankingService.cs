@@ -21,6 +21,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
             var selectedMonth = month;
 
             var trainingsQuery = _dbContext.Trainings
+                .AsNoTracking()
                 .Where(t => t.IsCompleted && t.Date.Year == selectedYear);
 
             if (selectedMonth.HasValue)
@@ -43,6 +44,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
             var userIds = groupedData.Select(g => g.UserId).ToList();
 
             var achievements = await _dbContext.UserAchievements
+                .AsNoTracking()
                 .Where(ua => userIds.Contains(ua.UserId) && ua.AchievementDefinition.IsActive)
                 .Include(ua => ua.AchievementDefinition)
                 .ToListAsync();

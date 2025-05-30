@@ -22,10 +22,12 @@ namespace BailarinaPreparadaApp.Services.Achievements
         {
             var definitions = await _dbContext.AchievementDefinitions
                 .Where(a => a.IsActive)
+                .AsNoTracking()
                 .ToListAsync();
 
             var userAchievements = await _dbContext.UserAchievements
                 .Where(ua => ua.UserId == userId)
+                .AsNoTracking()
                 .ToListAsync();
 
             var result = new List<AchievementResponse>();
@@ -72,9 +74,11 @@ namespace BailarinaPreparadaApp.Services.Achievements
         {
             var count = await _dbContext.UserAchievements
                 .Where(ua => ua.UserId == userId && ua.AchievementDefinitionId == achievementId)
+                .AsNoTracking()
                 .CountAsync();
 
             var achievement = await _dbContext.AchievementDefinitions
+                .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.AchievementDefinitionId == achievementId && a.IsActive);
 
             if (achievement == null)
@@ -98,6 +102,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
         public async Task<bool> HasAchievementAsync(string userId, string achievementId, int year, int month)
         {
             return await _dbContext.UserAchievements
+                .AsNoTracking()
                 .AnyAsync(ua =>
                     ua.UserId == userId &&
                     ua.AchievementDefinitionId == achievementId &&

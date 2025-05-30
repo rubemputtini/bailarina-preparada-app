@@ -26,6 +26,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsAsync()
         {
             var evaluations = await _dbContext.Evaluations
+                .AsNoTracking()
                 .Include(e => e.Admin)
                 .Include(e => e.User)
                 .Include(e => e.Exercises)
@@ -38,6 +39,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsByUserIdAsync(string userId)
         {
             var evaluations = await _dbContext.Evaluations
+                .AsNoTracking()
                 .Include(e => e.Admin)
                 .Include(e => e.User)
                 .Include(e => e.Exercises)
@@ -51,6 +53,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
         public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id, string currentUserId, bool isAdmin)
         {
             var evaluation = await _dbContext.Evaluations
+                .AsNoTracking()
                 .Include(e => e.Admin)
                 .Include(e => e.User)
                 .Include(e => e.Exercises)
@@ -118,6 +121,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
         public async Task SendEvaluationReadyEmailAsync(int evaluationId)
         {
             var evaluation = await _dbContext.Evaluations
+                .AsNoTracking()
                 .Include(e => e.User)
                 .FirstOrDefaultAsync(e => e.EvaluationId == evaluationId);
 

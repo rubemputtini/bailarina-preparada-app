@@ -84,6 +84,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
             var currentDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
 
             var dailySchedule = await _dbContext.ScheduleTasks
+                .AsNoTracking()
                 .Where(e => e.Schedule.UserId == userId && (int)e.DayOfWeek == currentDayOfWeek)
                 .Select(e => new ScheduleTaskResponse
                 {
@@ -196,7 +197,9 @@ namespace BailarinaPreparadaApp.Services.Schedules
 
         public async Task SendScheduleReadyEmailAsync(string userId)
         {
-            var user = await _dbContext.Users.FindAsync(userId);
+            var user = await _dbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {

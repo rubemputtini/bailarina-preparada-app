@@ -15,12 +15,7 @@ namespace BailarinaPreparadaApp.Services.Exercises
 
         public async Task<IEnumerable<ExerciseResponse>> GetExercisesAsync()
         {
-            var exercises = await _dbContext.Exercises.ToListAsync();
-
-            if (!exercises.Any())
-            {
-                return new List<ExerciseResponse>();
-            }
+            var exercises = await _dbContext.Exercises.AsNoTracking().ToListAsync();
 
             var response = exercises.Select(e => new ExerciseResponse
             {

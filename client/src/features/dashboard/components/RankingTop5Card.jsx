@@ -5,6 +5,7 @@ import LoadingCard from 'shared/ui/LoadingCard';
 import gold from 'assets/gold.png';
 import silver from 'assets/silver.png';
 import bronze from 'assets/bronze.png';
+import ResponsiveUserName from 'shared/components/ResponsiveUserName';
 
 const medals = [gold, silver, bronze];
 
@@ -82,8 +83,14 @@ const RankingTop5Card = ({ ranking, loading }) => {
                                                 )}
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className={`font-medium tracking-tight ${isTop1 ? 'text-lg text-yellow-600 flex items-center' : 'text-gray-900'}`}>
-                                                    {user.userName}
+                                                <span className={`font-medium tracking-tight ${isTop1 ? 'text-lg text-yellow-600 flex items-center gap-1 min-w-0' : 'text-gray-900'}`}>
+                                                    <ResponsiveUserName
+                                                        name={user.userName}
+                                                        variant="body1"
+                                                        className="font-medium"
+                                                        align="left"
+                                                        mobileOnlyTruncate
+                                                    />
                                                     {isTop1 && <FaCrown className="text-yellow-500 ml-1 animate-bounce" />}
                                                 </span>
                                                 <span className="text-sm text-gray-500">

@@ -25,6 +25,7 @@ namespace BailarinaPreparadaApp.Services.Admins
             var totalUsers = await _userManager.Users.CountAsync();
 
             var users = await _userManager.Users
+                .AsNoTracking()
                 .OrderBy(u => u.Name)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -52,6 +53,7 @@ namespace BailarinaPreparadaApp.Services.Admins
         public async Task<List<EvaluationResponse>> GetUserEvaluationsAsync(string userId)
         {
             var evaluations = await _dbContext.Evaluations
+                .AsNoTracking()
                 .Where(e => e.User.Id == userId)
                 .Include(e => e.Admin)
                 .Include(e => e.User)
@@ -89,6 +91,7 @@ namespace BailarinaPreparadaApp.Services.Admins
             var today = DateTime.Today;
 
             var users = await _userManager.Users
+                .AsNoTracking()
                 .Select(u => new
                 {
                     u.Id,

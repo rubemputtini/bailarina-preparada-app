@@ -24,6 +24,7 @@ namespace BailarinaPreparadaApp.Services.Announcements
             var now = DateTime.UtcNow;
 
             var announcements = await _dbContext.Announcements
+                .AsNoTracking()
                 .Include(a => a.Author)
                 .Where(a =>
                     (a.IsVisible || a.PublishAt != null && a.PublishAt <= now) &&
@@ -51,6 +52,7 @@ namespace BailarinaPreparadaApp.Services.Announcements
         public async Task<List<AnnouncementResponse>> GetAllAnnouncementsAsync()
         {
             var announcements = await _dbContext.Announcements
+                 .AsNoTracking()
                  .Include(a => a.Author)
                  .OrderByDescending(a => a.Date)
                  .ToListAsync();

@@ -22,6 +22,7 @@ namespace BailarinaPreparadaApp.Services.Users
         public async Task<UserGoalResponse> GetGoalByYearAsync(string userId, int year)
         {
             var goal = await _dbContext.UserGoals
+                .AsNoTracking()
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.Year == year);
 
             if (goal == null)
@@ -41,6 +42,7 @@ namespace BailarinaPreparadaApp.Services.Users
         public async Task<List<UserGoalResponse>> GetHistoricGoalsAsync(string userId)
         {
             var goals = await _dbContext.UserGoals
+                .AsNoTracking()
                 .Where(ug => ug.UserId == userId)
                 .OrderBy(ug => ug.Year)
                 .Select(ug => new UserGoalResponse

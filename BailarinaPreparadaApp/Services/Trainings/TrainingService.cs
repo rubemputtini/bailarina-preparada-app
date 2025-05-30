@@ -65,6 +65,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
             }
 
             var trainings = await trainingsQuery
+                .AsNoTracking()
                 .Select(t => new TrainingResponse
                 {
                     TrainingId = t.TrainingId,
@@ -81,6 +82,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
         public async Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year)
         {
             var trainingDaysCount = await _dbContext.Trainings
+                .AsNoTracking()
                 .Where(t => t.UserId == userId && t.IsCompleted && t.Date.Year == year)
                 .Select(t => t.Date.Date)
                 .Distinct()

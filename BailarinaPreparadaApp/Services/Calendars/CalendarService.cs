@@ -16,6 +16,7 @@ namespace BailarinaPreparadaApp.Services.Calendars
         public async Task<IEnumerable<CalendarSummaryResponse>> GetCalendarSummaryAsync(string userId, DateTime startDate, DateTime endDate)
         {
             var trainings = await _dbContext.Trainings
+                .AsNoTracking()
                 .Where(t => t.UserId == userId && t.Date >= startDate && t.Date <= endDate)
                 .GroupBy(t => t.Date.Date)
                 .Select(g => new CalendarSummaryResponse

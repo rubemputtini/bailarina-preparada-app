@@ -17,7 +17,9 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
         public async Task<List<ActivityLinkResponse>> GetAllAsync()
         {
-            var activityLinks = await _dbContext.ActivityLinks.ToListAsync();
+            var activityLinks = await _dbContext.ActivityLinks
+                .AsNoTracking()
+                .ToListAsync();
 
             return activityLinks.Select(link => new ActivityLinkResponse
             {
@@ -64,7 +66,9 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
         public async Task DeleteAsync(int id)
         {
-            var isUsed = await _dbContext.ScheduleTasks.AnyAsync(st => st.ActivityLinkId == id);
+            var isUsed = await _dbContext.ScheduleTasks
+                .AsNoTracking()
+                .AnyAsync(st => st.ActivityLinkId == id);
 
             if (isUsed)
             {
