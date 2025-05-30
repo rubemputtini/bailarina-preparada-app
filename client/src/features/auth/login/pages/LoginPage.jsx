@@ -21,9 +21,14 @@ const LoginPage = () => {
         setError(null);
 
         try {
-            const { token } = await loginRequest(email, password);
+            const response = await loginRequest(email, password);
 
-            login(token);
+            if (response.error === "locked") {
+                setError("Muitas tentativas. Tente novamente em alguns minutos.");
+                return;
+            }
+
+            login(response.token);
             navigate(ROUTES.dashboard);
         } catch (error) {
             setError(error.message);

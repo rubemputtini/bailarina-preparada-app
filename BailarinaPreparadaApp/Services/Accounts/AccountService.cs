@@ -36,7 +36,13 @@ namespace BailarinaPreparadaApp.Services.Accounts
             {
                 return null;
             }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                return new LoginResponse { Error = "locked" };
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
             if (!result.Succeeded)
             {

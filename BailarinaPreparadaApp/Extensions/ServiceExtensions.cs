@@ -33,6 +33,13 @@ namespace BailarinaPreparadaApp.Extensions
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
             services.AddScoped<AccountService>();
             services.AddScoped<AdminService>();
             services.AddScoped<ActivityLinkService>();
