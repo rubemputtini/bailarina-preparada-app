@@ -44,7 +44,7 @@ export const register = async (formData) => {
 
 export const logout = () => {
     clearToken();
-
+    delete api.defaults.headers.common.Authorization;
     console.log("Usuário deslogado");
 };
 

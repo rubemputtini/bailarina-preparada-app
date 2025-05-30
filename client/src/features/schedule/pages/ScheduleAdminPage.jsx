@@ -14,6 +14,7 @@ import SuggestedDateNotice from "../components/SuggestedDateNotice";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
+import ErrorCard from "shared/ui/ErrorCard";
 
 const ScheduleAdminPage = () => {
     const [events, setEvents] = useState([]);
@@ -31,6 +32,7 @@ const ScheduleAdminPage = () => {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     const [emailLoading, setEmailLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         const fetchSchedule = async () => {
@@ -116,6 +118,7 @@ const ScheduleAdminPage = () => {
     };
 
     const handleSendEmailClick = () => {
+        setErrorMessage("");
         setShowConfirmDialog(true);
     };
 
@@ -126,7 +129,7 @@ const ScheduleAdminPage = () => {
             await sendScheduleEmail(userId);
             setShowSuccessDialog(true);
         } catch (error) {
-            console.log("Erro ao enviar e-mail: ", error);
+            setErrorMessage("Não foi possível enviar o e-mail. Tente novamente mais tarde.");
         } finally {
             setEmailLoading(false);
             setShowConfirmDialog(false);
@@ -167,6 +170,14 @@ const ScheduleAdminPage = () => {
                         onConfirm={handleConfirmSendEmail}
                         onCancel={() => setShowConfirmDialog(false)}
                         loading={emailLoading}
+                    />
+                )}
+
+                {errorMessage && (
+                    <ErrorCard
+                        message={errorMessage}
+                        centered
+                        sx={{ mt: 3 }}
                     />
                 )}
 
