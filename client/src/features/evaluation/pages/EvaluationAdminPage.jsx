@@ -204,7 +204,7 @@ const EvaluationAdminPage = () => {
 
 
                 <div>
-                    <label className="text-sm text-gray-300">Próxima Avaliação</label>
+                    <label className="text-sm text-gray-300">Próxima Autoavaliação</label>
                     <input
                         type="date"
                         disabled

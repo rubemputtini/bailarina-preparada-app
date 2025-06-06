@@ -13,7 +13,7 @@ const PhysicalScoreCard = ({ averageClassification }) => (
         </p>
 
         <p className="text-sm text-gray-600 text-center font-semibold mb-5">
-            Força, Resistência, Potência e Equilíbrio
+            Força, Resistência, Cardio e Equilíbrio
         </p>
 
         <p className="text-md text-green-700 font-medium mb-5 text-center">

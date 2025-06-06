@@ -35,7 +35,7 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<IAchievementRule, Top1MonthlyRule>();
             services.AddScoped<IAchievementRule, Top5MonthlyRule>();
 
-            // Categorias
+            // Categories
             services.AddScoped<IAchievementRule, Cardio100Rule>();
             services.AddScoped<IAchievementRule, Core100Rule>();
             services.AddScoped<IAchievementRule, EnDehors100Rule>();

@@ -39,7 +39,8 @@ const AchievementCardPremium = ({ achievement }) => {
 
                 <Typography
                     variant="subtitle2"
-                    className="text-sm font-medium text-gray-800 mt-2 leading-snug"
+                    className="text-sm font-medium text-gray-800 leading-snug"
+                    sx={{ mt: 0.5 }}
                 >
                     {title}
                 </Typography>

@@ -24,7 +24,7 @@ const EvaluationSummary = ({ name, date, nextDate }) => {
             </div>
             <div className="flex items-center gap-2 justify-center">
                 <CalendarMonth />
-                <span><strong>Próxima Avaliação:</strong> {nextDate}</span>
+                <span><strong>Próxima Autoavaliação:</strong> {nextDate}</span>
             </div>
         </div>
     );

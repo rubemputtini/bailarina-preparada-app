@@ -16,7 +16,8 @@ const AchievementModal = ({ open, onClose, achievement }) => {
         unlocked,
         achievedAt,
         currentProgress,
-        goalTarget
+        goalTarget,
+        timesAchieved
     } = achievement;
 
     const showProgress = !unlocked && currentProgress != null && goalTarget != null;
@@ -103,7 +104,7 @@ const AchievementModal = ({ open, onClose, achievement }) => {
                                         mb: 3,
                                     }}
                                 >
-                                    Conquistado em{" "}
+                                    {timesAchieved > 1 ? "Última conquista em " : "Conquistado em "}
                                     {new Date(achievedAt).toLocaleDateString("pt-BR")}
                                 </Typography>
 

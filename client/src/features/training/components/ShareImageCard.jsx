@@ -42,7 +42,7 @@ const ShareImageCard = ({ category = 'FORÇA', trainingDaysCount = 0 }) => {
                                 {trainingDaysCount}
                             </p>
                             <p className="text-sm text-gray-300">
-                                de <span className="font-semibold">{goal.goalDays}</span> treinos este ano
+                                de <span className="font-semibold">{goal.goalDays}</span> dias de treinos este ano
                             </p>
                         </div>
                     )}

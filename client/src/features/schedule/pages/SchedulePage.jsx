@@ -6,6 +6,7 @@ import PageLayout from "layouts/PageLayout";
 import { getMySchedule } from "../services/scheduleService";
 import DroppableSlot from "../components/DroppableSlot";
 import { scheduleForm, daysOfWeek, periods } from "shared/utils/constants";
+import SuggestedDateNotice from "../components/SuggestedDateNotice";
 
 const SchedulePage = () => {
     const [events, setEvents] = useState([]);
@@ -117,12 +118,8 @@ const SchedulePage = () => {
                 </div>
 
                 {events.length > 0 ? (
-                    <div className="mt-6 text-center">
-                        <div className="flex flex-col sm:flex-row items-center justify-center text-gray-300 text-xl sm:text-2xl">
-                            <span>Próxima atualização sugerida:</span>
-                            <span className="font-bold sm:ml-2 sm:whitespace-nowrap">{suggestedDate}</span>
-                        </div>
-
+                    <>
+                        <SuggestedDateNotice date={suggestedDate} />
                         <div className="flex flex-col sm:flex-row items-center justify-center mt-2 text-gray-300 text-base">
                             <span>Precisa de um novo planejamento?</span>
                             <a
@@ -134,13 +131,13 @@ const SchedulePage = () => {
                                 Solicite aqui.
                             </a>
                         </div>
-                    </div>
+                    </>
                 ) : (
                     <div className="mt-6 text-center">
-                        <div className="text-gray-300 text-xl sm:text-2xl mb-2">
+                        <div className="text-gray-300 text-xl sm:text-2xl mb-3">
                             Você ainda não tem um planejamento semanal.
                         </div>
-                        <div className="text-gray-300 text-base">
+                        <div className="flex flex-col sm:flex-row items-center justify-center mt-2 text-gray-300 text-base">
                             <span>Deseja começar agora?</span>
                             <a
                                 href={scheduleForm}

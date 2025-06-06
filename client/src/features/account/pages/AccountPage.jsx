@@ -80,19 +80,21 @@ const AccountPage = () => {
                             {isAdminEditing ? `Editando: ${formValues.name || "usuário"}` : "Minha Conta"}
                         </h2>
 
-                        {!editing ? (
-                            <IconButton onClick={() => setEditing(true)}>
-                                <PencilSquareIcon className="h-6 w-6 text-purple-800 hover:text-purple-900 transition-colors" />
-                            </IconButton>
-                        ) : (
-                            <div className="flex gap-2">
-                                <IconButton onClick={handleCancel}>
-                                    <XMarkIcon className="h-6 w-6 text-red-600 hover:text-red-700 transition-colors" />
+                        {activeTab !== 2 && (
+                            !editing ? (
+                                <IconButton onClick={() => setEditing(true)}>
+                                    <PencilSquareIcon className="h-6 w-6 text-purple-800 hover:text-purple-900 transition-colors" />
                                 </IconButton>
-                                <IconButton onClick={handleSave}>
-                                    <CheckIcon className="h-6 w-6 text-emerald-600 hover:text-emerald-700 transition-colors" />
-                                </IconButton>
-                            </div>
+                            ) : (
+                                <div className="flex gap-2">
+                                    <IconButton onClick={handleCancel}>
+                                        <XMarkIcon className="h-6 w-6 text-red-600 hover:text-red-700 transition-colors" />
+                                    </IconButton>
+                                    <IconButton onClick={handleSave}>
+                                        <CheckIcon className="h-6 w-6 text-emerald-600 hover:text-emerald-700 transition-colors" />
+                                    </IconButton>
+                                </div>
+                            )
                         )}
                     </div>
 

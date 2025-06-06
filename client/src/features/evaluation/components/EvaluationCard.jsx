@@ -22,7 +22,7 @@ const EvaluationCard = ({ evaluation, fmsScore, classification }) => {
                 <div className="text-gray-700 gap-2 text-sm sm:text-base">
                     <span className="font-medium">Pontuação FMS: </span>
                 </div>
-                <div className="text-gray-700 font-extrabold text-xl">{fmsScore}</div>
+                <div className="text-gray-700 font-extrabold text-3xl">{fmsScore}</div>
 
                 <div className="text-gray-700 gap-2 text-sm sm:text-base">
                     <span className="font-medium">Capacidades Físicas:</span>
