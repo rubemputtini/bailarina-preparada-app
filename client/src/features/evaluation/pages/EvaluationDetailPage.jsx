@@ -15,11 +15,13 @@ import { groupByCategory } from "../../../shared/utils/exerciseUtils";
 import LoadingCard from "shared/ui/LoadingCard";
 import PageLayout from "layouts/PageLayout";
 import PhotosTab from "../components/PhotosTab";
+import InfoDialog from "shared/dialogs/InfoDialog";
 
 const EvaluationDetailPage = () => {
     const { evaluationId } = useParams();
     const { evaluation, referenceMap } = useEvaluationDetails(evaluationId);
     const [selectedTab, setSelectedTab] = useState("FMS");
+    const [openInfo, setOpenInfo] = useState(false);
 
     if (!evaluation) {
         return (
@@ -84,6 +86,16 @@ const EvaluationDetailPage = () => {
             {selectedTab === "CAPACIDADES" && (
                 <>
                     <PhysicalScoreCard averageClassification={avgClassification} />
+
+                    <p className="text-md text-white text-center mb-6">
+                        <button
+                            onClick={() => setOpenInfo(true)}
+                            className="underline decoration-white/40 hover:decoration-white transition-all"
+                        >
+                            Como essa classificação é calculada?
+                        </button>
+                    </p>
+
                     <EvaluationGrid items={groupUnilateralExercises(grouped.physical, referenceMap)} />
                 </>
             )}
@@ -91,6 +103,8 @@ const EvaluationDetailPage = () => {
             {selectedTab === "FOTOS" && (
                 <PhotosTab evaluationId={evaluationId} photosUrl={evaluation.photosUrl} />
             )}
+
+            <InfoDialog open={openInfo} onClose={() => setOpenInfo(false)} />
         </PageLayout>
     );
 };
