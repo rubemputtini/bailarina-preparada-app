@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 
 const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
-    const [goal, setGoal] = useState(currentGoal || "");
+    const [goal, setGoal] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (open) {
+            setGoal(currentGoal || "");
+        }
+    }, [open, currentGoal]);
 
     if (!open) return null;
 
