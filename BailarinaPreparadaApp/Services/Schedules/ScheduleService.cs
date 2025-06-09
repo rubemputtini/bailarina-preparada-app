@@ -2,6 +2,7 @@
 using BailarinaPreparadaApp.DTOs.Schedules;
 using BailarinaPreparadaApp.DTOs.ScheduleTasks;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Schedules;
 using BailarinaPreparadaApp.Models.ScheduleTasks;
 using BailarinaPreparadaApp.Services.Emails;
@@ -27,7 +28,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
 
         public async Task<ScheduleResponse> GetUserScheduleAsync(string userId)
         {
-            var cacheKey = $"schedule_{userId}";
+            var cacheKey = CacheKeys.UserSchedule(userId);
             
             if (_memoryCache.TryGetValue(cacheKey, out ScheduleResponse? cachedSchedule))
                 return cachedSchedule;
@@ -94,7 +95,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
         public async Task<IEnumerable<ScheduleTaskResponse>> GetDailyScheduleAsync(string userId)
         {
             var currentDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
-            var cacheKey = $"daily_schedule_{userId}_{currentDayOfWeek}";
+            var cacheKey = CacheKeys.UserDailySchedule(userId, currentDayOfWeek);
             
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<ScheduleTaskResponse>? cachedDailySchedule))
                 return cachedDailySchedule;
@@ -198,31 +199,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
             
             return await GetUserScheduleAsync(request.UserId);
         }
-
-        private async Task<int?> ValidateActivityLinkAssociation(int? activityLinkId, string? link, string color)
-        {
-            if (activityLinkId == null) return null;
-
-            var original = await _dbContext.ActivityLinks.FindAsync(activityLinkId.Value);
-
-            if (original != null && original.Link == link && original.DefaultColor == color)
-            {
-                return activityLinkId;
-            }
-
-            return null;
-        }
         
-        private void InvalidateUserScheduleCache(string userId)
-        {
-            _memoryCache.Remove($"schedule_{userId}");
-
-            for (var day = 0; day < 7; day++)
-            {
-                _memoryCache.Remove($"daily_schedule_{userId}_{day}");
-            }
-        }
-
         public async Task SendScheduleReadyEmailAsync(string userId)
         {
             var user = await _dbContext.Users
@@ -333,6 +310,30 @@ namespace BailarinaPreparadaApp.Services.Schedules
             _dbContext.Schedules.Remove(schedule);
             await _dbContext.SaveChangesAsync();
             InvalidateUserScheduleCache(schedule.UserId);
+        }
+        
+        private void InvalidateUserScheduleCache(string userId)
+        {
+            _memoryCache.Remove(CacheKeys.UserSchedule(userId));
+
+            for (var day = 0; day < 7; day++)
+            {
+                _memoryCache.Remove(CacheKeys.UserDailySchedule(userId, day));
+            }
+        }
+        
+        private async Task<int?> ValidateActivityLinkAssociation(int? activityLinkId, string? link, string color)
+        {
+            if (activityLinkId == null) return null;
+
+            var original = await _dbContext.ActivityLinks.FindAsync(activityLinkId.Value);
+
+            if (original != null && original.Link == link && original.DefaultColor == color)
+            {
+                return activityLinkId;
+            }
+
+            return null;
         }
     }
 }

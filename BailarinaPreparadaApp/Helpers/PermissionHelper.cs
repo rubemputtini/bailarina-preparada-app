@@ -2,7 +2,7 @@
 
 namespace BailarinaPreparadaApp.Helpers
 {
-    public class PermissionHelper
+    public static class PermissionHelper
     {
         public static void CheckUserPermission(string targetUserId, string currentUserId, bool isAdmin)
         {

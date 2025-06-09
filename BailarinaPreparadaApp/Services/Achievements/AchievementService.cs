@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Achievements;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Achievements;
 using BailarinaPreparadaApp.Services.Achievements.AchievementRules;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
 
         public async Task<List<AchievementResponse>> GetAchievementsForUserAsync(string userId)
         {
-            var cacheKey = $"achievements_user_{userId}";
+            var cacheKey = CacheKeys.UserAchievements(userId);
             
             if (_memoryCache.TryGetValue(cacheKey, out List<AchievementResponse> cachedUserAchievements))
                 return cachedUserAchievements;
@@ -108,7 +109,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
             });
 
             await _dbContext.SaveChangesAsync();
-            _memoryCache.Remove($"achievements_user_{userId}");
+            _memoryCache.Remove(CacheKeys.UserAchievements(userId));
 
             return true;
         }

@@ -3,6 +3,7 @@ using BailarinaPreparadaApp.DTOs.Accounts;
 using BailarinaPreparadaApp.DTOs.Evaluations;
 using BailarinaPreparadaApp.DTOs.Exercises;
 using BailarinaPreparadaApp.DTOs.Users;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace BailarinaPreparadaApp.Services.Admins
 
         public async Task<(IEnumerable<UserResponse> Users, int TotalUsers)> GetUsersAsync(int page = 1, int pageSize = 10)
         {
-            var cacheKey = $"users_page_{page}_size_{pageSize}";
+            var cacheKey = CacheKeys.AllUsers(page, pageSize);
             
             if (_memoryCache.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
                 return cachedUsers;
@@ -67,7 +68,7 @@ namespace BailarinaPreparadaApp.Services.Admins
 
         public async Task<List<EvaluationResponse>> GetUserEvaluationsAsync(string userId)
         {
-            var cacheKey = $"evaluations_user_{userId}";
+            var cacheKey = CacheKeys.UserEvaluations(userId);
             
             if (_memoryCache.TryGetValue(cacheKey, out List<EvaluationResponse>? cachedEvaluations))
                 return cachedEvaluations;
@@ -113,7 +114,7 @@ namespace BailarinaPreparadaApp.Services.Admins
 
         public async Task<List<BirthdayResponse>> GetRecentBirthdaysAsync(int rangeInDays = 7)
         {
-            var cacheKey = $"birthdays_{rangeInDays}";
+            var cacheKey = CacheKeys.RecentBirthDays(rangeInDays);
             
             if (_memoryCache.TryGetValue(cacheKey, out List<BirthdayResponse>? cachedBirthdays))
                 return cachedBirthdays;

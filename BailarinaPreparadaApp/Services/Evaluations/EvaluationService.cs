@@ -41,7 +41,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsByUserIdAsync(string userId)
         {
-            var cacheKey = $"evaluations_user_{userId}";
+            var cacheKey = CacheKeys.UserEvaluations(userId);
             
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<EvaluationResponse>? cachedEvaluations))
                 return cachedEvaluations;
@@ -67,7 +67,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
         public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id, string currentUserId, bool isAdmin)
         {
-            var cacheKey = $"evaluation_{id}";
+            var cacheKey = CacheKeys.EvaluationById(id);
             
             if (_memoryCache.TryGetValue(cacheKey, out EvaluationResponse? cachedEvaluation))
                 return cachedEvaluation;
@@ -140,7 +140,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
             _dbContext.Evaluations.Add(evaluation);
             
-            _memoryCache.Remove($"evaluations_user_{request.UserId}");
+            _memoryCache.Remove(CacheKeys.UserEvaluations(request.UserId));
             await _dbContext.SaveChangesAsync();
 
             return (true, "Avaliação criada com sucesso.", evaluation.EvaluationId);
@@ -216,7 +216,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             }
 
             await _dbContext.SaveChangesAsync();
-            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
+            _memoryCache.Remove(CacheKeys.UserEvaluations(evaluation.UserId));
 
             return (true, "Avaliação atualizada com sucesso.");
         }
@@ -233,7 +233,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             evaluation.PhotosUrl = photosUrl;
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
+            _memoryCache.Remove(CacheKeys.UserEvaluations(evaluation.UserId));
 
             return (true, "Link de fotos atualizado com sucesso.");
         }
@@ -250,7 +250,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             _dbContext.Evaluations.Remove(evaluation);
 
             await _dbContext.SaveChangesAsync();
-            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
+            _memoryCache.Remove(CacheKeys.UserEvaluations(evaluation.UserId));
 
             return (true, "Avaliação excluída com sucesso.");
         }

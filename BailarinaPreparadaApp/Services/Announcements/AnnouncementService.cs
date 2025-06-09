@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Announcements;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Announcements;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace BailarinaPreparadaApp.Services.Announcements
 
         public async Task<List<AnnouncementResponse>> GetVisibleAnnouncementsAsync()
         {
-            var cacheKey = "announcements_visible";
+            var cacheKey = CacheKeys.VisibleAnnouncements;
             
             if (_memoryCache.TryGetValue(cacheKey, out List<AnnouncementResponse>? cachedVisibleAnnouncements))
                 return cachedVisibleAnnouncements;
@@ -64,7 +65,7 @@ namespace BailarinaPreparadaApp.Services.Announcements
 
         public async Task<List<AnnouncementResponse>> GetAllAnnouncementsAsync()
         {
-            var cacheKey = "announcements_list";
+            var cacheKey = CacheKeys.AllAnnouncements;
             
             if (_memoryCache.TryGetValue(cacheKey, out List<AnnouncementResponse>? cachedAnnouncements))
                 return cachedAnnouncements;
@@ -178,8 +179,8 @@ namespace BailarinaPreparadaApp.Services.Announcements
         
         private void InvalidateAnnouncementCache()
         {
-            _memoryCache.Remove("announcements_visible");
-            _memoryCache.Remove("announcements_list");
+            _memoryCache.Remove(CacheKeys.VisibleAnnouncements);
+            _memoryCache.Remove(CacheKeys.AllAnnouncements);
         }
     }
 }

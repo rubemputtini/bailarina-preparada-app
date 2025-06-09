@@ -52,7 +52,7 @@ namespace BailarinaPreparadaApp.Services.Emails
                 return false;
             }
         }
-        public async Task<string> GetEmailTemplateAsync(string templateName)
+        private static async Task<string> GetEmailTemplateAsync(string templateName)
         {
             var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", $"{templateName}.html");
 
@@ -64,7 +64,7 @@ namespace BailarinaPreparadaApp.Services.Emails
             return await File.ReadAllTextAsync(templatePath);
         }
 
-        public string FillTemplateWithData(string templateContent, Dictionary<string, string> data)
+        private static string FillTemplateWithData(string templateContent, Dictionary<string, string> data)
         {
             foreach (var item in data)
             {

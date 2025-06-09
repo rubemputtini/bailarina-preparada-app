@@ -1,5 +1,6 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Calendars;
+using BailarinaPreparadaApp.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -18,7 +19,7 @@ namespace BailarinaPreparadaApp.Services.Calendars
 
         public async Task<IEnumerable<CalendarSummaryResponse>> GetCalendarSummaryAsync(string userId, DateTime startDate, DateTime endDate)
         {
-            var cacheKey = $"calendar_summary_{userId}_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}";
+            var cacheKey = CacheKeys.CalendarSummary(userId, startDate, endDate);
             
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<CalendarSummaryResponse> cachedCalendar))
                 return cachedCalendar;

@@ -1,5 +1,6 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Exercises;
+using BailarinaPreparadaApp.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -18,7 +19,7 @@ namespace BailarinaPreparadaApp.Services.Exercises
 
         public async Task<IEnumerable<ExerciseResponse>> GetExercisesAsync()
         {
-            const string cacheKey = "exercises_list";
+            var cacheKey = CacheKeys.AllExercises;
 
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<ExerciseResponse> cachedExercises))
                 return cachedExercises;

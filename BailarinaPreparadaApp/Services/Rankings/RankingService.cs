@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Rankings;
 using BailarinaPreparadaApp.DTOs.Achievements;
+using BailarinaPreparadaApp.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -24,7 +25,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
             var selectedMonth = month;
             var cacheMonth = selectedMonth ?? 0;
 
-            var cacheKey = $"ranking_{cacheMonth}_{selectedYear}";
+            var cacheKey = CacheKeys.Ranking(cacheMonth, selectedYear);
             
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<RankingResponse> cachedRanking))
                 return cachedRanking;

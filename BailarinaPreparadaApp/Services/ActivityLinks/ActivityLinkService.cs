@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.ActivityLinks;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.ActivityLinks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -20,7 +21,7 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
         public async Task<List<ActivityLinkResponse>> GetAllAsync()
         {
-            var cacheKey = "activity_links_list";
+            var cacheKey = CacheKeys.AllActivityLinks;
             
             if (_memoryCache.TryGetValue(cacheKey, out List<ActivityLinkResponse> cachedActivityLinks))
                 return cachedActivityLinks;
@@ -51,7 +52,7 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
             _dbContext.ActivityLinks.Add(activityLink);
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove("activity_links_list");
+            _memoryCache.Remove(CacheKeys.AllActivityLinks);
 
             return MapToResponse(activityLink);
         }
@@ -71,7 +72,7 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove("activity_links_list");
+            _memoryCache.Remove(CacheKeys.AllActivityLinks);
 
             return MapToResponse(activityLink);
         }
@@ -100,7 +101,7 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
             _dbContext.ActivityLinks.Remove(activityLink);
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove("activity_links_list");
+            _memoryCache.Remove(CacheKeys.AllActivityLinks);
         }
 
         public async Task<(bool Success, string Message)> ToggleStatusAsync(int id)
@@ -116,7 +117,7 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove("activity_links_list");
+            _memoryCache.Remove(CacheKeys.AllActivityLinks);
 
             return (true, activityLink.IsActive ? "Treino sugerido ativado com sucesso." : "Treino sugerido desativado com sucesso.");
         }

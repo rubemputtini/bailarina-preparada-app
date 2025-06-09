@@ -1,6 +1,7 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Trainings;
 using BailarinaPreparadaApp.Exceptions;
+using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.Trainings;
 using BailarinaPreparadaApp.Services.Achievements;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
             _dbContext.Trainings.Add(training);
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove($"yearly_training_days_count_{userId}_{request.Date.Year}");
+            _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, request.Date.Year));
             InvalidateUserCalendarCache(userId, request.Date);
             InvalidateRankingCache(request.Date.Month, request.Date.Year);
             
@@ -88,7 +89,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
         public async Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year)
         {
-            var cacheKey = $"yearly_training_days_count_{userId}_{year}";
+            var cacheKey = CacheKeys.YearlyTrainingDaysCount(userId, year);
             
             if (_memoryCache.TryGetValue(cacheKey, out int cachedTrainingDaysCount))
                 return cachedTrainingDaysCount;
@@ -121,7 +122,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
             _dbContext.Trainings.Remove(training);
             await _dbContext.SaveChangesAsync();
             
-            _memoryCache.Remove($"yearly_training_days_count_{userId}_{training.Date.Year}");
+            _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, training.Date.Year));
             InvalidateUserCalendarCache(userId, training.Date);
             InvalidateRankingCache(training.Date.Month, training.Date.Year);
         }
@@ -131,15 +132,13 @@ namespace BailarinaPreparadaApp.Services.Trainings
             var monthStart = new DateTime(date.Year, date.Month, 1);
             var monthEnd = monthStart.AddMonths(1).AddDays(-1);
             
-            var cacheKey = $"calendar_summary_{userId}_{monthStart:yyyyMMdd}_{monthEnd:yyyyMMdd}";
-            
-            _memoryCache.Remove(cacheKey);
+            _memoryCache.Remove(CacheKeys.CalendarSummary(userId, monthStart, monthEnd));
         }
 
         private void InvalidateRankingCache(int month, int year)
         {
-            _memoryCache.Remove($"ranking_{month}_{year}");
-            _memoryCache.Remove($"ranking_0_{year}"); // Ranking Anual
+            _memoryCache.Remove(CacheKeys.Ranking(month, year));
+            _memoryCache.Remove(CacheKeys.RankingAnnual(year));
         }
     }
 }
