@@ -3,32 +3,40 @@ using BailarinaPreparadaApp.DTOs.ActivityLinks;
 using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.ActivityLinks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.ActivityLinks
 {
     public class ActivityLinkService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
 
-        public ActivityLinkService(ApplicationDbContext dbContext)
+        public ActivityLinkService(ApplicationDbContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<ActivityLinkResponse>> GetAllAsync()
         {
+            var cacheKey = "activity_links_list";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<ActivityLinkResponse> cachedActivityLinks))
+                return cachedActivityLinks;
+            
             var activityLinks = await _dbContext.ActivityLinks
                 .AsNoTracking()
                 .ToListAsync();
 
-            return activityLinks.Select(link => new ActivityLinkResponse
-            {
-                ActivityLinkId = link.ActivityLinkId,
-                Title = link.Title,
-                Link = link.Link,
-                DefaultColor = link.DefaultColor,
-                IsActive = link.IsActive
-            }).ToList();
+            var response = activityLinks.Select(MapToResponse).ToList();
+            
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(30));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+            
+            return response;
         }
 
         public async Task<ActivityLinkResponse> CreateAsync(ActivityLinkRequest request)
@@ -42,6 +50,8 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
             _dbContext.ActivityLinks.Add(activityLink);
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove("activity_links_list");
 
             return MapToResponse(activityLink);
         }
@@ -60,6 +70,8 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
             activityLink.DefaultColor = request.DefaultColor;
 
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove("activity_links_list");
 
             return MapToResponse(activityLink);
         }
@@ -87,6 +99,8 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
 
             _dbContext.ActivityLinks.Remove(activityLink);
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove("activity_links_list");
         }
 
         public async Task<(bool Success, string Message)> ToggleStatusAsync(int id)
@@ -101,6 +115,8 @@ namespace BailarinaPreparadaApp.Services.ActivityLinks
             activityLink.IsActive = !activityLink.IsActive;
 
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove("activity_links_list");
 
             return (true, activityLink.IsActive ? "Treino sugerido ativado com sucesso." : "Treino sugerido desativado com sucesso.");
         }

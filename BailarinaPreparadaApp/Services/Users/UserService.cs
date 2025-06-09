@@ -75,7 +75,7 @@ namespace BailarinaPreparadaApp.Services.Users
 
             user.Name = request.Name ?? user.Name;
             user.Email = request.Email ?? user.Email;
-            user.UserName = request.Email ?? user.Email;
+            user.UserName = request.Email ?? user.UserName;
             user.PhoneNumber = request.PhoneNumber;
             user.DateOfBirth = request.DateOfBirth;
             user.Address.Street = request.Street ?? user.Address.Street;

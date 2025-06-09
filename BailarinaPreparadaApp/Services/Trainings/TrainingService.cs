@@ -4,6 +4,7 @@ using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.Trainings;
 using BailarinaPreparadaApp.Services.Achievements;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Trainings
 {
@@ -11,11 +12,13 @@ namespace BailarinaPreparadaApp.Services.Trainings
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly AchievementService _achievementService;
+        private readonly IMemoryCache _memoryCache;
 
-        public TrainingService(ApplicationDbContext dbContext, AchievementService achievementService)
+        public TrainingService(ApplicationDbContext dbContext, AchievementService achievementService, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _achievementService = achievementService;
+            _memoryCache = memoryCache;
         }
 
         public async Task CreateTrainingAsync(string userId, CreateTrainingRequest request)
@@ -39,8 +42,21 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             _dbContext.Trainings.Add(training);
             await _dbContext.SaveChangesAsync();
-
+            
+            _memoryCache.Remove($"yearly_training_days_count_{userId}_{request.Date.Year}");
+            InvalidateUserCalendarCache(userId, request.Date);
+            
             await _achievementService.EvaluateAllRulesAsync(userId);
+        }
+
+        private void InvalidateUserCalendarCache(string userId, DateTime date)
+        {
+            var monthStart = new DateTime(date.Year, date.Month, 1);
+            var monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            
+            var cacheKey = $"calendar_summary_{userId}_{monthStart:yyyyMMdd}_{monthEnd:yyyyMMdd}";
+            
+            _memoryCache.Remove(cacheKey);
         }
 
         public async Task<IEnumerable<TrainingResponse>> GetCompletedTrainingsAsync(string userId, DateTime? startDate, DateTime? endDate, string? category)
@@ -81,12 +97,22 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
         public async Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year)
         {
+            var cacheKey = $"yearly_training_days_count_{userId}_{year}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out int cachedTrainingDaysCount))
+                return cachedTrainingDaysCount;
+            
             var trainingDaysCount = await _dbContext.Trainings
                 .AsNoTracking()
                 .Where(t => t.UserId == userId && t.IsCompleted && t.Date.Year == year)
                 .Select(t => t.Date.Date)
                 .Distinct()
                 .CountAsync();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromHours(12));
+            
+            _memoryCache.Set(cacheKey, trainingDaysCount, cacheOptions);
 
             return trainingDaysCount;
         }
@@ -103,6 +129,9 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             _dbContext.Trainings.Remove(training);
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove($"yearly_training_days_count_{userId}_{training.Date.Year}");
+            InvalidateUserCalendarCache(userId, training.Date);
         }
     }
 }

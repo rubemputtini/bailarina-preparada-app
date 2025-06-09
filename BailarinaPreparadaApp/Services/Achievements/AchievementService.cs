@@ -4,6 +4,7 @@ using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.Achievements;
 using BailarinaPreparadaApp.Services.Achievements.AchievementRules;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Achievements
 {
@@ -11,15 +12,22 @@ namespace BailarinaPreparadaApp.Services.Achievements
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IEnumerable<IAchievementRule> _achievementsRules;
+        private readonly IMemoryCache _memoryCache;
 
-        public AchievementService(ApplicationDbContext dbContext, IEnumerable<IAchievementRule> achievementsRules)
+        public AchievementService(ApplicationDbContext dbContext, IEnumerable<IAchievementRule> achievementsRules, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _achievementsRules = achievementsRules;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<AchievementResponse>> GetAchievementsForUserAsync(string userId)
         {
+            var cacheKey = $"achievements_user_{userId}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<AchievementResponse> cachedUserAchievements))
+                return cachedUserAchievements;
+            
             var definitions = await _dbContext.AchievementDefinitions
                 .Where(a => a.IsActive)
                 .AsNoTracking()
@@ -53,6 +61,11 @@ namespace BailarinaPreparadaApp.Services.Achievements
 
                 result.Add(response);
             }
+            
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(7));
+            
+            _memoryCache.Set(cacheKey, result, cacheOptions);
 
             return result;
         }
@@ -95,6 +108,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
             });
 
             await _dbContext.SaveChangesAsync();
+            _memoryCache.Remove($"achievements_user_{userId}");
 
             return true;
         }

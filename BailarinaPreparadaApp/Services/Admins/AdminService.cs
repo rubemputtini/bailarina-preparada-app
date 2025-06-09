@@ -6,6 +6,7 @@ using BailarinaPreparadaApp.DTOs.Users;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Admins
 {
@@ -13,15 +14,22 @@ namespace BailarinaPreparadaApp.Services.Admins
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
 
-        public AdminService(UserManager<User> userManager, ApplicationDbContext dbContext)
+        public AdminService(UserManager<User> userManager, ApplicationDbContext dbContext, IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task<(IEnumerable<UserResponse> Users, int TotalUsers)> GetUsersAsync(int page = 1, int pageSize = 10)
         {
+            var cacheKey = $"users_page_{page}_size_{pageSize}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
+                return cachedUsers;
+            
             var totalUsers = await _userManager.Users.CountAsync();
 
             var users = await _userManager.Users
@@ -47,11 +55,23 @@ namespace BailarinaPreparadaApp.Services.Admins
                 });
             }
 
-            return (userResponses, totalUsers);
+            var result = (userResponses, totalUsers);
+            
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+            
+            _memoryCache.Set(cacheKey, result, cacheOptions);
+
+            return result;
         }
 
         public async Task<List<EvaluationResponse>> GetUserEvaluationsAsync(string userId)
         {
+            var cacheKey = $"evaluations_user_{userId}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<EvaluationResponse>? cachedEvaluations))
+                return cachedEvaluations;
+            
             var evaluations = await _dbContext.Evaluations
                 .AsNoTracking()
                 .Where(e => e.User.Id == userId)
@@ -83,11 +103,21 @@ namespace BailarinaPreparadaApp.Services.Admins
                 }).ToList()
             }).ToList();
 
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(30));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+
             return response;
         }
 
         public async Task<List<BirthdayResponse>> GetRecentBirthdaysAsync(int rangeInDays = 7)
         {
+            var cacheKey = $"birthdays_{rangeInDays}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<BirthdayResponse>? cachedBirthdays))
+                return cachedBirthdays;
+            
             var today = DateTime.Today;
 
             var users = await _userManager.Users
@@ -129,6 +159,11 @@ namespace BailarinaPreparadaApp.Services.Admins
                     PhoneNumber = b.PhoneNumber!
                 })
                 .ToList();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromHours(12));
+            
+            _memoryCache.Set(cacheKey, result, cacheOptions);
 
             return result;
         }
