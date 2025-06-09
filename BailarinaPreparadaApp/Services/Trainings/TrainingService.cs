@@ -45,18 +45,9 @@ namespace BailarinaPreparadaApp.Services.Trainings
             
             _memoryCache.Remove($"yearly_training_days_count_{userId}_{request.Date.Year}");
             InvalidateUserCalendarCache(userId, request.Date);
+            InvalidateRankingCache(request.Date.Month, request.Date.Year);
             
             await _achievementService.EvaluateAllRulesAsync(userId);
-        }
-
-        private void InvalidateUserCalendarCache(string userId, DateTime date)
-        {
-            var monthStart = new DateTime(date.Year, date.Month, 1);
-            var monthEnd = monthStart.AddMonths(1).AddDays(-1);
-            
-            var cacheKey = $"calendar_summary_{userId}_{monthStart:yyyyMMdd}_{monthEnd:yyyyMMdd}";
-            
-            _memoryCache.Remove(cacheKey);
         }
 
         public async Task<IEnumerable<TrainingResponse>> GetCompletedTrainingsAsync(string userId, DateTime? startDate, DateTime? endDate, string? category)
@@ -132,6 +123,23 @@ namespace BailarinaPreparadaApp.Services.Trainings
             
             _memoryCache.Remove($"yearly_training_days_count_{userId}_{training.Date.Year}");
             InvalidateUserCalendarCache(userId, training.Date);
+            InvalidateRankingCache(training.Date.Month, training.Date.Year);
+        }
+
+        private void InvalidateUserCalendarCache(string userId, DateTime date)
+        {
+            var monthStart = new DateTime(date.Year, date.Month, 1);
+            var monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            
+            var cacheKey = $"calendar_summary_{userId}_{monthStart:yyyyMMdd}_{monthEnd:yyyyMMdd}";
+            
+            _memoryCache.Remove(cacheKey);
+        }
+
+        private void InvalidateRankingCache(int month, int year)
+        {
+            _memoryCache.Remove($"ranking_{month}_{year}");
+            _memoryCache.Remove($"ranking_0_{year}"); // Ranking Anual
         }
     }
 }

@@ -2,16 +2,19 @@
 using BailarinaPreparadaApp.DTOs.Rankings;
 using BailarinaPreparadaApp.DTOs.Achievements;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Rankings
 {
     public class RankingService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
 
-        public RankingService(ApplicationDbContext dbContext)
+        public RankingService(ApplicationDbContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IEnumerable<RankingResponse>> GetRankingAsync(int? month, int? year, int? limit = null)
@@ -19,6 +22,12 @@ namespace BailarinaPreparadaApp.Services.Rankings
             var currentDate = DateTime.UtcNow;
             var selectedYear = year ?? currentDate.Year;
             var selectedMonth = month;
+            var cacheMonth = selectedMonth ?? 0;
+
+            var cacheKey = $"ranking_{cacheMonth}_{selectedYear}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<RankingResponse> cachedRanking))
+                return cachedRanking;
 
             var trainingsQuery = _dbContext.Trainings
                 .AsNoTracking()
@@ -81,6 +90,11 @@ namespace BailarinaPreparadaApp.Services.Rankings
                 Year = selectedYear,
                 Achievements = achievementsByUser.ContainsKey(g.UserId) ? achievementsByUser[g.UserId] : new List<AchievementResponse>()
             }).ToList();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(1));
+            
+            _memoryCache.Set(cacheKey, result, cacheOptions);
 
             return result;
         }

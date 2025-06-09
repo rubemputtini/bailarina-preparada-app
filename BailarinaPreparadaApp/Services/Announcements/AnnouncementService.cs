@@ -5,6 +5,7 @@ using BailarinaPreparadaApp.Models.Announcements;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Announcements
 {
@@ -12,15 +13,22 @@ namespace BailarinaPreparadaApp.Services.Announcements
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<User> _userManager;
+        private readonly IMemoryCache _memoryCache;
 
-        public AnnouncementService(ApplicationDbContext context, UserManager<User> userManager)
+        public AnnouncementService(ApplicationDbContext context, UserManager<User> userManager, IMemoryCache memoryCache)
         {
             _dbContext = context;
             _userManager = userManager;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<AnnouncementResponse>> GetVisibleAnnouncementsAsync()
         {
+            var cacheKey = "announcements_visible";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<AnnouncementResponse>? cachedVisibleAnnouncements))
+                return cachedVisibleAnnouncements;
+            
             var now = DateTime.UtcNow;
 
             var announcements = await _dbContext.Announcements
@@ -46,11 +54,21 @@ namespace BailarinaPreparadaApp.Services.Announcements
                 Category = a.Category.ToString()
             }).ToList();
 
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(7));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+
             return response;
         }
 
         public async Task<List<AnnouncementResponse>> GetAllAnnouncementsAsync()
         {
+            var cacheKey = "announcements_list";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<AnnouncementResponse>? cachedAnnouncements))
+                return cachedAnnouncements;
+            
             var announcements = await _dbContext.Announcements
                  .AsNoTracking()
                  .Include(a => a.Author)
@@ -70,6 +88,11 @@ namespace BailarinaPreparadaApp.Services.Announcements
                 Link = a.Link,
                 Category = a.Category.ToString()
             }).ToList();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(7));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
 
             return response;
         }
@@ -113,6 +136,8 @@ namespace BailarinaPreparadaApp.Services.Announcements
                 Link = announcement.Link,
                 Category = announcement.Category.ToString(),
             };
+            
+            InvalidateAnnouncementCache();
 
             return response;
         }
@@ -129,6 +154,8 @@ namespace BailarinaPreparadaApp.Services.Announcements
             _dbContext.Announcements.Remove(announcement);
             await _dbContext.SaveChangesAsync();
 
+            InvalidateAnnouncementCache();
+            
             return true;
         }
 
@@ -144,8 +171,15 @@ namespace BailarinaPreparadaApp.Services.Announcements
             announcement.IsVisible = isVisible;
             await _dbContext.SaveChangesAsync();
 
+            InvalidateAnnouncementCache();
+            
             return true;
         }
-
+        
+        private void InvalidateAnnouncementCache()
+        {
+            _memoryCache.Remove("announcements_visible");
+            _memoryCache.Remove("announcements_list");
+        }
     }
 }
