@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using BailarinaPreparadaApp.Data;
+﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Schedules;
 using BailarinaPreparadaApp.DTOs.ScheduleTasks;
 using BailarinaPreparadaApp.Exceptions;
@@ -7,6 +6,7 @@ using BailarinaPreparadaApp.Models.Schedules;
 using BailarinaPreparadaApp.Models.ScheduleTasks;
 using BailarinaPreparadaApp.Services.Emails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Schedules
 {
@@ -15,16 +15,23 @@ namespace BailarinaPreparadaApp.Services.Schedules
         private readonly ApplicationDbContext _dbContext;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
 
-        public ScheduleService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration)
+        public ScheduleService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _emailService = emailService;
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
 
         public async Task<ScheduleResponse> GetUserScheduleAsync(string userId)
         {
+            var cacheKey = $"schedule_{userId}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out ScheduleResponse? cachedSchedule))
+                return cachedSchedule;
+            
             var user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
@@ -76,12 +83,21 @@ namespace BailarinaPreparadaApp.Services.Schedules
                 }).ToList()
             };
 
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(3));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+
             return response;
         }
 
         public async Task<IEnumerable<ScheduleTaskResponse>> GetDailyScheduleAsync(string userId)
         {
             var currentDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
+            var cacheKey = $"daily_schedule_{userId}_{currentDayOfWeek}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<ScheduleTaskResponse>? cachedDailySchedule))
+                return cachedDailySchedule;
 
             var dailySchedule = await _dbContext.ScheduleTasks
                 .AsNoTracking()
@@ -102,11 +118,11 @@ namespace BailarinaPreparadaApp.Services.Schedules
                 .ThenBy(e => e.Slot)
                 .ToListAsync();
 
-            if (dailySchedule == null)
-            {
-                return new List<ScheduleTaskResponse>();
-            }
-
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromHours(6));
+            
+            _memoryCache.Set(cacheKey, dailySchedule, cacheOptions);
+            
             return dailySchedule;
         }
 
@@ -150,6 +166,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
                 }
 
                 await _dbContext.SaveChangesAsync();
+                InvalidateUserScheduleCache(request.UserId);
 
                 return await GetUserScheduleAsync(request.UserId);
             }
@@ -177,7 +194,8 @@ namespace BailarinaPreparadaApp.Services.Schedules
 
             _dbContext.Schedules.Add(schedule);
             await _dbContext.SaveChangesAsync();
-
+            InvalidateUserScheduleCache(request.UserId);
+            
             return await GetUserScheduleAsync(request.UserId);
         }
 
@@ -193,6 +211,16 @@ namespace BailarinaPreparadaApp.Services.Schedules
             }
 
             return null;
+        }
+        
+        private void InvalidateUserScheduleCache(string userId)
+        {
+            _memoryCache.Remove($"schedule_{userId}");
+
+            for (var day = 0; day < 7; day++)
+            {
+                _memoryCache.Remove($"daily_schedule_{userId}_{day}");
+            }
         }
 
         public async Task SendScheduleReadyEmailAsync(string userId)
@@ -283,6 +311,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
             schedule.UpdatedAt = DateTime.UtcNow;
 
             await _dbContext.SaveChangesAsync();
+            InvalidateUserScheduleCache(schedule.UserId);
         }
 
         public async Task DeleteScheduleAsync(int scheduleId)
@@ -303,6 +332,7 @@ namespace BailarinaPreparadaApp.Services.Schedules
 
             _dbContext.Schedules.Remove(schedule);
             await _dbContext.SaveChangesAsync();
+            InvalidateUserScheduleCache(schedule.UserId);
         }
     }
 }

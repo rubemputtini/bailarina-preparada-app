@@ -7,6 +7,7 @@ using BailarinaPreparadaApp.Models.Evaluations;
 using BailarinaPreparadaApp.Models.Exercises;
 using BailarinaPreparadaApp.Services.Emails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Evaluations
 {
@@ -15,12 +16,14 @@ namespace BailarinaPreparadaApp.Services.Evaluations
         private readonly ApplicationDbContext _dbContext;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
 
-        public EvaluationService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration)
+        public EvaluationService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _emailService = emailService;
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsAsync()
@@ -38,6 +41,11 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
         public async Task<IEnumerable<EvaluationResponse>> GetEvaluationsByUserIdAsync(string userId)
         {
+            var cacheKey = $"evaluations_user_{userId}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<EvaluationResponse>? cachedEvaluations))
+                return cachedEvaluations;
+            
             var evaluations = await _dbContext.Evaluations
                 .AsNoTracking()
                 .Include(e => e.Admin)
@@ -47,11 +55,23 @@ namespace BailarinaPreparadaApp.Services.Evaluations
                 .Where(e => e.UserId == userId)
                 .ToListAsync();
 
-            return evaluations.Select(MapToEvaluationResponse);
+            var response = evaluations.Select(MapToEvaluationResponse).ToList();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(30));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+
+            return response;
         }
 
         public async Task<EvaluationResponse?> GetEvaluationByIdAsync(int id, string currentUserId, bool isAdmin)
         {
+            var cacheKey = $"evaluation_{id}";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out EvaluationResponse? cachedEvaluation))
+                return cachedEvaluation;
+            
             var evaluation = await _dbContext.Evaluations
                 .AsNoTracking()
                 .Include(e => e.Admin)
@@ -66,8 +86,15 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             }
 
             PermissionHelper.CheckUserPermission(evaluation.UserId, currentUserId, isAdmin);
+            
+            var response = MapToEvaluationResponse(evaluation);
 
-            return MapToEvaluationResponse(evaluation);
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(30));
+            
+            _memoryCache.Set(cacheKey, response, cacheOptions);
+
+            return response;
         }
 
         public async Task<(bool Success, string Message, int? EvaluationId)> CreateEvaluationAsync(CreateEvaluationRequest request)
@@ -112,7 +139,8 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             }
 
             _dbContext.Evaluations.Add(evaluation);
-
+            
+            _memoryCache.Remove($"evaluations_user_{request.UserId}");
             await _dbContext.SaveChangesAsync();
 
             return (true, "Avaliação criada com sucesso.", evaluation.EvaluationId);
@@ -188,6 +216,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             }
 
             await _dbContext.SaveChangesAsync();
+            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
 
             return (true, "Avaliação atualizada com sucesso.");
         }
@@ -203,6 +232,8 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
             evaluation.PhotosUrl = photosUrl;
             await _dbContext.SaveChangesAsync();
+            
+            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
 
             return (true, "Link de fotos atualizado com sucesso.");
         }
@@ -219,6 +250,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             _dbContext.Evaluations.Remove(evaluation);
 
             await _dbContext.SaveChangesAsync();
+            _memoryCache.Remove($"evaluations_user_{evaluation.UserId}");
 
             return (true, "Avaliação excluída com sucesso.");
         }

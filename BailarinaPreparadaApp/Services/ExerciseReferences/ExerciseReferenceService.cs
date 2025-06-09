@@ -2,24 +2,25 @@
 using BailarinaPreparadaApp.DTOs.ExerciseReferences;
 using BailarinaPreparadaApp.Models.ExerciseReferences;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.ExerciseReferences
 {
     public class ExerciseReferenceService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
 
-        public ExerciseReferenceService(ApplicationDbContext dbContext)
+        public ExerciseReferenceService(ApplicationDbContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IEnumerable<ExerciseReferenceResponse>> GetAllReferencesAsync()
         {
-            var references = await _dbContext.ExerciseReferences
-                .AsNoTracking()
-                .ToListAsync();          
-
+            var references = await GetAllReferencesCachedAsync();
+            
             var response = references.Select(MapToDto);
 
             return response;
@@ -27,43 +28,54 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
 
         public async Task<IEnumerable<ExerciseReferenceResponse>> GetByExerciseIdAsync(int exerciseId)
         {
-            var references = await _dbContext.ExerciseReferences
-                .AsNoTracking()
+            var references = await GetAllReferencesCachedAsync();
+            
+            var response = references
                 .Where(er => er.ExerciseId == exerciseId)
                 .OrderBy(er => er.MinAge)
                 .ThenBy(er => er.Gender)
-                .ToListAsync();
-
-            var response = references.Select(MapToDto);
+                .Select(MapToDto);
 
             return response;
         }
 
         public async Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, int score)
         {
-            var references = await _dbContext.ExerciseReferences
-                .AsNoTracking()
-                .Where(er =>
+            var references = await GetAllReferencesCachedAsync();
+            
+            var match =  references.FirstOrDefault(er =>
                     er.ExerciseId == exerciseId &&
-                    er.Gender.ToUpper() == gender.ToUpper() &&
+                    string.Equals(er.Gender, gender, StringComparison.CurrentCultureIgnoreCase) &&
                     age >= er.MinAge &&
                     age <= er.MaxAge &&
                     score >= er.MinValue &&
                     (er.MaxValue == null || score <= er.MaxValue)
-                )
-                .FirstOrDefaultAsync();
+                    );
 
-            if (references == null)
-            {
-                return null;
-            }
-
-            var response = MapToDto(references);
+            var response = match == null ? null : MapToDto(match);
 
             return response;
         }
 
-
+        private async Task<List<ExerciseReference>> GetAllReferencesCachedAsync()
+        {
+            const string cacheKey = "exercise_references_list";
+            
+            if (_memoryCache.TryGetValue(cacheKey, out List<ExerciseReference> cachedReferences))
+                return cachedReferences;
+            
+            var references = await _dbContext.ExerciseReferences
+                .AsNoTracking()
+                .ToListAsync();
+            
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromDays(7));
+                
+            _memoryCache.Set(cacheKey, references, cacheOptions);
+            
+            return references;
+        }
+        
         private static ExerciseReferenceResponse MapToDto(ExerciseReference e) => new()
         {
             ExerciseReferenceId = e.ExerciseReferenceId,
