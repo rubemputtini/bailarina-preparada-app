@@ -28,7 +28,7 @@ namespace BailarinaPreparadaApp.Middlewares
 
                 context.Response.ContentType = "application/json";
                 var response = new { message = "Erro interno do servidor." };
-                int statusCode = (int)HttpStatusCode.InternalServerError;
+                int statusCode;
 
                 switch(ex)
                 {

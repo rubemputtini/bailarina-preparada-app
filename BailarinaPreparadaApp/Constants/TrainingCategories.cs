@@ -1,6 +1,6 @@
 ﻿namespace BailarinaPreparadaApp.Constants
 {
-    public class TrainingCategories
+    public static class TrainingCategories
     {
         public const string Flex = "FLEX";
         public const string Strength = "FORÇA";

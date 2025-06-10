@@ -1,7 +1,6 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.UserGoals;
 using BailarinaPreparadaApp.Exceptions;
-using BailarinaPreparadaApp.Models;
 using BailarinaPreparadaApp.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

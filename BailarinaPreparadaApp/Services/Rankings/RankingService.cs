@@ -42,7 +42,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
                 .Select(g => new
                 {
                     g.Key.UserId,
-                    Name = g.Key.Name,
+                    g.Key.Name,
                     TrainingsCompleted = g.Count(),
                     DaysTrained = g.Select(t => t.Date.Date).Distinct().Count(),
                 })
@@ -71,7 +71,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
                             return new AchievementResponse
                             {
                                 AchievementId = first.AchievementDefinitionId,
-                                Title = first.AchievementDefinition!.Title,
+                                Title = first.AchievementDefinition.Title,
                                 Description = first.AchievementDefinition.Description,
                                 Icon = first.AchievementDefinition.Icon,
                                 Unlocked = true,

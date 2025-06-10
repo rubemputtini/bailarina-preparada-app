@@ -1,6 +1,5 @@
 ﻿using BailarinaPreparadaApp.DTOs.Evaluations;
 using BailarinaPreparadaApp.Services.Evaluations;
-using BailarinaPreparadaApp.Services.Schedules;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

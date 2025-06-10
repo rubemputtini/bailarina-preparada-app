@@ -27,7 +27,7 @@ namespace BailarinaPreparadaApp.Services
                     new (ClaimTypes.Name, user.UserName!),
                     new (ClaimTypes.Email, user.Email!),
                     new (ClaimTypes.Role, role),
-                    new (ClaimTypes.NameIdentifier, user.Id.ToString())
+                    new (ClaimTypes.NameIdentifier, user.Id)
                 }),
                 Expires = DateTime.UtcNow.AddHours(8),
                 SigningCredentials = new SigningCredentials

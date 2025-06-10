@@ -73,19 +73,19 @@ namespace BailarinaPreparadaApp.Services.Users
 
             PermissionHelper.CheckUserPermission(userId, currentUserId, isAdmin);
 
-            user.Name = request.Name ?? user.Name;
-            user.Email = request.Email ?? user.Email;
-            user.UserName = request.Email ?? user.UserName;
+            user.Name = request.Name;
+            user.Email = request.Email;
+            user.UserName = request.Email;
             user.PhoneNumber = request.PhoneNumber;
             user.DateOfBirth = request.DateOfBirth;
-            user.Address.Street = request.Street ?? user.Address.Street;
-            user.Address.Number = request.Number ?? user.Address.Number;
+            user.Address.Street = request.Street;
+            user.Address.Number = request.Number;
             user.Address.Complement = request.Complement ?? user.Address.Complement;
-            user.Address.Neighborhood = request.Neighborhood ?? user.Address.Neighborhood;
-            user.Address.City = request.City ?? user.Address.City;
-            user.Address.State = request.State ?? user.Address.State;
-            user.Address.Country = request.Country ?? user.Address.Country;
-            user.Address.PostalCode = request.PostalCode ?? user.Address.PostalCode;
+            user.Address.Neighborhood = request.Neighborhood;
+            user.Address.City = request.City;
+            user.Address.State = request.State;
+            user.Address.Country = request.Country;
+            user.Address.PostalCode = request.PostalCode;
             user.Address.Latitude = request.Latitude ?? user.Address.Latitude;
             user.Address.Longitude = request.Longitude ?? user.Address.Longitude;
 

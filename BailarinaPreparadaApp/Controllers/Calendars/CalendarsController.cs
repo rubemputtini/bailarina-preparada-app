@@ -21,7 +21,7 @@ namespace BailarinaPreparadaApp.Controllers.Calendars
         {
             var trainings = await _calendarService.GetCalendarSummaryAsync(CurrentUserId, startDate, endDate);
 
-            if (trainings == null)
+            if (!trainings.Any())
             {
                 return NotFound(new { message = "Nenhum treino encontrado no período especificado." });
             }
