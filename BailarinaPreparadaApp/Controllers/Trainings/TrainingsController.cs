@@ -41,7 +41,7 @@ namespace BailarinaPreparadaApp.Controllers.Trainings
             return Ok(trainingDaysCount);
         }
 
-        [HttpDelete("{trainingId}")]
+        [HttpDelete("{trainingId:int}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {
             await _trainingService.DeleteTrainingAsync(CurrentUserId, trainingId);

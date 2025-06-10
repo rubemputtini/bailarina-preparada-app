@@ -26,7 +26,7 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
             return Ok(references);
         }
 
-        [HttpGet("{exerciseId}")]
+        [HttpGet("{exerciseId:int}")]
         public async Task<IActionResult> GetByExerciseId(int exerciseId)
         {
             var references = await _exerciseReferenceService.GetByExerciseIdAsync(exerciseId);

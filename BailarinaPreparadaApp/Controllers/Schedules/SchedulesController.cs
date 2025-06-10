@@ -66,7 +66,7 @@ namespace BailarinaPreparadaApp.Controllers.Schedules
             return Ok(new { message = "E-mail de planejamento enviado com sucesso!" });
         }
 
-        [HttpPut("{scheduleId}")]
+        [HttpPut("{scheduleId:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateSchedule(int scheduleId, UpdateScheduleRequest request)
         {
@@ -75,7 +75,7 @@ namespace BailarinaPreparadaApp.Controllers.Schedules
             return Ok(new { message = "Planejamento atualizado com sucesso!" });
         }
 
-        [HttpDelete("{scheduleId}")]
+        [HttpDelete("{scheduleId:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteSchedule(int scheduleId)
         {

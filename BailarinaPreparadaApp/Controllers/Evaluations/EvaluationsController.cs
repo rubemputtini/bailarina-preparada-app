@@ -35,7 +35,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
             return Ok(evaluations);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetEvaluationById(int id)
         {
             var evaluation = await _evaluationService.GetEvaluationByIdAsync(id, CurrentUserId, IsAdmin);
@@ -58,7 +58,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost("{evaluationId}/send-evaluation-email")]
+        [HttpPost("{evaluationId:int}/send-evaluation-email")]
         public async Task<IActionResult> SendEvaluationEmail(int evaluationId)
         {
             await _evaluationService.SendEvaluationReadyEmailAsync(evaluationId);
@@ -67,7 +67,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateEvaluation(int id, [FromBody] List<EvaluationExerciseRequest> updatedExercises)
         {
             var (success, message) = await _evaluationService.UpdateEvaluationAsync(id, updatedExercises);
@@ -81,7 +81,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPatch("{id}/photos")]
+        [HttpPatch("{id:int}/photos")]
         public async Task<IActionResult> UpdatePhotosUrl(int id, [FromBody] EvaluationPhotoUrlRequest request)
         {
             var (success, message) = await _evaluationService.UpdatePhotosUrlAsync(id, request.PhotosUrl);
@@ -95,7 +95,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteEvaluation(int id)
         {
             var (success, message) = await _evaluationService.DeleteEvaluationAsync(id);

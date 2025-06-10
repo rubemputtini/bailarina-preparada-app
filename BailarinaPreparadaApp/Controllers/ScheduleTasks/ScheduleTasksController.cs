@@ -16,7 +16,7 @@ namespace BailarinaPreparadaApp.Controllers.ScheduleTasks
             _scheduleTaskService = scheduleTaskService;
         }
 
-        [HttpDelete("{scheduleTaskId}")]
+        [HttpDelete("{scheduleTaskId:int}")]
         public async Task<IActionResult> DeleteScheduleTask(int scheduleTaskId)
         {
             await _scheduleTaskService.DeleteScheduleTaskAsync(scheduleTaskId);
