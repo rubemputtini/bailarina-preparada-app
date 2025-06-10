@@ -29,15 +29,44 @@ namespace BailarinaPreparadaApp.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.ConfigureDbContext(configuration);
+            services.ConfigureIdentity();
+            services.ConfigureCompression();
+            services.ConfigureRateLimiting();
+            services.ConfigureCustomServices();
+            services.ConfigureExternalServices(configuration);
+
+            services.AddMemoryCache();
+
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
+            services.AddAuthorization();
+        }
+
+        private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        }
 
+        private static void ConfigureIdentity(this IServiceCollection services)
+        {
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMemoryCache();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+        }
 
+        private static void ConfigureCompression(this IServiceCollection services)
+        {
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
@@ -54,14 +83,10 @@ namespace BailarinaPreparadaApp.Extensions
             {
                 options.Level = CompressionLevel.Fastest;
             });
+        }
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-            });
-
+        private static void ConfigureRateLimiting(this IServiceCollection services)
+        {
             services.AddRateLimiter(options =>
             {
                 options.AddPolicy("LoginLimiter", context =>
@@ -79,10 +104,14 @@ namespace BailarinaPreparadaApp.Extensions
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
                     context.HttpContext.Response.ContentType = "application/json";
-                    await context.HttpContext.Response.WriteAsync("{\"message\":\"Muitas requisições. Tente novamente em breve.\"}", token);
+                    await context.HttpContext.Response.WriteAsync(
+                        "{\"message\":\"Muitas requisições. Tente novamente em breve.\"}", token);
                 };
             });
+        }
 
+        private static void ConfigureCustomServices(this IServiceCollection services)
+        {
             services.AddScoped<AccountService>();
             services.AddScoped<AdminService>();
             services.AddScoped<ActivityLinkService>();
@@ -102,14 +131,12 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddAchievementRules();
 
             services.AddTransient<TokenService>();
-
+        }
+        
+        private static void ConfigureExternalServices(this IServiceCollection services,
+            IConfiguration configuration)
+        {
             services.Configure<SmtpConfiguration>(configuration.GetSection("Smtp"));
-
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-
-            services.AddAuthorization();
         }
     }
 }

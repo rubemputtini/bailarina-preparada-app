@@ -5,6 +5,7 @@ import useIsAdmin from "hooks/useIsAdmin";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
+import mockup from "assets/mockup.png";
 
 const PhotosCard = ({ photosUrl: initialUrl, evaluationId }) => {
     const isAdmin = useIsAdmin();
@@ -63,11 +64,11 @@ const PhotosCard = ({ photosUrl: initialUrl, evaluationId }) => {
             </p>
 
             <div className="flex justify-center mb-5">
-                <div className="w-full max-w-md aspect-video bg-gray-100 rounded-xl shadow-inner overflow-hidden">
+                <div className="w-full max-w-md bg-gray-100 rounded-xl shadow-inner overflow-hidden">
                     <img
-                        src=""
+                        src={mockup}
                         alt="Avaliação Bailarina Preparada"
-                        className="object-cover w-full h-full"
+                        className="w-full h-full"
                     />
                 </div>
             </div>
