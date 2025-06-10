@@ -24,6 +24,8 @@ if (app.Environment.IsProduction())
 app.UseHttpsRedirection();
 app.UseRateLimiter();
 
+app.UseResponseCompression();
+
 app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");

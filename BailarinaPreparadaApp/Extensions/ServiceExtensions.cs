@@ -1,4 +1,5 @@
-﻿using BailarinaPreparadaApp.Configuration;
+﻿using System.IO.Compression;
+using BailarinaPreparadaApp.Configuration;
 using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.Models.Users;
 using BailarinaPreparadaApp.Services;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BailarinaPreparadaApp.Services.Achievements;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace BailarinaPreparadaApp.Extensions
 {
@@ -35,6 +37,23 @@ namespace BailarinaPreparadaApp.Extensions
                 .AddDefaultTokenProviders();
 
             services.AddMemoryCache();
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+                options.Providers.Add<BrotliCompressionProvider>();
+            });
+
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
 
             services.Configure<IdentityOptions>(options =>
             {
