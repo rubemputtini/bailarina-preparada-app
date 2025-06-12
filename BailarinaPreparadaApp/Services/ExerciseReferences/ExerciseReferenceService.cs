@@ -40,6 +40,24 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
             return response;
         }
 
+        public async Task<IEnumerable<ExerciseReferenceResponse>> GetLevelsForUserAsync(int exerciseId, int age,
+            string gender)
+        {
+            var references = await GetAllReferencesCachedAsync();
+
+            var filtered = references
+                .Where(er =>
+                    er.ExerciseId == exerciseId &&
+                    string.Equals(er.Gender, gender, StringComparison.CurrentCultureIgnoreCase) &&
+                    age >= er.MinAge &&
+                    age <= er.MaxAge)
+                .OrderBy(er => er.MinValue);
+            
+            var response = filtered.Select(MapToDto);
+            
+            return response;
+        }
+        
         public async Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, int score)
         {
             var references = await GetAllReferencesCachedAsync();
@@ -57,7 +75,7 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
 
             return response;
         }
-
+        
         private async Task<List<ExerciseReference>> GetAllReferencesCachedAsync()
         {
             var cacheKey = CacheKeys.AllExerciseReferences;

@@ -33,7 +33,28 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
 
             return Ok(references);
         }
+        
+        [HttpGet("user/levels")]
+        public async Task<IActionResult> GetLevelsForUser(
+            [FromQuery] int exerciseId,
+            [FromQuery] int age,
+            [FromQuery] string gender)
+        {
+            if (string.IsNullOrWhiteSpace(gender))
+            {
+                return BadRequest(new { message = "O gênero é obrigatório." });
+            }
 
+            var levels = await _exerciseReferenceService.GetLevelsForUserAsync(exerciseId, age, gender);
+
+            if (!levels.Any())
+            {
+                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade e gênero.");
+            }
+            
+            return Ok(levels);
+        }
+        
         [HttpGet("user")]
         public async Task<IActionResult> GetClassificationForUser(
             [FromQuery] int exerciseId,
@@ -50,7 +71,7 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
 
             if (reference == null)
             {
-                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade e gênero.");
+                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade, gênero e pontuação.");
             }
 
             return Ok(reference);

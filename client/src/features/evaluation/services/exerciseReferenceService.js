@@ -21,12 +21,22 @@ export const getByExerciseId = async (exerciseId) => {
     }
 };
 
+export const getLevelsForUser = async (exerciseId, age, gender) => {
+    try {
+        const response = await api.get("/api/v1/exercise-references/user/levels", { params: { exerciseId, age, gender }});
+
+        return response.data;
+    } catch (error) {
+        throw handleError(error, "Erro ao buscar os níveis do exercício para o usuário.");
+    }
+};
+
 export const getClassificationForUser = async (exerciseId, age, gender, score) => {
     try {
         const response = await api.get("/api/v1/exercise-references/user", { params: { exerciseId, age, gender, score }});
 
         return response.data;
     } catch (error) {
-        throw handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId} para ${age} anos e sexo ${gender}.`);
+        throw handleError(error, `Erro ao buscar os valores de referências do exercício com ID ${exerciseId} para ${age} anos, sexo ${gender} e pontuação ${score}`);
     }
 };

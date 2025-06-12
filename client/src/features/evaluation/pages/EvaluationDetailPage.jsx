@@ -96,7 +96,11 @@ const EvaluationDetailPage = () => {
                         </button>
                     </p>
 
-                    <EvaluationGrid items={groupUnilateralExercises(grouped.physical, referenceMap)} />
+                    <EvaluationGrid
+                        items={groupUnilateralExercises(grouped.physical, referenceMap)}
+                        userAge={evaluation.userAge}
+                        userGender={evaluation.userGender}
+                    />
                 </>
             )}
 

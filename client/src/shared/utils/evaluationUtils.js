@@ -30,7 +30,13 @@ export const fetchEvaluationDetails = async (evaluationId) => {
       referenceMap[id] = reference;
     });
 
-    return { evaluation: evaluationData, referenceMap };
+    return {
+      evaluation: {
+        ...evaluationData,
+        userAge: age,
+      },
+      referenceMap,
+    };
 
   } catch (error) {
       console.error("Erro ao carregar avaliação:", error.message);
