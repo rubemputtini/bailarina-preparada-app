@@ -5,6 +5,7 @@ namespace BailarinaPreparadaApp.DTOs.Accounts
     public class ResetPasswordRequest
     {
         [Required(ErrorMessage = "O Email do usuário é obrigatório.")]
+        [EmailAddress(ErrorMessage = "O formato do E-mail é inválido.")]
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O Token do usuário é obrigatório.")]

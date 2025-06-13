@@ -36,42 +36,7 @@ namespace BailarinaPreparadaApp.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>()
-                .HasOne(u => u.Address)
-                .WithOne(a => a.User)
-                .HasForeignKey<Address>(a => a.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Evaluation>()
-                .HasOne(e => e.Admin)
-                .WithMany()
-                .HasForeignKey(e => e.AdminId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Evaluation>()
-                .HasOne(e => e.User)
-                .WithMany()
-                .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Evaluation>()
-                .HasMany(e => e.Exercises)
-                .WithOne(ee => ee.Evaluation)
-                .HasForeignKey(ee => ee.EvaluationId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Schedule>()
-                .HasOne(s => s.User)
-                .WithMany()
-                .HasForeignKey(s => s.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<ScheduleTask>()
-                .HasOne(t => t.ActivityLink)
-                .WithMany(a => a.ScheduleTasks)
-                .HasForeignKey(t => t.ActivityLinkId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }
