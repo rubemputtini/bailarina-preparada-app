@@ -8,13 +8,15 @@ const ResponsiveUserName = ({
     className = "",
     align = "left",
     mobileOnlyTruncate = true,
+    forceShort = false,
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    const displayName = isMobile ? getShortName(name) : name;
+    const shouldShorten = forceShort || isMobile;
+    const displayName = shouldShorten ? getShortName(name) : name;
 
     const appliedClassName = mobileOnlyTruncate
-        ? isMobile
+        ? shouldShorten
             ? `truncate ${className}`
             : className
         : `truncate ${className}`;

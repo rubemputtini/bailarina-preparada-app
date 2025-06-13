@@ -8,6 +8,7 @@ import { useAuth } from 'features/auth/AuthContext';
 import { ROUTES } from 'shared/routes/routes';
 import { useUserData } from 'hooks/useUserData';
 import useIsAdmin from 'hooks/useIsAdmin';
+import ResponsiveUserName from 'shared/components/ResponsiveUserName';
 
 const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -135,16 +136,20 @@ const Nav = () => {
 
                 {user && (
                     <div
-                        className="mt-auto px-4 py-3 flex items-center gap-2 border-t border-white/10 cursor-pointer hover:bg-white/5 transition"
+                        className="mt-auto px-4 py-3 flex items-center gap-2 border-t border-white/10 cursor-pointer hover:bg-white/5 transition font-semibold"
                         onClick={() => {
                             handleDrawerToggle();
                             navigate(ROUTES.account);
                         }}
                     >
                         <UserCircleIcon className="h-6 w-6 text-white" />
-                        <span className="text-white text-sm font-semibold truncate">
-                            {user.name}
-                        </span>
+                        <ResponsiveUserName
+                            name={user.name}
+                            variant="inherit"
+                            className="text-white"
+                            mobileOnlyTruncate={true}
+                            forceShort={true}
+                        />
                     </div>
                 )}
             </Drawer>
