@@ -99,6 +99,7 @@ const AnnouncementForm = ({ onPreviewChange, onSuccess }) => {
                 className="border rounded-xl px-4 py-2 w-full resize-none min-h-[70px] focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
                 value={formData.content}
                 onChange={(e) => handleChange('content', e.target.value)}
+                required
             />
 
             <div className="grid sm:grid-cols-3 gap-4">

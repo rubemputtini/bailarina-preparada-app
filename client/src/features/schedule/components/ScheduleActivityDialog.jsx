@@ -7,7 +7,7 @@ import DialogButton from "shared/buttons/DialogButton";
 const ScheduleActivityDialog = ({ open, onClose, onSave, initialData }) => {
     const [title, setTitle] = useState("");
     const [link, setLink] = useState("");
-    const [color, setColor] = useState("lightBlue");
+    const [color, setColor] = useState("slate");
     const [activityLinkId, setActivityLinkId] = useState(null);
     const [activityLinks, setActivityLinks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -19,13 +19,13 @@ const ScheduleActivityDialog = ({ open, onClose, onSave, initialData }) => {
             fetchSuggestions();
             setTitle(initialData?.title || "");
             setLink(initialData?.link || "");
-            setColor(initialData?.color || "lightBlue");
+            setColor(initialData?.color || "slate");
             setActivityLinkId(initialData?.activityLinkId || null);
             setTimeout(() => inputRef.current?.focus(), 100);
         } else {
             setTitle("");
             setLink("");
-            setColor("lightBlue");
+            setColor("slate");
             setActivityLinkId(null);
         }
     }, [open, initialData]);
@@ -50,7 +50,7 @@ const ScheduleActivityDialog = ({ open, onClose, onSave, initialData }) => {
     const handleSuggestionClick = (suggestion) => {
         setTitle(suggestion.title);
         setLink(suggestion.link);
-        setColor(suggestion.defaultColor || "lightBlue");
+        setColor(suggestion.defaultColor || "slate");
         setActivityLinkId(suggestion.activityLinkId);
     };
 

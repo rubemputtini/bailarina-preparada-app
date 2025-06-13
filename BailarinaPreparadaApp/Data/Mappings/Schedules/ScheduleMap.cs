@@ -33,12 +33,12 @@ public class ScheduleMap : IEntityTypeConfiguration<Schedule>
         builder.Property(x => x.Goal)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.Observations)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.HasOne(x => x.User)
             .WithMany()

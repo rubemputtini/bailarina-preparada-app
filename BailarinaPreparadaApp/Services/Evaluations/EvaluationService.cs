@@ -173,13 +173,18 @@ namespace BailarinaPreparadaApp.Services.Evaluations
                 { "EvaluationLink", evaluationLink }
             };
 
-            await _emailService.SendEmailAsync(
+            var success = await _emailService.SendEmailAsync(
                 toName: user.Name,
                 toEmail: user.Email!,
                 subject: "Sua avaliação física está pronta! - App Bailarina Preparada",
                 templateName: "EvaluationReadyTemplate",
                 templateData: templateData
             );
+
+            if (!success)
+            {
+                throw new ValidationException("Não foi possível enviar o e-mail. Tente novamente.");
+            }
         }
 
         public async Task<(bool Success, string Message)> UpdateEvaluationAsync(int id, List<EvaluationExerciseRequest> updatedExercises)

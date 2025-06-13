@@ -11,7 +11,7 @@ namespace BailarinaPreparadaApp.DTOs.Schedules
         public List<ScheduleTaskResponse> Tasks { get; set; } = new List<ScheduleTaskResponse>();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string Goal { get; set; } = string.Empty;
-        public string Observations { get; set; } = string.Empty;
+        public string? Goal { get; set; } = string.Empty;
+        public string? Observations { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Accounts;
+using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Models.Addresses;
 using BailarinaPreparadaApp.Models.Users;
 using BailarinaPreparadaApp.Services.Emails;
@@ -171,13 +172,18 @@ namespace BailarinaPreparadaApp.Services.Accounts
                 { "ResetLink", resetLink }
             };
 
-            await _emailService.SendEmailAsync(
+            var success = await _emailService.SendEmailAsync(
                toName: user.Name,
                toEmail: user.Email!,
                subject: "Redefinição de Senha - App Bailarina Preparada",
                templateName: "PasswordResetTemplate",
                templateData: templateData
             );
+
+            if (!success)
+            {
+                throw new ValidationException("Não foi possível enviar o e-mail. Tente novamente.");
+            }
 
             return (true, GENERIC_MESSAGE);
         }

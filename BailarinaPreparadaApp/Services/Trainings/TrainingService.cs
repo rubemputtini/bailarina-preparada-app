@@ -45,6 +45,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
             await _dbContext.SaveChangesAsync();
             
             _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, request.Date.Year));
+            _memoryCache.Remove(CacheKeys.UserAchievements(userId));
             InvalidateUserCalendarCache(userId, request.Date);
             InvalidateRankingCache(request.Date.Month, request.Date.Year);
             

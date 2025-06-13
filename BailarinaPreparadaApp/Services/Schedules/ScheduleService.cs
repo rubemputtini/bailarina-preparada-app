@@ -219,13 +219,18 @@ namespace BailarinaPreparadaApp.Services.Schedules
                 { "ScheduleLink", scheduleLink }
             };
 
-            await _emailService.SendEmailAsync(
+            var success = await _emailService.SendEmailAsync(
                 toName: user.Name,
                 toEmail: user.Email!,
                 subject: "Seu planejamento está pronto! - App Bailarina Preparada",
                 templateName: "ScheduleReadyTemplate",
                 templateData: templateData
             );
+
+            if (!success)
+            {
+                throw new ValidationException("Não foi possível enviar o e-mail. Tente novamente.");
+            }
         }
 
         public async Task UpdateScheduleAsync(int scheduleId, UpdateScheduleRequest request)

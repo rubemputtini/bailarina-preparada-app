@@ -29,7 +29,7 @@ public class TrainingMap : IEntityTypeConfiguration<Training>
         builder.Property(x => x.Description)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.Category)
             .HasColumnType("NVARCHAR")
