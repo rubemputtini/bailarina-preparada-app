@@ -46,11 +46,6 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
             }
 
             var levels = await _exerciseReferenceService.GetLevelsForUserAsync(exerciseId, age, gender);
-
-            if (!levels.Any())
-            {
-                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade e gênero.");
-            }
             
             return Ok(levels);
         }
@@ -68,12 +63,7 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
             }
 
             var reference = await _exerciseReferenceService.GetClassificationForUserAsync(exerciseId, age, gender, score);
-
-            if (reference == null)
-            {
-                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade, gênero e pontuação.");
-            }
-
+            
             return Ok(reference);
         }
     }

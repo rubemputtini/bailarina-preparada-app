@@ -1,5 +1,6 @@
 ﻿using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.ExerciseReferences;
+using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Helpers;
 using BailarinaPreparadaApp.Models.ExerciseReferences;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,13 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
                     string.Equals(er.Gender, gender, StringComparison.CurrentCultureIgnoreCase) &&
                     age >= er.MinAge &&
                     age <= er.MaxAge)
-                .OrderBy(er => er.MinValue);
+                .OrderBy(er => er.MinValue)
+                .ToList();
+            
+            if (!filtered.Any())
+            {
+                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade e gênero.");
+            }
             
             var response = filtered.Select(MapToDto);
             
@@ -70,8 +77,13 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
                     score >= er.MinValue &&
                     (er.MaxValue == null || score <= er.MaxValue)
                     );
+            
+            if (match == null)
+            {
+                throw new NotFoundException("Nenhuma faixa de referência encontrada para esse exercício, idade, gênero e pontuação.");
+            }
 
-            var response = match == null ? null : MapToDto(match);
+            var response = MapToDto(match);
 
             return response;
         }

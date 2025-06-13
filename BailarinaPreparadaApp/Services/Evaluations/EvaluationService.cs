@@ -104,7 +104,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
             if (admin == null || user == null)
             {
-                return (false, "Usuário ou administrador não encontrado.", null);
+                throw new NotFoundException("Usuário ou administrador não encontrado.");
             }
 
             var evaluation = new Evaluation
@@ -227,7 +227,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
             if (evaluation == null)
             {
-                return (false, "Avaliação não encontrada.");
+                throw new NotFoundException("Avaliação não encontrada.");
             }
 
             evaluation.PhotosUrl = photosUrl;
@@ -244,7 +244,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
 
             if (evaluation == null)
             {
-                return (false, "Avaliação não encontrada.");
+                throw new NotFoundException("Avaliação não encontrada.");
             }
 
             _dbContext.Evaluations.Remove(evaluation);

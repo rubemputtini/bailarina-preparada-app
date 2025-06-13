@@ -47,12 +47,7 @@ namespace BailarinaPreparadaApp.Controllers.Announcements
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> ToggleVisibility(int id, [FromQuery] bool isVisible)
         {
-            var success = await _announcementService.ToggleVisibilityAsync(id, isVisible);
-
-            if (!success)
-            {
-                return NotFound(new { message = "Aviso não encontrado." });
-            }
+            await _announcementService.ToggleVisibilityAsync(id, isVisible);
 
             return Ok(new { message = "Visibilidade alterada com sucesso." });
         }
@@ -61,12 +56,7 @@ namespace BailarinaPreparadaApp.Controllers.Announcements
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteAnnouncement(int id)
         {
-            var success = await _announcementService.DeleteAnnouncementAsync(id);
-
-            if (!success)
-            {
-                return NotFound(new { message = "Aviso não encontrado." });
-            }
+            await _announcementService.DeleteAnnouncementAsync(id);
 
             return Ok(new { message = "Aviso excluído com sucesso." });
         }

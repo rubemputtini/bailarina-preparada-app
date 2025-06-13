@@ -50,7 +50,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
 
             if (!success)
             {
-                return NotFound(new { message });
+                return BadRequest(new { message });
             }
 
             return CreatedAtAction(nameof(GetEvaluationById), new { id = evaluationId }, new { message, evaluationId });
@@ -83,12 +83,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         [HttpPatch("{id:int}/photos")]
         public async Task<IActionResult> UpdatePhotosUrl(int id, [FromBody] EvaluationPhotoUrlRequest request)
         {
-            var (success, message) = await _evaluationService.UpdatePhotosUrlAsync(id, request.PhotosUrl);
-
-            if (!success)
-            {
-                return NotFound(new { message });
-            }
+            var message = await _evaluationService.UpdatePhotosUrlAsync(id, request.PhotosUrl);
 
             return Ok(new { message });
         }
@@ -97,12 +92,7 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteEvaluation(int id)
         {
-            var (success, message) = await _evaluationService.DeleteEvaluationAsync(id);
-
-            if (!success)
-            {
-                return NotFound(new { message });
-            }
+            var message = await _evaluationService.DeleteEvaluationAsync(id);
 
             return Ok(new { message });
         }
