@@ -132,31 +132,46 @@ const RankingPage = () => {
                 <Alert severity="error">{error}</Alert>
             ) : (
                 <Box>
-                    <Box className="grid md:grid-cols-3 gap-4 mt-6 mb-10">
-                        {rankingDataTop3.map((user, index) => (
-                            <TopRankingCard
-                                key={index}
-                                user={user}
-                                index={index}
-                                getMedalColor={getMedalColor}
-                            />
-                        ))}
-                    </Box>
-                    <Box className="mt-6 max-h-[500px] overflow-y-auto text-black">
-                        {rankingDataOthers.map((user, index) => {
-                            const rank = index + 4;
-                            const isCurrentUser = user.userId === currentUserId;
-                            return (
-                                <RankingRow
-                                    key={index + 3}
+                    {rankingDataTop3.length > 0 && (
+                        <Box className="grid md:grid-cols-3 gap-4 mt-6 mb-10">
+                            {rankingDataTop3.map((user, index) => (
+                                <TopRankingCard
+                                    key={index}
                                     user={user}
-                                    rank={rank}
-                                    isCurrentUser={isCurrentUser}
-                                    isEven={index % 2 === 0}
+                                    index={index}
+                                    getMedalColor={getMedalColor}
                                 />
-                            );
-                        })}
+                            ))}
+                        </Box>
+                    )}
+
+                    <Box className="mt-6 max-h-[500px] overflow-y-auto text-black">
+                        {rankingDataOthers.length === 0 && rankingDataTop3.length === 0 ? (
+                            <Box className="text-center mt-20 opacity-70">
+                                <Typography variant="h6" className="text-[#c5e1e9] font-semibold" sx={{ marginBottom: 1 }}>
+                                    Nenhum treino registrado ainda!
+                                </Typography>
+                                <Typography variant="body2" className="text-[#c5e1e9]">
+                                    Assim que as alunas registrarem seus treinos, o ranking será exibido aqui!
+                                </Typography>
+                            </Box>
+                        ) : (
+                            rankingDataOthers.map((user, index) => {
+                                const rank = index + 4;
+                                const isCurrentUser = user.userId === currentUserId;
+                                return (
+                                    <RankingRow
+                                        key={index + 3}
+                                        user={user}
+                                        rank={rank}
+                                        isCurrentUser={isCurrentUser}
+                                        isEven={index % 2 === 0}
+                                    />
+                                );
+                            })
+                        )}
                     </Box>
+
                 </Box>
             )}
         </PageLayout>
