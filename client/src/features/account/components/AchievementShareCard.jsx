@@ -1,4 +1,3 @@
-import logo from 'assets/logo.png';
 import logoBP from 'assets/logo-white.png';
 import heart from 'assets/heart.png';
 import biceps from 'assets/biceps.png';
@@ -31,9 +30,9 @@ const AchievementShareCard = ({ title, description, achievedAt, icon }) => {
 
                         <div className="w-40 h-40 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-purple-300 mb-4">
                             <img
-                                src={logo}
+                                src={icon}
                                 alt={title}
-                                className="w-36 h-36 object-contain"
+                                className="w-36 h-36 rounded-full object-contain"
                             />
                         </div>
 

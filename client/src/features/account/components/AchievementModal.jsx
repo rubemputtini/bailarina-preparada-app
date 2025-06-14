@@ -1,6 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import logo from "assets/logo.png";
 import { useState } from "react";
 import DialogButton from "shared/buttons/DialogButton";
 import AchievementShareDialog from "./AchievementShareDialog";
@@ -13,6 +12,7 @@ const AchievementModal = ({ open, onClose, achievement }) => {
     const {
         title,
         description,
+        icon,
         unlocked,
         achievedAt,
         currentProgress,
@@ -40,7 +40,7 @@ const AchievementModal = ({ open, onClose, achievement }) => {
                         className="flex flex-col items-center text-center"
                     >
                         <div className="w-36 h-36 rounded-full bg-gradient-to-br from-[#E5D4FF] to-[#CBAEFF] border-[3px] border-yellow-400 shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex items-center justify-center mb-6">
-                            <img src={logo} alt={title} className="w-32 h-32 object-contain" />
+                            <img src={icon} alt={title} className="w-32 h-32 rounded-full object-contain" />
                         </div>
 
                         <Typography

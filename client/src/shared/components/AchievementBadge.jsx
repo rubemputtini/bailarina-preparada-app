@@ -1,12 +1,11 @@
 import { Tooltip } from "@mui/material";
-import logo from "assets/logo.png";
 
-const AchievementBadge = ({ title }) => {
+const AchievementBadge = ({ title, icon }) => {
     return (
         <Tooltip title={title} arrow>
             <span className="mx-1 block">
                 <img
-                    src={logo}
+                    src={icon}
                     alt={title}
                     className="w-10 h-10 rounded-full border border-gray-300 shadow-sm object-cover"
                 />

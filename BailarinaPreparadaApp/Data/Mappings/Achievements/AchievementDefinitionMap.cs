@@ -30,7 +30,7 @@ public class AchievementDefinitionMap : IEntityTypeConfiguration<AchievementDefi
         
         builder.Property(x => x.Icon)
             .HasColumnType("NVARCHAR")
-            .HasMaxLength(50)
+            .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.IsActive)

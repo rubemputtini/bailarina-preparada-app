@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import logo from "assets/logo.png";
 import AchievementModal from "./AchievementModal";
 
 const AchievementCardPremium = ({ achievement }) => {
@@ -10,13 +9,10 @@ const AchievementCardPremium = ({ achievement }) => {
 
     const {
         title,
-        description,
         unlocked,
         achievedAt,
         icon,
         timesAchieved,
-        currentProgress,
-        goalTarget
     } = achievement;
 
     const glow = unlocked ? "shadow-[0_0_16px_rgba(139,92,246,0.6)]" : "";
@@ -31,7 +27,7 @@ const AchievementCardPremium = ({ achievement }) => {
             >
                 <div className={`rounded-full border-4 border-gray-300 ${glow}`}>
                     <img
-                        src={logo}
+                        src={icon}
                         alt={title}
                         className={`w-20 h-20 rounded-full ${imageStyle}`}
                     />
