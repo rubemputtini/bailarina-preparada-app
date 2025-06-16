@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BailarinaPreparadaApp.Services.Users
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<User> _userManager;

@@ -9,13 +9,13 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Trainings
 {
-    public class TrainingService
+    public class TrainingService : ITrainingService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly AchievementService _achievementService;
+        private readonly IAchievementService _achievementService;
         private readonly IMemoryCache _memoryCache;
 
-        public TrainingService(ApplicationDbContext dbContext, AchievementService achievementService, IMemoryCache memoryCache)
+        public TrainingService(ApplicationDbContext dbContext, IAchievementService achievementService, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _achievementService = achievementService;

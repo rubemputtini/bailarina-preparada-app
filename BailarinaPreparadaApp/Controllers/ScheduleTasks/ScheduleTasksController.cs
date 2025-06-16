@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.ScheduleTasks
     [Authorize(Roles = "admin")]
     public class ScheduleTasksController : BaseController
     {
-        private readonly ScheduleTaskService _scheduleTaskService;
+        private readonly IScheduleTaskService _scheduleTaskService;
 
-        public ScheduleTasksController(ScheduleTaskService scheduleTaskService)
+        public ScheduleTasksController(IScheduleTaskService scheduleTaskService)
         {
             _scheduleTaskService = scheduleTaskService;
         }

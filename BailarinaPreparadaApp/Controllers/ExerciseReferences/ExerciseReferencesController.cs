@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
     [Authorize]
     public class ExerciseReferencesController : BaseController
     {
-        private readonly ExerciseReferenceService _exerciseReferenceService;
+        private readonly IExerciseReferenceService _exerciseReferenceService;
 
-        public ExerciseReferencesController(ExerciseReferenceService exerciseReferenceService)
+        public ExerciseReferencesController(IExerciseReferenceService exerciseReferenceService)
         {
             _exerciseReferenceService = exerciseReferenceService;
         }

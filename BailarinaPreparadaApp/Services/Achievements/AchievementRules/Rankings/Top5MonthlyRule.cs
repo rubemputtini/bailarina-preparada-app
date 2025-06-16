@@ -5,12 +5,12 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Rankings
 {
     public class Top5MonthlyRule : IAchievementRule
     {
-        private readonly RankingService _rankingService;
+        private readonly IRankingService _rankingService;
         private readonly Lazy<AchievementService> _achievementService;
 
         public string Id => AchievementIds.Top5Monthly;
 
-        public Top5MonthlyRule(RankingService rankingService, Lazy<AchievementService> achievementService)
+        public Top5MonthlyRule(IRankingService rankingService, Lazy<AchievementService> achievementService)
         {
             _rankingService = rankingService;
             _achievementService = achievementService;

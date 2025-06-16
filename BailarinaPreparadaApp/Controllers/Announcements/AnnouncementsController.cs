@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.Announcements
     [Authorize]
     public class AnnouncementsController : BaseController
     {
-        private readonly AnnouncementService _announcementService;
+        private readonly IAnnouncementService _announcementService;
 
-        public AnnouncementsController(AnnouncementService announcementService)
+        public AnnouncementsController(IAnnouncementService announcementService)
         {
             _announcementService = announcementService;
         }

@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.Evaluations
     [Authorize]
     public class EvaluationsController : BaseController
     {
-        private readonly EvaluationService _evaluationService;
+        private readonly IEvaluationService _evaluationService;
 
-        public EvaluationsController(EvaluationService evaluationService)
+        public EvaluationsController(IEvaluationService evaluationService)
         {
             _evaluationService = evaluationService;
         }

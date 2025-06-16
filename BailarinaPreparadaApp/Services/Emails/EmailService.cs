@@ -5,7 +5,7 @@ using BailarinaPreparadaApp.Configuration;
 
 namespace BailarinaPreparadaApp.Services.Emails
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
         private readonly SmtpConfiguration _smtpConfig;

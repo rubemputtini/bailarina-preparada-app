@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.ActivityLinks
     [Authorize(Roles = "admin")]
     public class ActivityLinksController : BaseController
     {
-        private readonly ActivityLinkService _activityLinkService;
+        private readonly IActivityLinkService _activityLinkService;
 
-        public ActivityLinksController(ActivityLinkService activityLinkService)
+        public ActivityLinksController(IActivityLinkService activityLinkService)
         {
             _activityLinkService = activityLinkService;
         }

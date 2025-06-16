@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Announcements
 {
-    public class AnnouncementService
+    public class AnnouncementService : IAnnouncementService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<User> _userManager;

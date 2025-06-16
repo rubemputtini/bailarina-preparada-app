@@ -11,9 +11,9 @@ namespace BailarinaPreparadaApp.Controllers.Schedules
     [Authorize]
     public class SchedulesController : BaseController
     {
-        private readonly ScheduleService _scheduleService;
+        private readonly IScheduleService _scheduleService;
 
-        public SchedulesController(ScheduleService scheduleService)
+        public SchedulesController(IScheduleService scheduleService)
         {
             _scheduleService = scheduleService;
         }

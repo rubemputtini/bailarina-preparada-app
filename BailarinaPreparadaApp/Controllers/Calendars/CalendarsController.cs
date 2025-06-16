@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.Calendars
     [Authorize]
     public class CalendarsController : BaseController
     {
-        private readonly CalendarService _calendarService;
+        private readonly ICalendarService _calendarService;
 
-        public CalendarsController(CalendarService calendarService)
+        public CalendarsController(ICalendarService calendarService)
         {
             _calendarService = calendarService;
         }

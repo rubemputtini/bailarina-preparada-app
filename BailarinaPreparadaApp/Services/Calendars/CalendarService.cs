@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Calendars
 {
-    public class CalendarService
+    public class CalendarService : ICalendarService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _memoryCache;

@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.Achievements
     [Authorize]
     public class AchievementsController : BaseController
     {
-        private readonly AchievementService _achievementService;
+        private readonly IAchievementService _achievementService;
 
-        public AchievementsController(AchievementService achievementService)
+        public AchievementsController(IAchievementService achievementService)
         {
             _achievementService = achievementService;
         }

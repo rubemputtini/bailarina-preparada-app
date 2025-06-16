@@ -3,7 +3,7 @@ using BailarinaPreparadaApp.Exceptions;
 
 namespace BailarinaPreparadaApp.Services.ScheduleTasks
 {
-    public class ScheduleTaskService
+    public class ScheduleTaskService : IScheduleTaskService
     {
         private readonly ApplicationDbContext _dbContext;
 

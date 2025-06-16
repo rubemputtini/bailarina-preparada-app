@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Admins
 {
-    public class AdminService
+    public class AdminService : IAdminService
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;

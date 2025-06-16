@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.Trainings
     [Authorize]
     public class TrainingsController : BaseController
     {
-        private readonly TrainingService _trainingService;
+        private readonly ITrainingService _trainingService;
 
-        public TrainingsController(TrainingService trainingService)
+        public TrainingsController(ITrainingService trainingService)
         {
             _trainingService = trainingService;
         }

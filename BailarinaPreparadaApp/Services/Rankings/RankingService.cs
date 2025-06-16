@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Rankings
 {
-    public class RankingService
+    public class RankingService : IRankingService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _memoryCache;

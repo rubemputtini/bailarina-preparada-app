@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.Rankings
     [Authorize]
     public class RankingController : BaseController
     {
-        private readonly RankingService _rankingService;
+        private readonly IRankingService _rankingService;
 
-        public RankingController(RankingService rankingService)
+        public RankingController(IRankingService rankingService)
         {
             _rankingService = rankingService;
         }

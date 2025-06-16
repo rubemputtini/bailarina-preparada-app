@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.Admins
     [Authorize(Roles = "admin")]
     public class AdminController : BaseController
     {
-        private readonly AdminService _adminService;
+        private readonly IAdminService _adminService;
 
-        public AdminController(AdminService adminService)
+        public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
         }

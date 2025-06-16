@@ -11,14 +11,14 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Schedules
 {
-    public class ScheduleService
+    public class ScheduleService : IScheduleService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
 
-        public ScheduleService(ApplicationDbContext dbContext, EmailService emailService, IConfiguration configuration, IMemoryCache memoryCache)
+        public ScheduleService(ApplicationDbContext dbContext, IEmailService emailService, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
             _emailService = emailService;

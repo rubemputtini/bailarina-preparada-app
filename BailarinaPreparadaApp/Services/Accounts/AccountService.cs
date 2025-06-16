@@ -8,17 +8,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BailarinaPreparadaApp.Services.Accounts
 {
-    public class AccountService
+    public class AccountService : IAccountService
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly EmailService _emailService;
-        private readonly TokenService _tokenService;
+        private readonly IEmailService _emailService;
+        private readonly ITokenService _tokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _dbContext;
 
-        public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, EmailService emailService, TokenService tokenService, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext dbContext)
+        public AccountService(SignInManager<User> signInManager, UserManager<User> userManager, IEmailService emailService, ITokenService tokenService, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext dbContext)
         {
             _signInManager = signInManager;
             _userManager = userManager;

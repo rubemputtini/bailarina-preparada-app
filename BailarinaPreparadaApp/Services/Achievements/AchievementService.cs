@@ -9,7 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Achievements
 {
-    public class AchievementService
+    public class AchievementService : IAchievementService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IEnumerable<IAchievementRule> _achievementsRules;

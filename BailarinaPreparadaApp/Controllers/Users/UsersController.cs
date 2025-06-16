@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.Users
     [Authorize]
     public class UsersController : BaseController
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(UserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }

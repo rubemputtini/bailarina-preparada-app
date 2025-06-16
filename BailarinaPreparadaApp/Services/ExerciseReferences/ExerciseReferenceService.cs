@@ -8,7 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.ExerciseReferences
 {
-    public class ExerciseReferenceService
+    public class ExerciseReferenceService : IExerciseReferenceService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _memoryCache;

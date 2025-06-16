@@ -112,25 +112,25 @@ namespace BailarinaPreparadaApp.Extensions
 
         private static void ConfigureCustomServices(this IServiceCollection services)
         {
-            services.AddScoped<AccountService>();
-            services.AddScoped<AdminService>();
-            services.AddScoped<ActivityLinkService>();
-            services.AddScoped<CalendarService>();
-            services.AddScoped<EvaluationService>();
-            services.AddScoped<ExerciseService>();
-            services.AddScoped<ExerciseReferenceService>();
-            services.AddScoped<RankingService>();
-            services.AddScoped<ScheduleService>();
-            services.AddScoped<ScheduleTaskService>();
-            services.AddScoped<TrainingService>();
-            services.AddScoped<UserService>();
-            services.AddScoped<UserGoalService>();
-            services.AddScoped<AnnouncementService>();
-            services.AddScoped<EmailService>();
-            services.AddScoped<AchievementService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IActivityLinkService, ActivityLinkService>();
+            services.AddScoped<ICalendarService, CalendarService>();
+            services.AddScoped<IEvaluationService, EvaluationService>();
+            services.AddScoped<IExerciseService, ExerciseService>();
+            services.AddScoped<IExerciseReferenceService, ExerciseReferenceService>();
+            services.AddScoped<IRankingService, RankingService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IScheduleTaskService, ScheduleTaskService>();
+            services.AddScoped<ITrainingService, TrainingService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserGoalService, UserGoalService>();
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAchievementService, AchievementService>();
             services.AddAchievementRules();
 
-            services.AddTransient<TokenService>();
+            services.AddTransient<ITokenService, TokenService>();
         }
         
         private static void ConfigureExternalServices(this IServiceCollection services,

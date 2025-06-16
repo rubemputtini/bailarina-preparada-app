@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.Exercises
 {
-    public class ExerciseService
+    public class ExerciseService : IExerciseService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _memoryCache;

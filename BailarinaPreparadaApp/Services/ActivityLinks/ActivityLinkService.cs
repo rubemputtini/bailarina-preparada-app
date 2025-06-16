@@ -8,7 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace BailarinaPreparadaApp.Services.ActivityLinks
 {
-    public class ActivityLinkService
+    public class ActivityLinkService : IActivityLinkService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMemoryCache _memoryCache;

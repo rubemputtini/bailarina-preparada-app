@@ -9,9 +9,9 @@ namespace BailarinaPreparadaApp.Controllers.Exercises
     [Authorize(Roles = "admin")]
     public class ExercisesController : BaseController
     {
-        private readonly ExerciseService _exerciseService;
+        private readonly IExerciseService _exerciseService;
 
-        public ExercisesController(ExerciseService exerciseService)
+        public ExercisesController(IExerciseService exerciseService)
         {
             _exerciseService = exerciseService;
         }

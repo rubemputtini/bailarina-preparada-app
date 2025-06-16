@@ -10,9 +10,9 @@ namespace BailarinaPreparadaApp.Controllers.Users
     [Authorize]
     public class UserGoalsController : BaseController
     {
-        private readonly UserGoalService _userGoalService;
+        private readonly IUserGoalService _userGoalService;
 
-        public UserGoalsController(UserGoalService userGoalService)
+        public UserGoalsController(IUserGoalService userGoalService)
         {
             _userGoalService = userGoalService;
         }
