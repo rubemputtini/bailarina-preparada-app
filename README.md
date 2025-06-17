@@ -12,7 +12,7 @@ Through this platform, members can log completed workouts, view evaluation resul
 - **Backend:** .NET, C#, Entity Framework
 - **Tests:** xUnit, Moq, FluentAssertions
 - **Authentication:** Identity
-- **Email Service:** SendGrid
+- **Email Service:** SMTP2GO
 - **Database Hosting:** Azure
 
 ## Access

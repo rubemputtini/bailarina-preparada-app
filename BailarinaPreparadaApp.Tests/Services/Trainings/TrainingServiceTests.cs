@@ -1,12 +1,9 @@
-using BailarinaPreparadaApp.Data;
 using BailarinaPreparadaApp.DTOs.Trainings;
 using BailarinaPreparadaApp.Exceptions;
 using BailarinaPreparadaApp.Helpers;
-using BailarinaPreparadaApp.Models.Addresses;
 using BailarinaPreparadaApp.Models.Trainings;
-using BailarinaPreparadaApp.Models.Users;
 using BailarinaPreparadaApp.Services.Achievements;
-using BailarinaPreparadaApp.Services.Trainings;
+using BailarinaPreparadaApp.Tests.Helpers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -16,8 +13,8 @@ namespace BailarinaPreparadaApp.Tests.Services.Trainings;
 
 public class TrainingServiceTests
 {
-    private readonly string _userId = Guid.NewGuid().ToString();
-    private readonly DateTime _today = DateTime.Today;
+    private readonly string _userId = TestsHelper.GenerateUserId();
+    private readonly DateTime _today = TestsHelper.Today;
 
     private readonly CreateTrainingRequest _validRequest = new CreateTrainingRequest
     {
@@ -25,59 +22,12 @@ public class TrainingServiceTests
         Date = DateTime.Today,
         Description = "Difícil!"
     };
-
-    private static DbContextOptions<ApplicationDbContext> GetDbContextOptions()
-        => new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase("TestDb_" + Guid.NewGuid())
-            .Options;
-
-    private static User CreateFakeUser(string userId, string name)
-    {
-        var user = new User
-        {
-            Id = userId,
-            Name = name,
-            DateOfBirth = DateTime.Today.AddYears(-20),
-            Address = new Address
-            {
-                UserId = userId,
-                Street = "Rua X",
-                Number = "123",
-                City = "Cidade",
-                State = "Estado",
-                Country = "Brasil",
-                PostalCode = "12345-678"
-            }
-        };
-
-        user.Address.User = user;
-        
-        return user;
-    }
-
-    private async Task<ApplicationDbContext> CreateContextWithUserAsync(string userId)
-    {
-        var context = new ApplicationDbContext(GetDbContextOptions());
-        context.Users.Add(CreateFakeUser(userId, "User Test"));
-
-        await context.SaveChangesAsync();
-
-        return context;
-    }
-
-    private TrainingService CreateService(ApplicationDbContext context, IMemoryCache? memoryCache = null, IAchievementService? achievementService = null)
-    {
-        return new TrainingService(
-            context,
-            achievementService ?? new Mock<IAchievementService>().Object,
-            memoryCache ?? new MemoryCache(new MemoryCacheOptions()));
-    }
-
+    
     [Fact]
     public async Task CreateTraining_ShouldThrow_WhenDateIsFuture()
     {
-        var context = await CreateContextWithUserAsync(_userId);
-        var service = CreateService(context);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
+        var service = TestsHelper.CreateTrainingService(context);
 
         var futureRequest = new CreateTrainingRequest { Category = "CARDIO", Date = _today.AddDays(1) };
 
@@ -90,8 +40,8 @@ public class TrainingServiceTests
     [Fact]
     public async Task CreateTraining_ShouldSaveTrainingToDatabase_WhenInputIsValid()
     {
-        var context = await CreateContextWithUserAsync(_userId);
-        var service = CreateService(context);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
+        var service = TestsHelper.CreateTrainingService(context);
 
         await service.CreateTrainingAsync(_userId, _validRequest);
 
@@ -104,9 +54,9 @@ public class TrainingServiceTests
     [Fact]
     public async Task CreateTraining_ShouldCallAchievementEvaluation()
     {
-        var context = await CreateContextWithUserAsync(_userId);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
         var mockAchievementService = new Mock<IAchievementService>();
-        var service = CreateService(context, achievementService: mockAchievementService.Object);
+        var service = TestsHelper.CreateTrainingService(context, achievement: mockAchievementService.Object);
 
         await service.CreateTrainingAsync(_userId, _validRequest);
 
@@ -116,14 +66,14 @@ public class TrainingServiceTests
     [Fact]
     public async Task CreateTraining_ShouldInvalidateExpectedCacheKeys()
     {
-        var context = await CreateContextWithUserAsync(_userId);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
 
         var memoryCache = new Mock<IMemoryCache>();
         memoryCache.Setup(c => c.Remove(It.IsAny<object>()));
 
         var date = new DateTime(2025, 6, 16);
         var request = new CreateTrainingRequest { Category = "CARDIO", Date = date, Description = "Teste" };
-        var service = CreateService(context, memoryCache: memoryCache.Object);
+        var service = TestsHelper.CreateTrainingService(context, cache: memoryCache.Object);
 
         await service.CreateTrainingAsync(_userId, request);
 
@@ -141,9 +91,9 @@ public class TrainingServiceTests
     [Fact]
     public async Task GetCompletedTrainings_ShouldReturnTrainingsWithDateRange()
     {
-        var context = await CreateContextWithUserAsync(_userId);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
         var user = await context.Users.FindAsync(_userId);
-        var service = CreateService(context);
+        var service = TestsHelper.CreateTrainingService(context);
 
         context.Trainings.AddRange(
             new Training
@@ -185,7 +135,7 @@ public class TrainingServiceTests
     [Fact]
     public async Task GetYearlyTrainingDaysCount_ShouldCountDistinctDaysOnly()
     {
-        var context = await CreateContextWithUserAsync(_userId);
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
         var user = await context.Users.FindAsync(_userId);
 
         context.Trainings.AddRange(
@@ -220,7 +170,7 @@ public class TrainingServiceTests
 
         await context.SaveChangesAsync();
 
-        var service = CreateService(context);
+        var service = TestsHelper.CreateTrainingService(context);
 
         var result = await service.GetYearlyTrainingDaysCountAsync(_userId, _today.Year);
 
