@@ -10,6 +10,7 @@ Through this platform, members can log completed workouts, view evaluation resul
 
 - **Frontend:** React, JavaScript, Tailwind CSS, Material UI
 - **Backend:** .NET, C#, Entity Framework
+- **Tests:** xUnit, Moq, FluentAssertions
 - **Authentication:** Identity
 - **Email Service:** SendGrid
 - **Database Hosting:** Azure
