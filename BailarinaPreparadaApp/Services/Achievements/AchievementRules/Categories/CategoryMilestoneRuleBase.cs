@@ -20,6 +20,11 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
 
         public async Task EvaluateAsync(string userId)
         {
+            var alreadyEarned = await _dbContext.UserAchievements
+                .AnyAsync(a => a.UserId == userId && a.AchievementDefinitionId == Id);
+            
+            if (alreadyEarned) return;
+            
             var trainingCount = await _dbContext.Trainings
                 .Where(t =>
                     t.UserId == userId &&
@@ -27,13 +32,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
                     t.Category == Category)
                 .CountAsync();
 
-            var alreadyEarned = await _dbContext.UserAchievements
-                .Where(a => a.UserId == userId && a.AchievementDefinitionId == Id)
-                .CountAsync();
-
-            var expectedForNext = (alreadyEarned + 1) * Milestone;
-
-            if (trainingCount >= expectedForNext)
+            if (trainingCount >= Milestone)
             {
                 await _achievementService.Value.GrantAchievementAsync(userId, Id);
             }
@@ -47,13 +46,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
                     t.IsCompleted &&
                     t.Category == Category);
 
-            var alreadyEarned = await _dbContext.UserAchievements
-                .Where(a => a.UserId == userId && a.AchievementDefinitionId == Id)
-                .CountAsync();
-
-            var goal = (alreadyEarned + 1) * Milestone;
-
-            return (current, goal);
+            return (current, Milestone);
         }
     }
 }
