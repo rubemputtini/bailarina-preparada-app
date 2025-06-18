@@ -8,12 +8,12 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Milestone
     public class GoalCompletedRule : IAchievementRule
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly Lazy<AchievementService> _achievementService;
-        private readonly Lazy<TrainingService> _trainingService;
+        private readonly Lazy<IAchievementService> _achievementService;
+        private readonly Lazy<ITrainingService> _trainingService;
 
         public string Id => AchievementIds.GoalCompleted;
 
-        public GoalCompletedRule(ApplicationDbContext dbContext, Lazy<AchievementService> achievementService, Lazy<TrainingService> trainingService)
+        public GoalCompletedRule(ApplicationDbContext dbContext, Lazy<IAchievementService> achievementService, Lazy<ITrainingService> trainingService)
         {
             _dbContext = dbContext;
             _achievementService = achievementService;

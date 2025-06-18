@@ -7,11 +7,11 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Streaks
     public class PerfectMonthRule : IAchievementRule
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly Lazy<AchievementService> _achievementService;
+        private readonly Lazy<IAchievementService> _achievementService;
 
         public string Id => AchievementIds.PerfectMonth;
 
-        public PerfectMonthRule(ApplicationDbContext dbContext, Lazy<AchievementService> achievementService)
+        public PerfectMonthRule(ApplicationDbContext dbContext, Lazy<IAchievementService> achievementService)
         {
             _dbContext = dbContext;
             _achievementService = achievementService;

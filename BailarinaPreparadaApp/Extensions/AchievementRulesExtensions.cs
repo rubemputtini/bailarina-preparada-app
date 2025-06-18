@@ -12,15 +12,15 @@ namespace BailarinaPreparadaApp.Extensions
     {
         public static void AddAchievementRules(this IServiceCollection services)
         {
-            services.AddScoped<Lazy<AchievementService>>(provider =>
+            services.AddScoped<Lazy<IAchievementService>>(provider =>
             {
-                return new Lazy<AchievementService>(() =>
+                return new Lazy<IAchievementService>(() =>
                     provider.GetRequiredService<AchievementService>());
             });
 
-            services.AddScoped<Lazy<TrainingService>>(provider =>
+            services.AddScoped<Lazy<ITrainingService>>(provider =>
             {
-                return new Lazy<TrainingService>(() =>
+                return new Lazy<ITrainingService>(() =>
                     provider.GetRequiredService<TrainingService>());
             });
 

@@ -6,13 +6,13 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
     public abstract class CategoryMilestoneRuleBase : IAchievementRule, IProgressiveAchievement
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly Lazy<AchievementService> _achievementService;
+        private readonly Lazy<IAchievementService> _achievementService;
 
         protected abstract string Category { get; }
         protected abstract int Milestone { get; }
         public abstract string Id { get; }
 
-        protected CategoryMilestoneRuleBase(ApplicationDbContext dbContext, Lazy<AchievementService> achievementService)
+        protected CategoryMilestoneRuleBase(ApplicationDbContext dbContext, Lazy<IAchievementService> achievementService)
         {
             _dbContext = dbContext;
             _achievementService = achievementService;

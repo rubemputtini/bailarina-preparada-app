@@ -9,7 +9,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
         protected override string Category => TrainingCategories.Cardio;
         protected override int Milestone => 100;
 
-        public Cardio100Rule(ApplicationDbContext dbContext, Lazy<AchievementService> achievementService)
+        public Cardio100Rule(ApplicationDbContext dbContext, Lazy<IAchievementService> achievementService)
             : base(dbContext, achievementService)
         {
         }

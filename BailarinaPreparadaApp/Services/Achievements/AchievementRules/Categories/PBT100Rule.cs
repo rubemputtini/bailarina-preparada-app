@@ -9,7 +9,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Categorie
         protected override string Category => TrainingCategories.PBT;
         protected override int Milestone => 100;
 
-        public PBT100Rule(ApplicationDbContext dbContext, Lazy<AchievementService> achievementService)
+        public PBT100Rule(ApplicationDbContext dbContext, Lazy<IAchievementService> achievementService)
             : base(dbContext, achievementService)
         {
         }
