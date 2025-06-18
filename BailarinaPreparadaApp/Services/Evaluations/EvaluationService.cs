@@ -165,7 +165,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
                 throw new NotFoundException("Usuário não encontrado.");
             }
 
-            var evaluationLink = $"{_configuration["AppSettings:FrontendUrl"]}/avaliacoes/{evaluationId}";
+            var evaluationLink = $"{_configuration["AppSettings:FrontendUrl"]}/avaliacao/{evaluationId}";
 
             var templateData = new Dictionary<string, string>
             {
@@ -185,6 +185,9 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             {
                 throw new ValidationException("Não foi possível enviar o e-mail. Tente novamente.");
             }
+            
+            _memoryCache.Remove(CacheKeys.UserEvaluations(evaluation.UserId));
+            _memoryCache.Remove(CacheKeys.EvaluationById(evaluationId));
         }
 
         public async Task<(bool Success, string Message)> UpdateEvaluationAsync(int id, List<EvaluationExerciseRequest> updatedExercises)
@@ -239,6 +242,7 @@ namespace BailarinaPreparadaApp.Services.Evaluations
             await _dbContext.SaveChangesAsync();
             
             _memoryCache.Remove(CacheKeys.UserEvaluations(evaluation.UserId));
+            _memoryCache.Remove(CacheKeys.EvaluationById(evaluationId));
 
             return (true, "Link de fotos atualizado com sucesso.");
         }

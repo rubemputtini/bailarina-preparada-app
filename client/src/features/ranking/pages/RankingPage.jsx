@@ -152,7 +152,7 @@ const RankingPage = () => {
                                     Nenhum treino registrado ainda!
                                 </Typography>
                                 <Typography variant="body2" className="text-[#c5e1e9]">
-                                    Assim que as alunas registrarem seus treinos, o ranking será exibido aqui!
+                                    Assim que as alunas registrarem seus treinos, o ranking será exibido aqui.
                                 </Typography>
                             </Box>
                         ) : (

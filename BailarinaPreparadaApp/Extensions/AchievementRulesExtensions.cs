@@ -15,13 +15,13 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<Lazy<IAchievementService>>(provider =>
             {
                 return new Lazy<IAchievementService>(() =>
-                    provider.GetRequiredService<AchievementService>());
+                    provider.GetRequiredService<IAchievementService>());
             });
 
             services.AddScoped<Lazy<ITrainingService>>(provider =>
             {
                 return new Lazy<ITrainingService>(() =>
-                    provider.GetRequiredService<TrainingService>());
+                    provider.GetRequiredService<ITrainingService>());
             });
 
             // Milestones

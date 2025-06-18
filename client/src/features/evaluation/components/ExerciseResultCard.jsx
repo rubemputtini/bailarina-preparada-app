@@ -118,8 +118,11 @@ const ExerciseResultCard = ({ ex, userAge, userGender }) => {
                 )}
             </div>
 
-            {(right?.observation || left?.observation) && (
-                <ObservationCard observation={`${right?.observation || ""} ${left?.observation || ""}`} />
+            {left?.observation && (
+                <ObservationCard observation={`${left?.observation || ""}`} label="Observação Esquerdo" />
+            )}
+            {right?.observation && (
+                <ObservationCard observation={`${right?.observation || ""}`} label="Observação Direito" />
             )}
 
             <ReferenceDetailDialog
