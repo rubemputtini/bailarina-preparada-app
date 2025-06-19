@@ -116,6 +116,8 @@ const CompletedTrainingCard = ({ trainingDaysCount }) => {
                                         Você superou sua meta! 👏
                                         <img src={partypopper} alt="🎉" className="inline w-5 h-5 ml-1 align-middle" />
                                     </>
+                                ) : goal.goalDays - trainingDaysCount === 1 ? (
+                                    "Falta só mais 1 dia para sua meta! 😱"
                                 ) : (
                                     `Faltam ${goal.goalDays - trainingDaysCount} dias para sua meta.`
                                 )}
