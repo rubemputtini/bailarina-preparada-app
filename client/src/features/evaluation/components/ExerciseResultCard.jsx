@@ -130,6 +130,7 @@ const ExerciseResultCard = ({ ex, userAge, userGender }) => {
                 onClose={() => setOpenReferenceDialog(false)}
                 references={levels}
                 exerciseName={exercise.name}
+                side={activeSide}
             />
         </div>
     );
