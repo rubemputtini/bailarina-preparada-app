@@ -12,6 +12,7 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
             }`}>
             <Box className="flex items-center gap-2">
                 <Box className="text-[#9c27b0] font-bold w-6 text-center text-lg">{rank}</Box>
+
                 <ResponsiveUserName
                     name={user.userName}
                     variant="subtitle1"
@@ -23,7 +24,6 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
                     {user.achievements?.map((a) => (
                         <AchievementBadge key={a.achievementId} title={a.title} icon={a.icon} />
                     ))}
-
                 </Box>
             </Box>
             <Box className="text-right leading-tight">
