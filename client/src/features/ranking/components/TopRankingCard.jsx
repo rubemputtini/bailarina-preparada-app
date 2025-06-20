@@ -34,6 +34,7 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
                     >
                         {user.daysTrained} {user.daysTrained === 1 ? "dia" : "dias"}
                     </Typography>
+
                     <Typography variant="caption" className="text-gray-600">
                         {user.trainingsCompleted}{" "}
                         {user.trainingsCompleted === 1 ? "treino" : "treinos"}
