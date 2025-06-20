@@ -34,6 +34,7 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
                 >
                     {user.daysTrained} {user.daysTrained === 1 ? "dia" : "dias"}
                 </Typography>
+
                 <Typography variant="caption" className="text-gray-500 text-xs">
                     {user.trainingsCompleted}{" "}
                     {user.trainingsCompleted === 1 ? "treino" : "treinos"}
