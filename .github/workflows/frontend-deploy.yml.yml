@@ -18,6 +18,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      
+      - name: Create .env.production file
+        working-directory: ./client
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env.production
+          echo "REACT_APP_GOOGLE_MAPS_API_KEY=${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}" >> .env.production
 
       - name: Install dependencies and build frontend
         working-directory: ./client

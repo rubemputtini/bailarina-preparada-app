@@ -27,8 +27,10 @@ export const groupUnilateralExercises = (exercises, referenceMap) => {
             sides: {},
             index: ordered.length,
           });
+
           ordered.push(map.get(id));
         }
+        
         map.get(id).sides[sideKey] = {
           score: ex.score,
           observation: ex.observation,
