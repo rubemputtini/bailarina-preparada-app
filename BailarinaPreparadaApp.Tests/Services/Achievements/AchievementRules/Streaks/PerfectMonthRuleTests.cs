@@ -58,12 +58,12 @@ public class PerfectMonthRuleTests
         var context = await CreateContextWithTrainingsAsync(allDays);
 
         var (rule, mock) = CreateRuleWithMock(context);
-        mock.Setup(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth))
+        mock.Setup(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth, _firstDayOfMonth))
             .ReturnsAsync(true).Verifiable();
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth), Times.Once);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth, _firstDayOfMonth), Times.Once);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class PerfectMonthRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth, _firstDayOfMonth), Times.Never);
     }
 
     [Fact]
@@ -92,7 +92,8 @@ public class PerfectMonthRuleTests
             UserId = _userId,
             AchievementDefinitionId = AchievementIds.PerfectMonth,
             AchievedAt = _firstDayOfMonth,
-            Sequence = 1
+            Sequence = 1,
+            ReferenceDate = _firstDayOfMonth
         });
         
         await context.SaveChangesAsync();
@@ -101,7 +102,7 @@ public class PerfectMonthRuleTests
         
         await rule.EvaluateAsync(_userId);
         
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth, _firstDayOfMonth), Times.Never);
     }
 
     [Fact]
@@ -131,6 +132,6 @@ public class PerfectMonthRuleTests
         
         await rule.EvaluateAsync(_userId);
         
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectMonth, _firstDayOfMonth), Times.Never);
     }
 }

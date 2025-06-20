@@ -35,6 +35,10 @@ public class UserAchievementMap : IEntityTypeConfiguration<UserAchievement>
             .HasColumnType("INT")
             .IsRequired(false);
         
+        builder.Property(x => x.ReferenceDate)
+            .HasColumnType("DATE")
+            .IsRequired(false);
+        
         builder.HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)

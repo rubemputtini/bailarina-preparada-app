@@ -13,6 +13,7 @@ public class Top5MonthlyRuleTests
     private readonly string _userId = TestsHelper.GenerateUserId();
     private static readonly DateTime ReferenceDate = TestDateUtils.GetReferenceDate();
     private static readonly DateTime PreviousMonth = TestDateUtils.GetPreviousMonth(ReferenceDate);
+    private static readonly DateTime ReferenceFirstDay = TestDateUtils.GetReferenceFirstDay(PreviousMonth);
 
     private (Top5MonthlyRule rule, Mock<IAchievementService> achievementMock, Mock<IRankingService> rankingMock)
         CreateRuleWithMocks(List<RankingResponse> ranking)
@@ -36,15 +37,15 @@ public class Top5MonthlyRuleTests
         var (rule, achievementMock, rankingMock) = CreateRuleWithMocks(ranking);
 
         achievementMock.Setup(a =>
-                a.HasAchievementAsync(_userId, AchievementIds.Top5Monthly, PreviousMonth.Year, PreviousMonth.Month))
+                a.HasAchievementAsync(_userId, AchievementIds.Top5Monthly, ReferenceFirstDay))
             .ReturnsAsync(false);
         
-        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly))
+        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly, ReferenceFirstDay))
             .ReturnsAsync(true).Verifiable();
         
         await rule.EvaluateAsync(_userId);
         
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly), Times.Once);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly, ReferenceFirstDay), Times.Once);
     }
     
     [Fact]
@@ -56,7 +57,7 @@ public class Top5MonthlyRuleTests
         
         await rule.EvaluateAsync(_userId);
         
-        achievementMock.Verify(a => a.GrantAchievementAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>()), Times.Never);
     }
     
     [Fact]
@@ -66,11 +67,11 @@ public class Top5MonthlyRuleTests
         
         var (rule, achievementMock, rankingMock) = CreateRuleWithMocks(ranking);
         
-        achievementMock.Setup(a => a.HasAchievementAsync(_userId, AchievementIds.Top5Monthly, PreviousMonth.Year, PreviousMonth.Month))
+        achievementMock.Setup(a => a.HasAchievementAsync(_userId, AchievementIds.Top5Monthly, ReferenceFirstDay))
             .ReturnsAsync(true);
         
         await rule.EvaluateAsync(_userId);
         
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.Top5Monthly, ReferenceFirstDay), Times.Never);
     }
 }

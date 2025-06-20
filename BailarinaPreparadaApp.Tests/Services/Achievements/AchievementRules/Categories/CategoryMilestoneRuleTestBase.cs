@@ -64,12 +64,12 @@ public abstract class CategoryMilestoneRuleTestBase<T> where T : CategoryMilesto
         var context = await CreateContextWithTrainingsAsync(Milestone);
         var (rule, achievementMock) = CreateRuleWithMocks(context);
 
-        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementId))
+        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementId, null))
             .ReturnsAsync(true).Verifiable();
 
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId), Times.Once);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId, null), Times.Once);
     }
 
     protected async Task Test_EvaluateAsync_ShouldNotGrantAchievement()
@@ -79,7 +79,7 @@ public abstract class CategoryMilestoneRuleTestBase<T> where T : CategoryMilesto
         
         await rule.EvaluateAsync(_userId);
         
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId, null), Times.Never);
     }
 
     protected async Task Test_EvaluateAsync_ShouldNotGrantAchievement_WhenAlreadyEarned()
@@ -89,7 +89,7 @@ public abstract class CategoryMilestoneRuleTestBase<T> where T : CategoryMilesto
         
         await rule.EvaluateAsync(_userId);
         
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementId, null), Times.Never);
     }
 
     protected async Task Test_GetProgressAsync(int completedTrainings, int expectedGoal, bool alreadyEarned = false)

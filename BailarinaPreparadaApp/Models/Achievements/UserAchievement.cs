@@ -11,5 +11,6 @@ namespace BailarinaPreparadaApp.Models.Achievements
         public AchievementDefinition AchievementDefinition { get; set; } = null!;
         public DateTime AchievedAt { get; set; } = DateTime.UtcNow;
         public int? Sequence { get; set; }
+        public DateTime? ReferenceDate { get; set; }
     }
 }

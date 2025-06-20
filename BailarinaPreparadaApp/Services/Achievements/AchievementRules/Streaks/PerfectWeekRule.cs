@@ -23,6 +23,14 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Streaks
             var lastSunday = today.AddDays(-(int)today.DayOfWeek);
             var previousMonday = lastSunday.AddDays(-6);
 
+            var alreadyEarned = await _dbContext.UserAchievements
+                .AnyAsync(a =>
+                    a.UserId == userId &&
+                    a.AchievementDefinitionId == Id &&
+                    a.ReferenceDate == previousMonday);
+
+            if (alreadyEarned) return;
+
             var trainedDays = await _dbContext.Trainings
                 .Where(t =>
                     t.UserId == userId &&
@@ -37,17 +45,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Streaks
 
             if (trainedDays.Count == 7 && trainedDays.All(fullWeekDays.Contains))
             {
-                var alreadyEarned = await _dbContext.UserAchievements
-                    .AnyAsync(a =>
-                        a.UserId == userId &&
-                        a.AchievementDefinitionId == Id &&
-                        a.AchievedAt >= previousMonday &&
-                        a.AchievedAt <= lastSunday);
-
-                if (!alreadyEarned)
-                {
-                    await _achievementService.Value.GrantAchievementAsync(userId, Id);
-                }
+                await _achievementService.Value.GrantAchievementAsync(userId, Id, previousMonday);
             }
         }
     }

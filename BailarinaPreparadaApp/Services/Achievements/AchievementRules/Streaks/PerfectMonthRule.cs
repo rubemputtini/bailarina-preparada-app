@@ -23,6 +23,14 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Streaks
             var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
+            var alreadyEarned = await _dbContext.UserAchievements
+                .AnyAsync(a =>
+                    a.UserId == userId &&
+                    a.AchievementDefinitionId == Id &&
+                    a.ReferenceDate == firstDayOfMonth);
+
+            if (alreadyEarned) return;
+
             var trainedDates = await _dbContext.Trainings
                 .Where(t =>
                     t.UserId == userId &&
@@ -33,21 +41,11 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Streaks
                 .Distinct()
                 .ToListAsync();
 
-            var fullMonthDays = DateTime.DaysInMonth(now.Year, now.Month);
+            var totalDaysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
 
-            if (trainedDates.Count == fullMonthDays)
+            if (trainedDates.Count == totalDaysInMonth)
             {
-                var alreadyEarned = await _dbContext.UserAchievements
-                    .AnyAsync(a =>
-                        a.UserId == userId &&
-                        a.AchievementDefinitionId == Id &&
-                        a.AchievedAt.Month == now.Month &&
-                        a.AchievedAt.Year == now.Year);
-
-                if (!alreadyEarned)
-                {
-                    await _achievementService.Value.GrantAchievementAsync(userId, Id);
-                }
+                await _achievementService.Value.GrantAchievementAsync(userId, Id, firstDayOfMonth);
             }
         }
     }

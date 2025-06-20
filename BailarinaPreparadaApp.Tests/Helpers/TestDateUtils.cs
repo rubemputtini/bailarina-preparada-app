@@ -13,6 +13,12 @@ public static class TestDateUtils
     public static DateTime GetPreviousMonth(DateTime reference)
         => reference.AddMonths(-1);
 
+    public static DateTime GetReferenceFirstDay(DateTime reference)
+        => new(reference.Year, reference.Month, 1);
+
+    public static DateTime GetReferenceFirstDayOfYear(int reference)
+        => new(reference, 1, 1);
+
     public static DateTime GetDateForWeekDay(DayOfWeek day, DateTime mondayStart)
         => day == DayOfWeek.Sunday ? mondayStart.AddDays(6) : mondayStart.AddDays((int)day - 1);
 }

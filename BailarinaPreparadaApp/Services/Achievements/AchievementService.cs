@@ -84,7 +84,7 @@ namespace BailarinaPreparadaApp.Services.Achievements
             }
         }
 
-        public async Task<bool> GrantAchievementAsync(string userId, string achievementId)
+        public async Task<bool> GrantAchievementAsync(string userId, string achievementId, DateTime? referenceDate = null)
         {
             var count = await _dbContext.UserAchievements
                 .Where(ua => ua.UserId == userId && ua.AchievementDefinitionId == achievementId)
@@ -105,7 +105,8 @@ namespace BailarinaPreparadaApp.Services.Achievements
                 UserId = userId,
                 AchievementDefinitionId = achievementId,
                 AchievedAt = DateTime.UtcNow,
-                Sequence = count + 1
+                Sequence = count + 1,
+                ReferenceDate = referenceDate
             });
 
             await _dbContext.SaveChangesAsync();
@@ -114,15 +115,14 @@ namespace BailarinaPreparadaApp.Services.Achievements
             return true;
         }
 
-        public async Task<bool> HasAchievementAsync(string userId, string achievementId, int year, int month)
+        public async Task<bool> HasAchievementAsync(string userId, string achievementId, DateTime referenceDate)
         {
             return await _dbContext.UserAchievements
                 .AsNoTracking()
                 .AnyAsync(ua =>
                     ua.UserId == userId &&
                     ua.AchievementDefinitionId == achievementId &&
-                    ua.AchievedAt.Year == year &&
-                    ua.AchievedAt.Month == month);
+                    ua.ReferenceDate == referenceDate.Date);
         }
 
         public async Task EvaluateAllRulesAsync(string userId)

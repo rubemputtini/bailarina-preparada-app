@@ -59,12 +59,12 @@ public class PerfectWeekRuleTests
 
         var (rule, mock) = CreateRuleWithMock(context);
 
-        mock.Setup(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek))
+        mock.Setup(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday))
             .ReturnsAsync(true).Verifiable();
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek), Times.Once);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday), Times.Once);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class PerfectWeekRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday), Times.Never);
     }
 
     [Fact]
@@ -93,7 +93,8 @@ public class PerfectWeekRuleTests
             UserId = _userId,
             AchievementDefinitionId = AchievementIds.PerfectWeek,
             AchievedAt = TestDateUtils.GetDateForWeekDay(DayOfWeek.Tuesday, _previousMonday),
-            Sequence = 1
+            Sequence = 1,
+            ReferenceDate = _previousMonday
         });
 
         await context.SaveChangesAsync();
@@ -102,7 +103,7 @@ public class PerfectWeekRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday), Times.Never);
     }
 
     [Fact]
@@ -132,7 +133,7 @@ public class PerfectWeekRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday), Times.Never);
     }
 
     [Fact]
@@ -178,6 +179,45 @@ public class PerfectWeekRuleTests
         
         await rule.EvaluateAsync(_userId);
         
-        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek), Times.Never);
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, _previousMonday), Times.Never);
+    }
+    
+    [Fact]
+    public async Task EvaluateAsync_ShouldNotGrantAchievement_Again_WhenTrainingBackdated()
+    {
+        var previousMonday = new DateTime(2025, 6, 10);
+
+        var context = await TestsHelper.CreateContextWithUserAsync(_userId);
+        var user = await context.Users.FindAsync(_userId);
+
+        for (int i = 0; i < 7; i++)
+        {
+            context.Trainings.Add(new Training
+            {
+                UserId = _userId,
+                User = user!,
+                Category = "PBT",
+                Date = previousMonday.AddDays(i),
+                Description = "Retroativo",
+                IsCompleted = true
+            });
+        }
+        
+        context.UserAchievements.Add(new UserAchievement
+        {
+            UserId = _userId,
+            AchievementDefinitionId = AchievementIds.PerfectWeek,
+            AchievedAt = new DateTime(2025, 6, 19),
+            Sequence = 1,
+            ReferenceDate = previousMonday
+        });
+
+        await context.SaveChangesAsync();
+
+        var (rule, mock) = CreateRuleWithMock(context);
+
+        await rule.EvaluateAsync(_userId);
+
+        mock.Verify(s => s.GrantAchievementAsync(_userId, AchievementIds.PerfectWeek, previousMonday), Times.Never);
     }
 }

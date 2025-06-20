@@ -23,6 +23,11 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Milestone
         public async Task EvaluateAsync(string userId)
         {
             var currentYear = DateTime.UtcNow.Year;
+            var referenceDate = new DateTime(currentYear, 1, 1);
+            
+            var alreadyEarned = await _achievementService.Value.HasAchievementAsync(userId, Id, referenceDate);
+            
+            if (alreadyEarned) return;
 
             var userGoal = await _dbContext.UserGoals
                 .FirstOrDefaultAsync(g => g.UserId == userId && g.Year == currentYear);
@@ -36,16 +41,7 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Milestone
 
             if (actualDaysTrained >= userGoal.GoalDays)
             {
-                var alreadyThisYear = await _dbContext.UserAchievements
-                    .AnyAsync(a =>
-                        a.UserId == userId &&
-                        a.AchievementDefinitionId == Id &&
-                        a.AchievedAt.Year == currentYear);
-
-                if (!alreadyThisYear)
-                {
-                    await _achievementService.Value.GrantAchievementAsync(userId, Id);
-                }
+                await _achievementService.Value.GrantAchievementAsync(userId, Id, referenceDate);
             }
         }
     }

@@ -19,20 +19,18 @@ namespace BailarinaPreparadaApp.Services.Achievements.AchievementRules.Rankings
         public async Task EvaluateAsync(string userId)
         {
             var today = DateTime.UtcNow;
-            var previousMonthDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
-            var year = previousMonthDate.Year;
-            var month = previousMonthDate.Month;
+            var referenceDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
 
-            var top5 = (await _rankingService.GetRankingAsync(month, year, 5)).ToList();
+            var alreadyEarned =
+                await _achievementService.Value.HasAchievementAsync(userId, Id, referenceDate);
+
+            if (alreadyEarned) return;
+
+            var top5 = (await _rankingService.GetRankingAsync(referenceDate.Month, referenceDate.Year, 5)).ToList();
 
             if (top5.Any(r => r.UserId == userId))
             {
-                var alreadyEarned = await _achievementService.Value.HasAchievementAsync(userId, Id, year, month);
-
-                if (!alreadyEarned )
-                {
-                    await _achievementService.Value.GrantAchievementAsync(userId, Id);
-                }
+                await _achievementService.Value.GrantAchievementAsync(userId, Id, referenceDate);
             }
         }
     }

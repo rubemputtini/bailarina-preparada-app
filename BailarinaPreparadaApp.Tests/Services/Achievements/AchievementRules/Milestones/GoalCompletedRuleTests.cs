@@ -14,6 +14,7 @@ public class GoalCompletedRuleTests
 {
     private readonly string _userId = TestsHelper.GenerateUserId();
     private readonly int _currentYear = TestsHelper.Today.Year;
+    private DateTime ReferenceDate => TestDateUtils.GetReferenceFirstDayOfYear(_currentYear);
 
     private async Task<ApplicationDbContext> CreateContextWithGoalAsync(int goalDays,
         bool alreadyHasAchievement = false)
@@ -36,7 +37,7 @@ public class GoalCompletedRuleTests
                 UserId = _userId,
                 User = user!,
                 AchievementDefinitionId = AchievementIds.GoalCompleted,
-                AchievedAt = new DateTime(_currentYear, 1, 1)
+                AchievedAt = ReferenceDate
             });
         }
 
@@ -75,12 +76,12 @@ public class GoalCompletedRuleTests
         var context = await CreateContextWithGoalAsync(goal);
         var (rule, achievementMock, trainingMock) = CreateRuleWithMocks(context, actual);
 
-        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted))
+        achievementMock.Setup(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate))
             .ReturnsAsync(true).Verifiable();
 
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted), Times.Once);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate), Times.Once);
     }
 
     [Fact]
@@ -94,7 +95,7 @@ public class GoalCompletedRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate), Times.Never);
     }
 
     [Fact]
@@ -105,7 +106,7 @@ public class GoalCompletedRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate), Times.Never);
     }
 
     [Fact]
@@ -117,9 +118,12 @@ public class GoalCompletedRuleTests
         var context = await CreateContextWithGoalAsync(goal, alreadyHasAchievement: true);
         var (rule, achievementMock, trainingMock) = CreateRuleWithMocks(context, actual);
 
+        achievementMock.Setup(a => a.HasAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate))
+            .ReturnsAsync(true);
+
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate), Times.Never);
     }
 
     [Fact]
@@ -130,6 +134,6 @@ public class GoalCompletedRuleTests
 
         await rule.EvaluateAsync(_userId);
 
-        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted), Times.Never);
+        achievementMock.Verify(a => a.GrantAchievementAsync(_userId, AchievementIds.GoalCompleted, ReferenceDate), Times.Never);
     }
 }
