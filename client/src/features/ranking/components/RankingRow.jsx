@@ -10,6 +10,7 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
                 ? "bg-gray-50"
                 : "bg-white"
             }`}>
+
             <Box className="flex items-center gap-2">
                 <Box className="text-[#9c27b0] font-bold w-6 text-center text-lg">{rank}</Box>
 
