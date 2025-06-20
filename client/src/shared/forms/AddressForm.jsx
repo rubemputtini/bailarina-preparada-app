@@ -27,6 +27,7 @@ const AddressForm = ({ data, onChange }) => {
                     "& .MuiOutlinedInput-root": { borderRadius: "8px" }
                 }}
             />
+
             {suggestions.status === "OK" && (
                 <List>
                     {suggestions.data.map((suggestion) => (
@@ -36,6 +37,7 @@ const AddressForm = ({ data, onChange }) => {
                     ))}
                 </List>
             )}
+
             <TextField label="Número"
                 fullWidth
                 required
