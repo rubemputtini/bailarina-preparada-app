@@ -38,7 +38,7 @@ jobs:
         working-directory: BailarinaPreparadaApp
 
       - name: Run EF Core migrations
-        run: dotnet ef database update --project ./BailarinaPreparadaApp/BailarinaPreparadaApp.csproj
+        run: dotnet ef database update --project ./BailarinaPreparadaApp.csproj
         working-directory: BailarinaPreparadaApp
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
@@ -51,14 +51,14 @@ jobs:
           AdminSettings__AdminEmails__1: ${{ secrets.AdminSettings__AdminEmails__1 }}
 
       - name: Publish app
-        run: dotnet publish -c Release -o backend-release
+        run: dotnet publish -c Release -o ../backend-release
         working-directory: BailarinaPreparadaApp
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend-app
-          path: BailarinaPreparadaApp/backend-release
+          path: backend-release
 
   deploy:
     runs-on: ubuntu-latest
