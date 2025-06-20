@@ -51,14 +51,14 @@ jobs:
           AdminSettings__AdminEmails__1: ${{ secrets.AdminSettings__AdminEmails__1 }}
 
       - name: Publish app
-        run: dotnet publish -c Release -o ../backend-release
+        run: dotnet publish -c Release -o ../backend-app
         working-directory: BailarinaPreparadaApp
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend-app
-          path: backend-release
+          path: backend-app
 
   deploy:
     runs-on: ubuntu-latest
