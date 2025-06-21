@@ -14,7 +14,7 @@ import feet from "../../assets/feet.png";
 import specific from "../../assets/specific.png";
 import others from "../../assets/others.png";
 
-export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5103";
+export const API_URL = process.env.REACT_APP_API_URL;
 
 export const socialMedia = [
     {
