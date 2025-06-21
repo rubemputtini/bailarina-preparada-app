@@ -29,9 +29,6 @@ secrets.json
 bin/
 obj/
 
-# Entity Framework Migrations
-Migrations/
-
 # Local NuGet packages
 *.nupkg
 *.snupkg
