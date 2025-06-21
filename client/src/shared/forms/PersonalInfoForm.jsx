@@ -91,6 +91,7 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     onBlur={() => setShowPasswordPopup(false)}
                     sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                 />
+
                 {showPasswordPopup && (
                     <Box mt={1} p={1} border="1px solid #e0e0e0" borderRadius="8px">
                         <Typography variant="body2" color="textSecondary">
