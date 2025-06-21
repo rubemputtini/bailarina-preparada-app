@@ -70,6 +70,7 @@ namespace BailarinaPreparadaApp.Services.Accounts
             {
                 return (false, "Já existe um usuário com esse e-mail.", null);
             }
+            
             var adminEmails = _configuration.GetSection("AdminSettings:AdminEmails").Get<List<string>>();
 
             var user = new User
