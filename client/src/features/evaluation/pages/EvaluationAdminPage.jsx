@@ -194,6 +194,7 @@ const EvaluationAdminPage = () => {
                     <input
                         type="date"
                         className="w-full mt-1 rounded-xl bg-white text-black p-3 border border-gray-600 focus:outline-none"
+                        style={{ height: "52px" }}
                         value={date}
                         onChange={(e) => {
                             setDate(e.target.value);
@@ -209,6 +210,7 @@ const EvaluationAdminPage = () => {
                         type="date"
                         disabled
                         className="w-full mt-1 rounded-xl bg-gray-700 text-white p-3 border border-gray-600"
+                        style={{ height: "52px" }}
                         value={nextEvaluationDate}
                     />
                 </div>

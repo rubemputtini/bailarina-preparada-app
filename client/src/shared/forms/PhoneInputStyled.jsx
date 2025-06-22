@@ -27,6 +27,7 @@ const PhoneInputStyled = ({ value, onChange, disabled }) => {
                 borderRight: "none",
                 borderRadius: "8px 0 0 8px",
                 transition: "all 0.2s ease",
+                appearance: "none"
             }}
             containerStyle={{
                 borderRadius: "8px",

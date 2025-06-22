@@ -38,13 +38,23 @@ const StepDate = ({ newTraining, setNewTraining, today, error, onValidityChange 
                         sx={{
                             backgroundColor: "#FFFFFF",
                             borderRadius: "24px",
+                            height: "52px",
                             "& .MuiOutlinedInput-root": {
                                 borderRadius: "24px",
+                                height: "52px",
                                 borderColor: "#A7C7E7",
                                 "&:hover fieldset": { borderColor: "#6A1B9A" },
                                 "&.Mui-focused fieldset": { borderColor: "#4A148C" },
                             },
-                            "& .MuiInputBase-input": { padding: "12px", fontSize: "16px", color: "#323232", textAlign: "center" },
+                            "& .MuiInputBase-input": {
+                                height: "52px",
+                                boxSizing: "border-box",
+                                padding: "0 16px",
+                                fontSize: "16px",
+                                color: "#323232",
+                                textAlign: "center",
+                                appearance: "none"
+                            },
                         }}
                     />
                 </Box>

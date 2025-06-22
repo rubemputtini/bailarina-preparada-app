@@ -25,7 +25,7 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
             </Grid>
             <Grid item xs={12}>
                 <TextField
-                    label="Email"
+                    label="Email Hotmart"
                     type="email"
                     fullWidth
                     required
@@ -47,7 +47,23 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     InputLabelProps={{ shrink: true }}
                     value={data.dateOfBirth}
                     onChange={(e) => onChange("dateOfBirth", e.target.value)}
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
+                    sx={{
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: "8px",
+                            height: "40px",
+                            padding: 0,
+                        },
+                        "& .MuiOutlinedInput-input": {
+                            height: "40px",
+                            padding: "0 14px",
+                            boxSizing: "border-box",
+                        },
+                        "& input": {
+                            appearance: "none",
+                            MozAppearance: "none",
+                            WebkitAppearance: "none",
+                        }
+                    }}
                 />
             </Grid>
             <Grid item xs={12}>

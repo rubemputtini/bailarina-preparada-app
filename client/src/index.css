@@ -198,3 +198,13 @@ textarea,
   background-size: 200% 200%;
   animation: gradient-pulse 4s ease infinite;
 }
+
+input[type="date"],
+input[type="datetime-local"],
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 40px;
+  line-height: 1.5;
+}

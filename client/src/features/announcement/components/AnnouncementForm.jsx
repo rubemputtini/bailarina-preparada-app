@@ -75,13 +75,13 @@ const AnnouncementForm = ({ onPreviewChange, onSuccess }) => {
                 <input
                     type="text"
                     placeholder="Título do aviso"
-                    className="border rounded-xl px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
+                    className="border rounded-xl px-4 py-2 w-full h-[40px] focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
                     value={formData.title}
                     onChange={(e) => handleChange('title', e.target.value)}
                     required
                 />
                 <select
-                    className="border rounded-xl px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
+                    className="border rounded-xl px-4 py-2 w-full h-[40px] appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
                     value={formData.category}
                     onChange={(e) => handleChange('category', e.target.value)}
                     required
@@ -129,7 +129,7 @@ const AnnouncementForm = ({ onPreviewChange, onSuccess }) => {
                     <input
                         type="text"
                         placeholder="https://..."
-                        className="border rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
+                        className="border rounded-xl px-3 py-2 w-full h-[40px] focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
                         value={formData.link}
                         onChange={(e) => handleChange('link', e.target.value)}
                     />
@@ -174,7 +174,7 @@ const AnnouncementForm = ({ onPreviewChange, onSuccess }) => {
                         {!formData.isVisibleNow && (
                             <input
                                 type="datetime-local"
-                                className="border rounded-lg px-3 py-2 w-[180px]"
+                                className="border rounded-lg px-3 py-2 w-[180px] focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
                                 value={formData.publishAt}
                                 onChange={(e) => handleChange('publishAt', e.target.value)}
                             />
