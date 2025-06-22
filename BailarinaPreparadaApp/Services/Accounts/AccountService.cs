@@ -114,6 +114,16 @@ namespace BailarinaPreparadaApp.Services.Accounts
 
             var token = _tokenService.GenerateToken(user, role);
 
+            var adminPrincipal = adminEmails[1];
+
+            await _emailService.SendAdminNewUserEmailAsync(
+                toName: "Equipe Bailarina Preparada",
+                toEmail: adminPrincipal,
+                adminName: "Bella",
+                newUserName: user.Name,
+                newUserEmail: user.Email
+            );
+
             return (true, "Usuário registrado com sucesso.", token);
         }
 

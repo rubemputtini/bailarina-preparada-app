@@ -52,6 +52,26 @@ namespace BailarinaPreparadaApp.Services.Emails
                 return false;
             }
         }
+
+        public async Task<bool> SendAdminNewUserEmailAsync(string toName, string toEmail, string adminName,
+            string newUserName, string newUserEmail)
+        {
+            var templateData = new Dictionary<string, string>
+            {
+                { "AdminName", adminName },
+                { "Name", newUserName },
+                { "Email", newUserEmail }
+            };
+
+            return await SendEmailAsync(
+                toName: toName,
+                toEmail: toEmail,
+                subject: "Novo cadastro! - App Bailarina Preparada",
+                templateName: "UserCreatedTemplate",
+                templateData: templateData
+            );
+        }
+        
         private static async Task<string> GetEmailTemplateAsync(string templateName)
         {
             var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", $"{templateName}.html");
