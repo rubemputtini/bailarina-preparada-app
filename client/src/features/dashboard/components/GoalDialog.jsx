@@ -28,6 +28,15 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
         setLoading(false);
     };
 
+    const handleKeyDown = (e) => {
+        if (
+            !/[0-9]/.test(e.key) &&
+            !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+        ) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center z-50">
             <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md w-full text-center mx-4 sm:mx-8">
@@ -55,6 +64,7 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
                     type="number"
                     value={goal}
                     onChange={(e) => setGoal(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     min={1}
                     max={365}
                     className={`border-2 ${error ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-3 w-full mb-2 text-center text-5xl font-bold text-purple-700 outline-purple-500 transition-all`}
