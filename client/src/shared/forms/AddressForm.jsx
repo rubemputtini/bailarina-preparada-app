@@ -7,7 +7,7 @@ const AddressForm = ({ data, onChange }) => {
         onChange(field, value);
     };
 
-    const { suggestions, setValue, handleSelect } = useAddressAutocomplete(updateAddressField);
+    const { suggestions, setValue, handleSelect, clearSuggestions } = useAddressAutocomplete(updateAddressField);
 
     return (
         <Box>
@@ -22,6 +22,7 @@ const AddressForm = ({ data, onChange }) => {
                     setValue(e.target.value);
                     updateAddressField("street", e.target.value);
                 }}
+                onBlur={() => setTimeout(() => clearSuggestions(), 200)}
                 sx={{
                     marginBottom: "1rem",
                     "& .MuiOutlinedInput-root": { borderRadius: "8px" }
