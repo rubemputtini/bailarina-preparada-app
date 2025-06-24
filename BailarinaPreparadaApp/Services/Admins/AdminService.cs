@@ -24,16 +24,26 @@ namespace BailarinaPreparadaApp.Services.Admins
             _memoryCache = memoryCache;
         }
 
-        public async Task<(IEnumerable<UserResponse> Users, int TotalUsers)> GetUsersAsync(int page = 1, int pageSize = 10)
+        public async Task<(IEnumerable<UserResponse> Users, int TotalUsers)> GetUsersAsync(int page = 1, int pageSize = 10, string? searchTerm = null)
         {
+            var isSearch = !string.IsNullOrEmpty(searchTerm);
             var cacheKey = CacheKeys.AllUsers(page, pageSize);
-            
-            if (_memoryCache.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
+
+            if (!isSearch && _memoryCache.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
                 return cachedUsers;
             
-            var totalUsers = await _userManager.Users.CountAsync();
+            var query = _userManager.Users.AsQueryable();
 
-            var users = await _userManager.Users
+            if (isSearch)
+            {
+                query = query.Where(u =>
+                    u.Name.Contains(searchTerm!) ||
+                    u.Email!.Contains(searchTerm!));
+            }
+            
+            var totalUsers = await query.CountAsync();
+
+            var users = await query
                 .AsNoTracking()
                 .OrderBy(u => u.Name)
                 .Skip((page - 1) * pageSize)
@@ -57,11 +67,14 @@ namespace BailarinaPreparadaApp.Services.Admins
             }
 
             var result = (userResponses, totalUsers);
-            
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-            
-            _memoryCache.Set(cacheKey, result, cacheOptions);
+
+            if (!isSearch)
+            {
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+
+                _memoryCache.Set(cacheKey, result, cacheOptions);
+            }
 
             return result;
         }

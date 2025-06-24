@@ -52,6 +52,7 @@ const useAddressAutocomplete = (onAddressFieldsUpdate) => {
     suggestions,
     setValue,
     handleSelect,
+    clearSuggestions
   };
 };
 

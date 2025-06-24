@@ -24,5 +24,15 @@ namespace BailarinaPreparadaApp.Controllers.Achievements
 
             return Ok(achievements);
         }
+
+        [HttpGet]
+        [Route("user/{userId}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetUserAchievementsById(string userId)
+        {
+            var achievements = await _achievementService.GetAchievementsForUserAsync(userId);
+            
+            return Ok(achievements);
+        }
     }
 }

@@ -49,11 +49,13 @@ const StepDate = ({ newTraining, setNewTraining, today, error, onValidityChange 
                             "& .MuiInputBase-input": {
                                 height: "52px",
                                 boxSizing: "border-box",
-                                padding: "0 16px",
+                                padding: "14px 16px",
                                 fontSize: "16px",
                                 color: "#323232",
                                 textAlign: "center",
-                                appearance: "none"
+                                appearance: "none",
+                                WebkitAppearance: "none",
+                                MozAppearance: "none",
                             },
                         }}
                     />

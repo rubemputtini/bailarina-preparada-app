@@ -4,7 +4,7 @@ import LoadingCard from "shared/ui/LoadingCard";
 import ErrorCard from "shared/ui/ErrorCard";
 import AchievementCardPremium from "./AchievementCardPremium";
 
-const AchievementsSection = () => {
+const AchievementsSection = ({ userId }) => {
     const [achievements, setAchievements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ const AchievementsSection = () => {
     useEffect(() => {
         const fetchAchievements = async () => {
             try {
-                const data = await getUserAchievements();
+                const data = await getUserAchievements(userId);
                 setAchievements(data);
             } catch (err) {
                 setError("Erro ao carregar conquistas.");
@@ -21,7 +21,7 @@ const AchievementsSection = () => {
             }
         };
         fetchAchievements();
-    }, []);
+    }, [userId]);
 
     if (loading) return <LoadingCard color="#000" />;
     if (error) return <ErrorCard message={error} />;
