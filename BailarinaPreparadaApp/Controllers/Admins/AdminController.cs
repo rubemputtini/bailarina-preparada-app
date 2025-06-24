@@ -17,9 +17,10 @@ namespace BailarinaPreparadaApp.Controllers.Admins
         }
 
         [HttpGet("users")]
-        public async Task<IActionResult> GetUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 10,
+            [FromQuery] string? searchTerm = null)
         {
-            var (users, totalUsers) = await _adminService.GetUsersAsync(page, pageSize);
+            var (users, totalUsers) = await _adminService.GetUsersAsync(page, pageSize, searchTerm);
 
             return Ok(new { users, totalUsers });
         }

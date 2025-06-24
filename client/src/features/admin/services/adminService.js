@@ -1,9 +1,10 @@
 import api from "shared/services/api";
 import { handleError } from "shared/services/handleError";
 
-export const getUsers = async (page = 1, pageSize = 10) => {
+export const getUsers = async (page = 1, pageSize = 10, searchTerm = "") => {
     try {
-        const response = await api.get(`/api/v1/admin/users?page=${page}&pageSize=${pageSize}`);
+        const query = new URLSearchParams({page, pageSize, searchTerm}).toString();
+        const response = await api.get(`/api/v1/admin/users?${query}`);
 
         return response.data;
     } catch (error) {

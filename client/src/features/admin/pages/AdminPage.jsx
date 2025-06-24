@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 import { getUsers } from "../services/adminService";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
@@ -11,11 +11,13 @@ import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
 import { ROUTES } from "shared/routes/routes";
 import ErrorCard from "shared/ui/ErrorCard";
+import useDebounce from "shared/services/useDebounce";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const debouncedSearchTerm = useDebounce(searchTerm, 400);
     const [error, setError] = useState("");
     const [userToDelete, setUserToDelete] = useState(null);
     const [userDeleted, setUserDeleted] = useState(null);
@@ -23,13 +25,16 @@ const AdminPage = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [totalUsers, setTotalUsers] = useState(0);
+    const isFirstRender = useRef(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUsers = async () => {
+            setLoading(true);
+
             try {
-                const { users, totalUsers } = await getUsers(paginationModel.page + 1, paginationModel.pageSize);
+                const { users, totalUsers } = await getUsers(paginationModel.page + 1, paginationModel.pageSize, debouncedSearchTerm);
 
                 setUsers(users);
                 setTotalUsers(totalUsers);
@@ -41,8 +46,13 @@ const AdminPage = () => {
             }
         };
 
-        fetchUsers();
-    }, [paginationModel]);
+        if (!isFirstRender.current || debouncedSearchTerm !== "") {
+            fetchUsers();
+        }
+
+        isFirstRender.current = false;
+
+    }, [paginationModel, debouncedSearchTerm]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -84,12 +94,6 @@ const AdminPage = () => {
         setUserDeleted(false);
     };
 
-    const filteredUsers = users.filter(
-        (user) =>
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     return (
         <PageLayout>
             <Typography
@@ -105,17 +109,17 @@ const AdminPage = () => {
                 Gerenciador de Usuários
             </Typography>
 
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                <SearchField value={searchTerm} onChange={handleSearch} />
+            </div>
+
             {loading ? (
                 <LoadingCard />
             ) : error ? (
                 <ErrorCard message={error} />
             ) : (
                 <>
-                    <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                        <SearchField value={searchTerm} onChange={handleSearch} />
-                    </div>
-
-                    {filteredUsers.length === 0 ? (
+                    {users.length === 0 ? (
                         <Typography
                             variant="h6"
                             sx={{
@@ -138,12 +142,12 @@ const AdminPage = () => {
                                     color: "white",
                                 }}
                             >
-                                {filteredUsers.length === 1
+                                {users.length === 1
                                     ? "1 usuário encontrado"
-                                    : `${filteredUsers.length} usuários encontrados`}
+                                    : `${totalUsers} usuários encontrados`}
                             </Typography>
                             <UserTable
-                                users={filteredUsers}
+                                users={users}
                                 onEdit={handleEditUser}
                                 onViewEvaluations={handleViewEvaluations}
                                 onSchedule={handleScheduleUser}
