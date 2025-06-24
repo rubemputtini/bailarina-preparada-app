@@ -187,7 +187,7 @@ const AccountPage = () => {
                                 </>
                             )}
                             {activeTab === 2 && (
-                                <AchievementsSection />
+                                <AchievementsSection userId={userIdToLoad} />
                             )}
 
                             {error && (
