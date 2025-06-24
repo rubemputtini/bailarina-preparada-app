@@ -3,7 +3,7 @@ import { Stepper, Step, StepLabel, Box, Container, Grid, Typography } from "@mui
 import { Person, Home, CheckCircle } from "@mui/icons-material";
 import AddressForm from "shared/forms/AddressForm";
 import PersonalInfoForm from "shared/forms/PersonalInfoForm";
-import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid } from "shared/utils/validators";
+import { validatePassword, isEmailValid, isDateValid, isPasswordConfirmed, isPhoneValid, isAddressValid } from "shared/utils/validators";
 import ErrorCard from "shared/ui/ErrorCard";
 import DialogButton from "shared/buttons/DialogButton";
 
@@ -35,6 +35,8 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
         isDateValid(formData.dateOfBirth) && isPhoneValid(formData.phoneNumber) &&
         Object.values(passwordRequisites).every(Boolean) &&
         isPasswordConfirmed(formData.password, formData.confirmPassword);
+
+    const addressIsValid = isAddressValid(formData);
 
     const handleNext = () => isFormValid && setActiveStep((prevStep) => prevStep + 1);
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
@@ -118,6 +120,7 @@ const SignupStepper = ({ onRegister, onLoginRedirect, error, loading }) => {
                                 onClick={handleSubmit}
                                 loading={loading}
                                 fullWidthOnMobile={false}
+                                disabled={!addressIsValid}
                             >
                                 Registrar
                             </DialogButton>

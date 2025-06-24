@@ -27,3 +27,15 @@ export const isPhoneValid = (phoneNumber) => {
         return false;
     }
 };
+
+export const isAddressValid = (address) => {
+    return Boolean(
+        address.street &&
+        address.number &&
+        address.neighborhood &&
+        address.city &&
+        address.state &&
+        address.country &&
+        address.postalCode
+    )
+};
