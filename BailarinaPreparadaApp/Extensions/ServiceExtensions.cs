@@ -48,7 +48,7 @@ namespace BailarinaPreparadaApp.Extensions
         private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sql => sql.EnableRetryOnFailure()));
         }
 
         private static void ConfigureIdentity(this IServiceCollection services)
