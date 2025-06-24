@@ -53,14 +53,12 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                         },
                         "& .MuiOutlinedInput-input": {
                             height: "40px",
-                            padding: "0 14px",
+                            padding: "10px 14px",
                             boxSizing: "border-box",
-                        },
-                        "& input": {
                             appearance: "none",
-                            MozAppearance: "none",
                             WebkitAppearance: "none",
-                        }
+                            MozAppearance: "none",
+                        },
                     }}
                 />
             </Grid>
