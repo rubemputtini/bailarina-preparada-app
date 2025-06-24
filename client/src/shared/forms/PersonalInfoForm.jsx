@@ -10,7 +10,7 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
     const hasTypedConfirmPassword = data.confirmPassword.length > 0;
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} className="form-style">
             <Grid item xs={12}>
                 <TextField
                     label="Nome Completo"
@@ -20,7 +20,6 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     size="small"
                     value={data.name}
                     onChange={(e) => onChange("name", e.target.value)}
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -33,7 +32,6 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     size="small"
                     value={data.email}
                     onChange={(e) => onChange("email", e.target.value)}
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -55,14 +53,12 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                         },
                         "& .MuiOutlinedInput-input": {
                             height: "40px",
-                            padding: "0 14px",
+                            padding: "10px 14px",
                             boxSizing: "border-box",
-                        },
-                        "& input": {
                             appearance: "none",
-                            MozAppearance: "none",
                             WebkitAppearance: "none",
-                        }
+                            MozAppearance: "none",
+                        },
                     }}
                 />
             </Grid>
@@ -105,7 +101,6 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     onChange={(e) => onChange("password", e.target.value)}
                     onFocus={() => setShowPasswordPopup(true)}
                     onBlur={() => setShowPasswordPopup(false)}
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                 />
 
                 {showPasswordPopup && (
@@ -137,7 +132,6 @@ const PersonalInfoForm = ({ data, onChange, passwordRequisites, showPasswordPopu
                     onChange={(e) => onChange("confirmPassword", e.target.value)}
                     error={hasTypedConfirmPassword && !isPasswordConfirmed(data.password, data.confirmPassword)}
                     helperText={hasTypedConfirmPassword && !isPasswordConfirmed(data.password, data.confirmPassword) ? "As senhas não coincidem" : ""}
-                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                 />
             </Grid>
         </Grid>

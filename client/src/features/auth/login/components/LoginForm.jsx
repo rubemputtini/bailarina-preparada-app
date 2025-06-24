@@ -26,6 +26,7 @@ const LoginForm = ({
                 alignItems: "center",
                 padding: "1rem",
             }}
+            className="form-style"
         >
             <Box
                 sx={{
@@ -60,7 +61,6 @@ const LoginForm = ({
                                 variant="outlined"
                                 size="small"
                                 required
-                                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -73,7 +73,6 @@ const LoginForm = ({
                                 variant="outlined"
                                 size="small"
                                 required
-                                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
                             />
                         </Grid>
                         <Grid item xs={12} display="flex" justifyContent="center">
