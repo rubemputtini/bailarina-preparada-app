@@ -21,8 +21,7 @@ const AdminPage = () => {
     const [userDeleted, setUserDeleted] = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
     const [totalUsers, setTotalUsers] = useState(0);
 
     const navigate = useNavigate();
@@ -30,7 +29,7 @@ const AdminPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const { users, totalUsers } = await getUsers(page + 1, pageSize);
+                const { users, totalUsers } = await getUsers(paginationModel.page + 1, paginationModel.pageSize);
 
                 setUsers(users);
                 setTotalUsers(totalUsers);
@@ -43,7 +42,7 @@ const AdminPage = () => {
         };
 
         fetchUsers();
-    }, [page, pageSize]);
+    }, [paginationModel]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -149,10 +148,8 @@ const AdminPage = () => {
                                 onViewEvaluations={handleViewEvaluations}
                                 onSchedule={handleScheduleUser}
                                 onDelete={handleDeleteUser}
-                                page={page}
-                                setPage={setPage}
-                                pageSize={pageSize}
-                                setPageSize={setPageSize}
+                                paginationModel={paginationModel}
+                                onPaginationModelChange={setPaginationModel}
                                 totalUsers={totalUsers}
                             />
                         </>

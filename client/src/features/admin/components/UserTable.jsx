@@ -9,10 +9,8 @@ const UserTable = ({
     onViewEvaluations,
     onSchedule,
     onDelete,
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
+    paginationModel,
+    onPaginationModelChange,
     totalUsers,
 }) => {
     const columns = [
@@ -43,14 +41,15 @@ const UserTable = ({
             <DataGrid
                 rows={users}
                 columns={columns}
-                page={page}
-                onPageChange={(newPage) => setPage(newPage)}
-                pageSize={pageSize}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 pagination
                 paginationMode="server"
+                paginationModel={paginationModel}
+                onPaginationModelChange={onPaginationModelChange}
+                pageSizeOptions={[10, 25, 50]}
                 rowCount={totalUsers}
+                checkboxSelection={false}
                 disableSelectionOnClick
+                hideFooterSelectedRowCount
                 disableColumnMenu
                 localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
                 sx={{
