@@ -46,9 +46,7 @@ const AdminPage = () => {
             }
         };
 
-        if (!isFirstRender.current || debouncedSearchTerm !== "") {
-            fetchUsers();
-        }
+        fetchUsers();
 
         isFirstRender.current = false;
 
