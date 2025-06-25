@@ -48,7 +48,9 @@ namespace BailarinaPreparadaApp.Extensions
         private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sql => sql.EnableRetryOnFailure()));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    sql => sql.EnableRetryOnFailure().CommandTimeout(180)
+                ));
         }
 
         private static void ConfigureIdentity(this IServiceCollection services)
@@ -132,7 +134,7 @@ namespace BailarinaPreparadaApp.Extensions
 
             services.AddTransient<ITokenService, TokenService>();
         }
-        
+
         private static void ConfigureExternalServices(this IServiceCollection services,
             IConfiguration configuration)
         {
