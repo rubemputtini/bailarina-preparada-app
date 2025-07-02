@@ -50,7 +50,7 @@ namespace BailarinaPreparadaApp.Middlewares
                         break;
                     default:
                         statusCode = (int)HttpStatusCode.InternalServerError;
-                        response = new { message = "Erro interno do servidor." };
+                        response = new { message = "Erro interno do servidor. Tente novamente." };
                         break;
                 }
 
