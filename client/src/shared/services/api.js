@@ -25,7 +25,7 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error.response?.status;
-        const errorMessage = error.response?.data?.message || "Erro desconhecido.";
+        const errorMessage = error.response?.data?.message || "Erro inesperado. Tente novamente.";
         const requestUrl = error.config?.url;
 
         // Só bloqueia o erro se não for a rota de login
