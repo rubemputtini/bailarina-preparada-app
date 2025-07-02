@@ -296,8 +296,8 @@ namespace BailarinaPreparadaApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("NVARCHAR");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("INT");
+                    b.Property<decimal>("Score")
+                        .HasColumnType("DECIMAL(3,2)");
 
                     b.Property<int>("Side")
                         .HasColumnType("INT");
@@ -335,14 +335,14 @@ namespace BailarinaPreparadaApp.Migrations
                     b.Property<int>("MaxAge")
                         .HasColumnType("INT");
 
-                    b.Property<int?>("MaxValue")
-                        .HasColumnType("INT");
+                    b.Property<decimal?>("MaxValue")
+                        .HasColumnType("DECIMAL(3,2)");
 
                     b.Property<int>("MinAge")
                         .HasColumnType("INT");
 
-                    b.Property<int>("MinValue")
-                        .HasColumnType("INT");
+                    b.Property<decimal>("MinValue")
+                        .HasColumnType("DECIMAL(3,2)");
 
                     b.Property<string>("Source")
                         .HasMaxLength(200)

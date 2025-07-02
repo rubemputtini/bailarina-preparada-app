@@ -11,5 +11,5 @@ public interface IExerciseReferenceService
     Task<IEnumerable<ExerciseReferenceResponse>> GetLevelsForUserAsync(int exerciseId, int age,
         string gender);
 
-    Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, int score);
+    Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, decimal score);
 }

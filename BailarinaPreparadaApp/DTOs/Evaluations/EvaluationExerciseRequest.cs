@@ -9,7 +9,7 @@ namespace BailarinaPreparadaApp.DTOs.Evaluations
 
         [Required(ErrorMessage = "A pontuação do exercício é obrigatória.")]
         [Range(0, 100, ErrorMessage = "A pontuação deve estar entre 0 e 100.")]
-        public int Score { get; set; } = 0;
+        public decimal Score { get; set; } = 0;
 
         [StringLength(500, ErrorMessage = "A observação deve ter no máximo 500 caracteres.")]
         public string? Observation { get; set; }

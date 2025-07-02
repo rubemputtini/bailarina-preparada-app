@@ -35,11 +35,11 @@ public class ExerciseReferenceMap : IEntityTypeConfiguration<ExerciseReference>
             .IsRequired();
 
         builder.Property(x => x.MinValue)
-            .HasColumnType("INT")
+            .HasColumnType("DECIMAL(3,2)")
             .IsRequired();
 
         builder.Property(x => x.MaxValue)
-            .HasColumnType("INT")
+            .HasColumnType("DECIMAL(3,2)")
             .IsRequired(false);
 
         builder.Property(x => x.Classification)

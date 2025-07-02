@@ -55,7 +55,7 @@ namespace BailarinaPreparadaApp.Controllers.ExerciseReferences
             [FromQuery] int exerciseId,
             [FromQuery] int age, 
             [FromQuery] string gender,
-            [FromQuery] int score)
+            [FromQuery] decimal score)
         {
             if (string.IsNullOrWhiteSpace(gender))
             {

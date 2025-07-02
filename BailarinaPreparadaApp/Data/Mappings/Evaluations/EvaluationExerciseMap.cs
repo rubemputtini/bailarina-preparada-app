@@ -31,7 +31,7 @@ public class EvaluationExerciseMap : IEntityTypeConfiguration<EvaluationExercise
             .IsRequired();
 
         builder.Property(x => x.Score)
-            .HasColumnType("INT")
+            .HasColumnType("DECIMAL(3,2)")
             .IsRequired();
 
         builder.Property(x => x.Observation)

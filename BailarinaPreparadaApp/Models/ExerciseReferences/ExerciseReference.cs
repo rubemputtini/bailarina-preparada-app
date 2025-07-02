@@ -10,8 +10,8 @@ namespace BailarinaPreparadaApp.Models.ExerciseReferences
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
         public string Gender { get; set; } = string.Empty;
-        public int MinValue { get; set; }
-        public int? MaxValue { get; set; }
+        public decimal MinValue { get; set; }
+        public decimal? MaxValue { get; set; }
         public string? Classification { get; set; }
         public string? Source { get; set; } 
     }

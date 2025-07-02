@@ -65,7 +65,7 @@ namespace BailarinaPreparadaApp.Services.ExerciseReferences
             return response;
         }
         
-        public async Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, int score)
+        public async Task<ExerciseReferenceResponse?> GetClassificationForUserAsync(int exerciseId, int age, string gender, decimal score)
         {
             var references = await GetAllReferencesCachedAsync();
             
