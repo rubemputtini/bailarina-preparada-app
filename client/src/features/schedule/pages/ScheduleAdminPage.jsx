@@ -15,6 +15,8 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
 import ErrorCard from "shared/ui/ErrorCard";
+import BackButton from "shared/buttons/BackButton";
+import { ROUTES } from "shared/routes/routes";
 
 const ScheduleAdminPage = () => {
     const [events, setEvents] = useState([]);
@@ -139,6 +141,8 @@ const ScheduleAdminPage = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <PageLayout>
+                <BackButton to={ROUTES.adminHome} />
+
                 <HeaderSection isEditing={isEditing} onEditToggle={handleToggleEdit} onSave={handleSave} />
                 <div className="flex justify-between items-center mt-4 flex-wrap gap-2">
                     <UserInfo

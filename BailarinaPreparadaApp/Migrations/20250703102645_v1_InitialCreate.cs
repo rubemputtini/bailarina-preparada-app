@@ -398,8 +398,8 @@ namespace BailarinaPreparadaApp.Migrations
                     MinAge = table.Column<int>(type: "INT", nullable: false),
                     MaxAge = table.Column<int>(type: "INT", nullable: false),
                     Gender = table.Column<string>(type: "NVARCHAR(1)", maxLength: 1, nullable: false),
-                    MinValue = table.Column<decimal>(type: "DECIMAL(3,2)", nullable: false),
-                    MaxValue = table.Column<decimal>(type: "DECIMAL(3,2)", nullable: true),
+                    MinValue = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: false),
+                    MaxValue = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: true),
                     Classification = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: true),
                     Source = table.Column<string>(type: "NVARCHAR(200)", maxLength: 200, nullable: true)
                 },
@@ -423,7 +423,7 @@ namespace BailarinaPreparadaApp.Migrations
                     EvaluationId = table.Column<int>(type: "INT", nullable: false),
                     ExerciseId = table.Column<int>(type: "INT", nullable: false),
                     Side = table.Column<int>(type: "INT", nullable: false),
-                    Score = table.Column<decimal>(type: "DECIMAL(3,2)", nullable: false),
+                    Score = table.Column<decimal>(type: "DECIMAL(5,2)", nullable: false),
                     Observation = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>

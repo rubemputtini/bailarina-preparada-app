@@ -99,6 +99,7 @@ namespace BailarinaPreparadaApp.Services.Admins
             {
                 EvaluationId = e.EvaluationId,
                 AdminName = e.Admin.Name,
+                UserId = e.UserId,
                 UserName = e.User.Name,
                 Date = e.Date,
                 UserGender = e.UserGender,

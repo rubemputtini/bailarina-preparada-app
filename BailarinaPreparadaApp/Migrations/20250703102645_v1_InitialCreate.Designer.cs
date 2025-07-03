@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BailarinaPreparadaApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250702165443_v1_InitialCreate")]
+    [Migration("20250703102645_v1_InitialCreate")]
     partial class v1_InitialCreate
     {
         /// <inheritdoc />
@@ -300,7 +300,7 @@ namespace BailarinaPreparadaApp.Migrations
                         .HasColumnType("NVARCHAR");
 
                     b.Property<decimal>("Score")
-                        .HasColumnType("DECIMAL(3,2)");
+                        .HasColumnType("DECIMAL(5,2)");
 
                     b.Property<int>("Side")
                         .HasColumnType("INT");
@@ -339,13 +339,13 @@ namespace BailarinaPreparadaApp.Migrations
                         .HasColumnType("INT");
 
                     b.Property<decimal?>("MaxValue")
-                        .HasColumnType("DECIMAL(3,2)");
+                        .HasColumnType("DECIMAL(5,2)");
 
                     b.Property<int>("MinAge")
                         .HasColumnType("INT");
 
                     b.Property<decimal>("MinValue")
-                        .HasColumnType("DECIMAL(3,2)");
+                        .HasColumnType("DECIMAL(5,2)");
 
                     b.Property<string>("Source")
                         .HasMaxLength(200)

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { calculateTotalFMSScore } from "../../../shared/utils/fmsUtils";
 import FMSScoreCard from "../components/FMSScoreCard";
@@ -16,12 +16,25 @@ import LoadingCard from "shared/ui/LoadingCard";
 import PageLayout from "layouts/PageLayout";
 import PhotosTab from "../components/PhotosTab";
 import InfoDialog from "shared/dialogs/InfoDialog";
+import useIsAdmin from "hooks/useIsAdmin";
+import { ROUTES } from "shared/routes/routes";
+import BackButton from "shared/buttons/BackButton";
 
 const EvaluationDetailPage = () => {
     const { evaluationId } = useParams();
     const { evaluation, referenceMap } = useEvaluationDetails(evaluationId);
     const [selectedTab, setSelectedTab] = useState("FMS");
     const [openInfo, setOpenInfo] = useState(false);
+
+    const isAdmin = useIsAdmin();
+
+    const backRoute = useMemo(() => {
+        if (!evaluation) return -1;
+
+        return isAdmin
+            ? ROUTES.adminUserEvaluations(evaluation.userId)
+            : ROUTES.evaluationHistoric;
+    }, [evaluation, isAdmin])
 
     if (!evaluation) {
         return (
@@ -53,6 +66,7 @@ const EvaluationDetailPage = () => {
 
     return (
         <PageLayout>
+            <BackButton to={backRoute} />
             <Typography
                 variant="h4"
                 sx={{

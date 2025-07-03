@@ -12,6 +12,8 @@ import { groupByCategory } from "shared/utils/exerciseUtils";
 import { fetchEvaluationDetails } from "shared/utils/evaluationUtils";
 import { getUserId } from "features/auth/services/auth";
 import ErrorCard from "shared/ui/ErrorCard";
+import BackButton from "shared/buttons/BackButton";
+import { ROUTES } from "shared/routes/routes";
 
 const EvaluationHistoricPage = () => {
     const params = useParams();
@@ -66,6 +68,9 @@ const EvaluationHistoricPage = () => {
     return (
         <PageLayout>
             <div className="text-center">
+
+                {isAdminView && <BackButton to={ROUTES.adminHome} />}
+
                 <Typography
                     variant="h4"
                     sx={{

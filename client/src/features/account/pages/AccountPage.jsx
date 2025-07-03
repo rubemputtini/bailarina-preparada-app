@@ -16,6 +16,8 @@ import ErrorCard from "shared/ui/ErrorCard";
 import { useParams } from "react-router-dom";
 import useIsAdmin from "hooks/useIsAdmin";
 import AchievementsSection from "../components/AchievementSection";
+import BackButton from "shared/buttons/BackButton";
+import { ROUTES } from "shared/routes/routes";
 
 const tabs = ["Informações Pessoais", "Endereço", "Conquistas"];
 
@@ -74,6 +76,9 @@ const AccountPage = () => {
     return (
         <PageLayout>
             <div className="max-w-3xl mx-auto">
+
+                {isAdminEditing && <BackButton to={ROUTES.adminHome} />}
+
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-bold text-purple-800">
