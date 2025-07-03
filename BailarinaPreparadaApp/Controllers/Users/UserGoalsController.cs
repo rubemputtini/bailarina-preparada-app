@@ -29,6 +29,9 @@ namespace BailarinaPreparadaApp.Controllers.Users
         public async Task<ActionResult<UserGoalResponse>> GetMyGoalByYear(int year)
         {
             var goal = await _userGoalService.GetGoalByYearAsync(CurrentUserId, year);
+
+            if (goal == null) 
+                return NoContent();
             
             return Ok(goal);
         }

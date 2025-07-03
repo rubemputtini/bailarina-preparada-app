@@ -18,16 +18,13 @@ namespace BailarinaPreparadaApp.Services.Users
             _userManager = userManager;
         }
 
-        public async Task<UserGoalResponse> GetGoalByYearAsync(string userId, int year)
+        public async Task<UserGoalResponse?> GetGoalByYearAsync(string userId, int year)
         {
             var goal = await _dbContext.UserGoals
                 .AsNoTracking()
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.Year == year);
 
-            if (goal == null)
-            {
-                throw new NotFoundException("Meta do usuário não encontrada.");
-            }
+            if (goal == null) return null;
 
             var response = new UserGoalResponse
             {

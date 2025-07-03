@@ -11,24 +11,29 @@ export const fetchEvaluationDetails = async (evaluationId) => {
     const age = calculateAge(user.dateOfBirth);
     const gender = evaluationData.userGender;
 
-    const referenceRequests = evaluationData.exercises.map(async (e) => {
-      const sideKey = e.side === 1 ? "R" : e.side === 2 ? "L" : "U";
+    const referenceRequests = evaluationData.exercises.map(async (exerciseEntry) => {
+      const { exercise, score, side } = exerciseEntry;
+      const sideKey = side === 1 ? "R" : side === 2 ? "L" : "U";
+      const id = `${exercise.exerciseId}-${sideKey}`;
+
+      if (exercise.category === "FMS") {
+        return { id, reference: null };
+      }
 
       try {
-        const reference = await getClassificationForUser(e.exercise.exerciseId, age, gender, e.score);
+        const reference = await getClassificationForUser(exercise.exerciseId, age, gender, score);
 
-        return { id: `${e.exercise.exerciseId}-${sideKey}`, reference };
+        return { id, reference };
       } catch {
-        return { id: `${e.exercise.exerciseId}-${sideKey}`, reference: null };
+        return { id, reference: null };
       }
     });
 
     const results = await Promise.all(referenceRequests);
-    const referenceMap = {};
-
-    results.forEach(({ id, reference }) => {
-      referenceMap[id] = reference;
-    });
+    const referenceMap = results.reduce((map, {id, reference }) => {
+      map[id] = reference;
+      return map;
+    }, {});
 
     return {
       evaluation: {
@@ -40,5 +45,6 @@ export const fetchEvaluationDetails = async (evaluationId) => {
 
   } catch (error) {
       console.error("Erro ao carregar avaliação:", error.message);
+      throw error;
     }
   };
