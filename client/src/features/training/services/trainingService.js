@@ -30,6 +30,18 @@ export const getTrainingsByUser = async (startDate, endDate, category) => {
     }
 };
 
+export const getTrainingsByDate = async (date) => {
+    try {
+        const response = await api.get('/api/v1/trainings/by-date', {
+            params: { date }
+        });
+
+        return response.data;
+    } catch (error) {
+        throw handleError(error, "Erro ao buscar treinos do dia do usuário.");
+    }
+};
+
 export const deleteTraining = async (trainingId) => {
     try {
         await api.delete(`/api/v1/trainings/${trainingId}`)

@@ -41,6 +41,14 @@ namespace BailarinaPreparadaApp.Controllers.Trainings
             return Ok(trainingDaysCount);
         }
 
+        [HttpGet("by-date")]
+        public async Task<IActionResult> GetTrainingsByDate([FromQuery] DateTime date)
+        {
+            var trainings = await _trainingService.GetTrainingsByDateAsync(CurrentUserId, date.Date);
+            
+            return Ok(trainings);
+        }
+
         [HttpDelete("{trainingId:int}")]
         public async Task<IActionResult> DeleteTraining(int trainingId)
         {

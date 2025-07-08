@@ -43,12 +43,14 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             _dbContext.Trainings.Add(training);
             await _dbContext.SaveChangesAsync();
-            
+
             _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, request.Date.Year));
             _memoryCache.Remove(CacheKeys.UserAchievements(userId));
+            _memoryCache.Remove(CacheKeys.TrainingsByDate(userId, request.Date));
             InvalidateUserCalendarCache(userId, request.Date);
+            InvalidateUserAnnualCalendarCache(userId, request.Date.Year);
             InvalidateRankingCache(request.Date.Month, request.Date.Year);
-            
+
             await _achievementService.EvaluateAllRulesAsync(userId);
         }
 
@@ -91,10 +93,10 @@ namespace BailarinaPreparadaApp.Services.Trainings
         public async Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year)
         {
             var cacheKey = CacheKeys.YearlyTrainingDaysCount(userId, year);
-            
+
             if (_memoryCache.TryGetValue(cacheKey, out int cachedTrainingDaysCount))
                 return cachedTrainingDaysCount;
-            
+
             var trainingDaysCount = await _dbContext.Trainings
                 .AsNoTracking()
                 .Where(t => t.UserId == userId && t.IsCompleted && t.Date.Year == year)
@@ -104,10 +106,38 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             var cacheOptions = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromHours(12));
-            
+
             _memoryCache.Set(cacheKey, trainingDaysCount, cacheOptions);
 
             return trainingDaysCount;
+        }
+
+        public async Task<List<TrainingResponse>> GetTrainingsByDateAsync(string userId, DateTime date)
+        {
+            var cacheKey = CacheKeys.TrainingsByDate(userId, date.Date);
+
+            if (_memoryCache.TryGetValue(cacheKey, out List<TrainingResponse> cachedTrainings))
+                return cachedTrainings;
+
+            var trainings = await _dbContext.Trainings
+                .AsNoTracking()
+                .Where(t => t.UserId == userId && t.Date.Date == date.Date && t.IsCompleted)
+                .OrderBy(t => t.TrainingId)
+                .Select(t => new TrainingResponse
+                {
+                    TrainingId = t.TrainingId,
+                    Date = t.Date,
+                    Category = t.Category,
+                    Description = t.Description
+                })
+                .ToListAsync();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromHours(12));
+
+            _memoryCache.Set(cacheKey, trainings, cacheOptions);
+
+            return trainings;
         }
 
         public async Task DeleteTrainingAsync(string userId, int trainingId)
@@ -122,9 +152,11 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
             _dbContext.Trainings.Remove(training);
             await _dbContext.SaveChangesAsync();
-            
+
             _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, training.Date.Year));
+            _memoryCache.Remove(CacheKeys.TrainingsByDate(userId, training.Date));
             InvalidateUserCalendarCache(userId, training.Date);
+            InvalidateUserAnnualCalendarCache(userId, training.Date.Year);
             InvalidateRankingCache(training.Date.Month, training.Date.Year);
         }
 
@@ -132,8 +164,13 @@ namespace BailarinaPreparadaApp.Services.Trainings
         {
             var monthStart = new DateTime(date.Year, date.Month, 1);
             var monthEnd = monthStart.AddMonths(1).AddDays(-1);
-            
+
             _memoryCache.Remove(CacheKeys.CalendarSummary(userId, monthStart, monthEnd));
+        }
+
+        private void InvalidateUserAnnualCalendarCache(string userId, int year)
+        {
+            _memoryCache.Remove(CacheKeys.CalendarYearSummary(userId, year));
         }
 
         private void InvalidateRankingCache(int month, int year)

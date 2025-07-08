@@ -69,6 +69,8 @@ export const months = [
 
 export const daysOfWeek = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
+export const weekDayLabels = ["S", "T", "Q", "Q", "S", "S", "D"];
+
 export const periods = [
     { label: "Manhã" },
     { label: "Tarde" },

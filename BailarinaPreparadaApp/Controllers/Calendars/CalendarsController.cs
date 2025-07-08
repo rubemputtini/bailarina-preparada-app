@@ -23,5 +23,13 @@ namespace BailarinaPreparadaApp.Controllers.Calendars
 
             return Ok(trainings);
         }
+
+        [HttpGet("year-summary")]
+        public async Task<IActionResult> GetYearSummary([FromQuery] int year)
+        {
+            var result = await _calendarService.GetCalendarYearSummaryAsync(CurrentUserId, year);
+            
+            return Ok(result);
+        }
     }
 }

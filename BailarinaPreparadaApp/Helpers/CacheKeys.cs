@@ -22,7 +22,7 @@ public static class CacheKeys
 
     public static string UserDailySchedule(string userId, int currentDayOfWeek) =>
         $"daily_schedule_{userId}_{currentDayOfWeek}";
-    
+
     public static string UserSchedule(string userId) =>
         $"schedule_{userId}";
 
@@ -31,6 +31,12 @@ public static class CacheKeys
 
     public static string CalendarSummary(string userId, DateTime startDate, DateTime endDate) =>
         $"calendar_summary_{userId}_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}";
+
+    public static string CalendarYearSummary(string userId, int year) =>
+        $"calendar_year_summary_{userId}_{year}";
+
+    public static string TrainingsByDate(string userId, DateTime date) =>
+        $"trainings_by_date_{userId}_{date:yyyyMMdd}";
 
     public static string Ranking(int month, int year) =>
         $"ranking_{month}_{year}";

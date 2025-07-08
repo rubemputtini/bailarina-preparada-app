@@ -11,5 +11,7 @@ public interface ITrainingService
 
     Task<int> GetYearlyTrainingDaysCountAsync(string userId, int year);
 
+    Task<List<TrainingResponse>> GetTrainingsByDateAsync(string userId, DateTime date);
+
     Task DeleteTrainingAsync(string userId, int trainingId);
 }

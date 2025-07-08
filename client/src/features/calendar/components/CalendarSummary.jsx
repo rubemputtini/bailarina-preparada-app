@@ -16,30 +16,33 @@ const CalendarSummary = ({ uniqueDaysTrained }) => {
     return (
         <Box
             sx={{
-                backgroundColor: "#D9ECFF",
-                marginTop: "24px",
-                padding: "16px",
-                borderRadius: "12px",
+                background: "linear-gradient(to bottom right, #2a1c3f, #1e1e2e)",
+                color: "#e0e0e0",
+                mt: 3,
+                px: 3,
+                py: 2,
+                borderRadius: "16px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "8px",
+                gap: 1,
                 flexWrap: "wrap",
                 textAlign: "center",
-                maxWidth: "370px",
-                marginX: "auto"
+                maxWidth: "380px",
+                mx: "auto",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)"
             }}
         >
             {uniqueDaysTrained === 0 ? (
                 <>
-                    <Typography variant="body1" sx={{ color: "#6a1b9a" }}>
+                    <Typography variant="body1" sx={{ color: "#ffffff" }}>
                         Você ainda <strong>não treinou</strong> este mês!
                     </Typography>
                     <img src={sad} alt="triste" className="w-6 h-6" />
                 </>
             ) : (
                 <>
-                    <Typography variant="body1" sx={{ color: "#6a1b9a" }}>
+                    <Typography variant="body1" sx={{ color: "#ffffff" }}>
                         Você treinou:{" "}
                         <strong>
                             {uniqueDaysTrained} {uniqueDaysTrained === 1 ? "dia" : "dias"}
