@@ -48,6 +48,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
                 })
                 .OrderByDescending(g => g.DaysTrained)
                 .ThenByDescending(g => g.TrainingsCompleted)
+                .ThenBy(g => g.Name)
                 .Take(limit ?? int.MaxValue)
                 .ToListAsync();
 
