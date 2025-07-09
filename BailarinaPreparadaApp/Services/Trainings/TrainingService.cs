@@ -44,6 +44,8 @@ namespace BailarinaPreparadaApp.Services.Trainings
             _dbContext.Trainings.Add(training);
             await _dbContext.SaveChangesAsync();
 
+            await CreateFeedbackIfNeededAsync(training);
+
             _memoryCache.Remove(CacheKeys.YearlyTrainingDaysCount(userId, request.Date.Year));
             _memoryCache.Remove(CacheKeys.UserAchievements(userId));
             _memoryCache.Remove(CacheKeys.TrainingsByDate(userId, request.Date));
@@ -160,6 +162,21 @@ namespace BailarinaPreparadaApp.Services.Trainings
             InvalidateRankingCache(training.Date.Month, training.Date.Year);
         }
 
+        private async Task CreateFeedbackIfNeededAsync(Training training)
+        {
+            if (!string.IsNullOrWhiteSpace(training.Description))
+            {
+                var feedback = new TrainingFeedback
+                {
+                    TrainingId = training.TrainingId
+                };
+
+                _dbContext.TrainingFeedbacks.Add(feedback);
+
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+        
         private void InvalidateUserCalendarCache(string userId, DateTime date)
         {
             var monthStart = new DateTime(date.Year, date.Month, 1);

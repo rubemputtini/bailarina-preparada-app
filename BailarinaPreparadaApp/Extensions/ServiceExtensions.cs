@@ -123,6 +123,7 @@ namespace BailarinaPreparadaApp.Extensions
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IScheduleTaskService, ScheduleTaskService>();
             services.AddScoped<ITrainingService, TrainingService>();
+            services.AddScoped<ITrainingFeedbackService, TrainingFeedbackService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserGoalService, UserGoalService>();
             services.AddScoped<IAnnouncementService, AnnouncementService>();

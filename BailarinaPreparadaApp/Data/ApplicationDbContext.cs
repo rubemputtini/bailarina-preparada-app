@@ -25,6 +25,7 @@ namespace BailarinaPreparadaApp.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<ExerciseReference> ExerciseReferences { get; set; }
         public DbSet<Training> Trainings { get; set; }
+        public DbSet<TrainingFeedback> TrainingFeedbacks { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ScheduleTask> ScheduleTasks { get; set; }
