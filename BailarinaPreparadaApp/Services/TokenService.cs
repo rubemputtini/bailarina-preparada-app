@@ -29,7 +29,7 @@ namespace BailarinaPreparadaApp.Services
                     new (ClaimTypes.Role, role),
                     new (ClaimTypes.NameIdentifier, user.Id)
                 }),
-                Expires = DateTime.UtcNow.AddHours(8),
+                Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials
                 (
                     new SymmetricSecurityKey(key),
