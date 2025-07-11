@@ -16,6 +16,7 @@ import TopRankingCard from "../components/TopRankingCard";
 import RankingRow from "../components/RankingRow";
 import PageLayout from "layouts/PageLayout";
 import LoadingCard from "shared/ui/LoadingCard";
+import PageTitle from "layouts/PageTitle";
 
 const RankingPage = () => {
     const [rankingData, setRankingData] = useState([]);
@@ -70,20 +71,9 @@ const RankingPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: "800",
-                    textAlign: "center",
-                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "24px",
-                    fontSize: { xs: "2rem", md: "2.5rem" },
-                }}
-            >
+            <PageTitle>
                 Ranking CBP
-            </Typography>
+            </PageTitle>
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3} mb={2}>
                 <Tooltip title="Atualizar Ranking">

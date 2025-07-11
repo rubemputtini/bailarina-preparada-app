@@ -10,6 +10,7 @@ import ErrorCard from "shared/ui/ErrorCard";
 import CalendarYearCompactView from "../components/CalendarYearCompactView";
 import DialogButton from "shared/buttons/DialogButton";
 import TrainingDayDialog from "../components/TrainingDayDialog";
+import PageTitle from "layouts/PageTitle";
 
 const CalendarPage = () => {
     const [calendarData, setCalendarData] = useState([]);
@@ -81,20 +82,9 @@ const CalendarPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: "800",
-                    textAlign: "center",
-                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "24px",
-                    fontSize: { xs: "2rem", md: "2.5rem" },
-                }}
-            >
+            <PageTitle>
                 Frequência de Treinos
-            </Typography>
+            </PageTitle>
 
             {showYearView ? (
                 <CalendarYearCompactView

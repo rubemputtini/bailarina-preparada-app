@@ -14,6 +14,7 @@ import { getUserId } from "features/auth/services/auth";
 import ErrorCard from "shared/ui/ErrorCard";
 import BackButton from "shared/buttons/BackButton";
 import { ROUTES } from "shared/routes/routes";
+import PageTitle from "layouts/PageTitle";
 
 const EvaluationHistoricPage = () => {
     const params = useParams();
@@ -71,19 +72,9 @@ const EvaluationHistoricPage = () => {
 
                 {isAdminView && <BackButton to={ROUTES.adminHome} />}
 
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: "800",
-                        textAlign: "center",
-                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        fontSize: { xs: "2rem", md: "2.5rem" },
-                    }}
-                >
+                <PageTitle>
                     Histórico de Avaliações
-                </Typography>
+                </PageTitle>
 
                 {isAdminView && userName && (
                     <Typography
@@ -104,7 +95,9 @@ const EvaluationHistoricPage = () => {
                 ) : error ? (
                     <ErrorCard message={error} />
                 ) : evaluations.length === 0 ? (
-                    <Typography align="center" color="white" sx={{ marginTop: 6 }}>Nenhuma avaliação encontrada.</Typography>
+                    <Typography
+                        className="text-center text-gray-500" sx={{ marginTop: 6 }}>Nenhuma avaliação encontrada.
+                    </Typography>
                 ) : (
                     <div className="flex flex-wrap justify-center gap-6 mt-6">
                         {evaluations

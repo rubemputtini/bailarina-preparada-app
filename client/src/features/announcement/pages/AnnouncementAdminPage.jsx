@@ -7,6 +7,7 @@ import SuccessDialog from 'shared/dialogs/SuccessDialog';
 import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog';
 import { deleteAnnouncement } from '../services/announcementService';
 import PageLayout from 'layouts/PageLayout';
+import PageTitle from 'layouts/PageTitle';
 
 const AnnouncementAdminPage = () => {
     const [previewData, setPreviewData] = useState(null);
@@ -39,20 +40,9 @@ const AnnouncementAdminPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: "800",
-                    textAlign: "center",
-                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "24px",
-                    fontSize: { xs: "2rem", md: "2.5rem" },
-                }}
-            >
+            <PageTitle>
                 Central de Avisos
-            </Typography>
+            </PageTitle>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-3">

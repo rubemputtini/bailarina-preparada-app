@@ -8,7 +8,6 @@ import EvaluationTabs from "../components/EvaluationTabs";
 import EvaluationGrid from "../components/EvaluationGrid";
 import { groupUnilateralExercises } from "../../../shared/utils/exerciseUtils";
 import { calculateAvgClassification } from "../../../shared/utils/classificationUtils";
-import { Typography } from "@mui/material";
 import dayjs from "dayjs";
 import useEvaluationDetails from "../../../hooks/useEvaluationDetails";
 import { groupByCategory } from "../../../shared/utils/exerciseUtils";
@@ -19,6 +18,7 @@ import InfoDialog from "shared/dialogs/InfoDialog";
 import useIsAdmin from "hooks/useIsAdmin";
 import { ROUTES } from "shared/routes/routes";
 import BackButton from "shared/buttons/BackButton";
+import PageTitle from "layouts/PageTitle";
 
 const EvaluationDetailPage = () => {
     const { evaluationId } = useParams();
@@ -39,20 +39,9 @@ const EvaluationDetailPage = () => {
     if (!evaluation) {
         return (
             <PageLayout>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontWeight: "800",
-                        textAlign: "center",
-                        background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        marginBottom: "24px",
-                        fontSize: { xs: "2rem", md: "2.5rem" },
-                    }}
-                >
+                <PageTitle>
                     Resultado da Avaliação Física
-                </Typography>
+                </PageTitle>
 
                 <LoadingCard />
             </PageLayout>
@@ -67,20 +56,9 @@ const EvaluationDetailPage = () => {
     return (
         <PageLayout>
             <BackButton to={backRoute} />
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: "800",
-                    textAlign: "center",
-                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "24px",
-                    fontSize: { xs: "2rem", md: "2.5rem" },
-                }}
-            >
+            <PageTitle>
                 Resultado da Avaliação Física
-            </Typography>
+            </PageTitle>
 
             <EvaluationSummary
                 name={evaluation.userName}

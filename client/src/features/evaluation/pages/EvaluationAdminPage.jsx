@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import ConfirmationDialog from "shared/dialogs/ConfirmationDialog";
 import SuccessDialog from "shared/dialogs/SuccessDialog";
-import { Typography } from "@mui/material";
 import UserSelect from "../components/UserSelect";
 import ExerciseCard from "../components/ExerciseCard";
 import EvaluationTabs from "../components/EvaluationTabs";
 import PageLayout from "layouts/PageLayout";
 import { ROUTES } from "shared/routes/routes";
 import ErrorCard from "shared/ui/ErrorCard";
+import PageTitle from "layouts/PageTitle";
 
 const EvaluationAdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -149,20 +149,9 @@ const EvaluationAdminPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: "800",
-                    textAlign: "center",
-                    background: "linear-gradient(90deg, #ffffff 0%, #c5e1e9 60%, #c5e1e9 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "24px",
-                    fontSize: { xs: "2rem", md: "2.5rem" },
-                }}
-            >
+            <PageTitle>
                 Criar Avaliação Física
-            </Typography>
+            </PageTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 <div>

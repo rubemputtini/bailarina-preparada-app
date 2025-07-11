@@ -12,6 +12,7 @@ import LoadingCard from "shared/ui/LoadingCard";
 import { ROUTES } from "shared/routes/routes";
 import ErrorCard from "shared/ui/ErrorCard";
 import useDebounce from "shared/services/useDebounce";
+import PageTitle from "layouts/PageTitle";
 
 const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -96,18 +97,9 @@ const AdminPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant="h4"
-                sx={{
-                    textAlign: "center",
-                    color: "#c5e1e9",
-                    fontWeight: "bold",
-                    mb: 4,
-                    letterSpacing: 1.2,
-                }}
-            >
+            <PageTitle>
                 Gerenciador de Usuários
-            </Typography>
+            </PageTitle>
 
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                 <SearchField value={searchTerm} onChange={handleSearch} />
