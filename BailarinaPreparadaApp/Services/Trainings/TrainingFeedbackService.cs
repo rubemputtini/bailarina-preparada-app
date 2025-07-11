@@ -14,16 +14,27 @@ public class TrainingFeedbackService : ITrainingFeedbackService
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<FeedbackAdminListResponse>> GetPendingFeedbacksAsync(int page = 1, int pageSize = 10)
+    public async Task<(IEnumerable<FeedbackAdminListResponse>Feedbacks, int TotalFeedbacks)> GetPendingFeedbacksAsync(
+        int page = 1, int pageSize = 10, string? searchTerm = null, string? category = null)
     {
-        var feedbacks = await _dbContext.TrainingFeedbacks
+        var query = _dbContext.TrainingFeedbacks
             .AsNoTracking()
             .Include(f => f.Training)
             .ThenInclude(t => t.User)
             .Where(f =>
                 !f.IsResolvedByAdmin &&
                 string.IsNullOrEmpty(f.AdminMessage) &&
-                !string.IsNullOrEmpty(f.Training.Description))
+                !string.IsNullOrEmpty(f.Training.Description));
+        
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+            query = query.Where(f => f.Training.User.Name.ToLower().Contains(searchTerm.ToLower()));
+        
+        if (!string.IsNullOrWhiteSpace(category))
+            query = query.Where(f => f.Training.Category == category);
+        
+        var totalFeedbacks = await query.CountAsync();
+            
+        var feedbacks = await query
             .OrderByDescending(f => f.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -38,7 +49,7 @@ public class TrainingFeedbackService : ITrainingFeedbackService
             Category = f.Training.Category
         });
 
-        return response;
+        return (response, totalFeedbacks);
     }
 
     public async Task MarkAsResolvedAsync(int feedbackId)

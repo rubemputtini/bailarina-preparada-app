@@ -20,11 +20,15 @@ public class TrainingFeedbacksController : BaseController
     [HttpGet]
     [Authorize(Roles = "admin")]
     public async Task<ActionResult<IEnumerable<FeedbackAdminListResponse>>> GetPendingFeedbacks(
-        [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        [FromQuery] int page = 1, 
+        [FromQuery] int pageSize = 10, 
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] string? category = null)
     {
-        var feedbacks = await _feedbackService.GetPendingFeedbacksAsync(page, pageSize);
-        
-        return Ok(feedbacks);
+        var (feedbacks, totalFeedbacks) =
+            await _feedbackService.GetPendingFeedbacksAsync(page, pageSize, searchTerm, category);
+
+        return Ok(new { feedbacks, totalFeedbacks });
     }
 
     [HttpPost("{feedbackId:int}/resolve")]
@@ -32,7 +36,7 @@ public class TrainingFeedbacksController : BaseController
     public async Task<IActionResult> MarkAsResolved(int feedbackId)
     {
         await _feedbackService.MarkAsResolvedAsync(feedbackId);
-        
+
         return Ok(new { message = "Feedback resolvido com sucesso." });
     }
 
@@ -41,7 +45,7 @@ public class TrainingFeedbacksController : BaseController
     public async Task<IActionResult> ReplyToFeedback(int feedbackId, [FromBody] FeedbackReplyRequest request)
     {
         await _feedbackService.ReplyToFeedbackAsync(feedbackId, request);
-        
+
         return Ok(new { message = "Feedback enviado com sucesso." });
     }
 
@@ -50,7 +54,7 @@ public class TrainingFeedbacksController : BaseController
         [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
     {
         var feedbacks = await _feedbackService.GetUserFeedbacksAsync(CurrentUserId, page, pageSize);
-        
+
         return Ok(feedbacks);
     }
 
