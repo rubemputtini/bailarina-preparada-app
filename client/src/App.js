@@ -17,6 +17,8 @@ import AnnouncementAdminPage from './features/announcement/pages/AnnouncementAdm
 import { ROUTES } from 'shared/routes/routes';
 import ForgotPasswordPage from 'features/account/pages/ForgotPasswordPage';
 import ResetPasswordPage from 'features/account/pages/ResetPasswordPage';
+import FeedbackAdminPage from 'features/training/pages/FeedbackAdminPage';
+import FeedbackPage from 'features/training/pages/FeedbackPage';
 
 function App() {
   return (
@@ -118,6 +120,22 @@ function App() {
           element={
             <ProtectedRoute>
               <AccountPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.feedbacks}
+          element={
+            <ProtectedRoute >
+              <FeedbackPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path={ROUTES.adminFeedbacks}
+          element={
+            <ProtectedRoute requireAdmin>
+              <FeedbackAdminPage />
             </ProtectedRoute>
           }
         />

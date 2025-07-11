@@ -13,6 +13,7 @@ export const ROUTES = {
     calendar: "/calendario",
     ranking: "/ranking",
     account: "/conta",
+    feedbacks: "/feedbacks",
     evaluationDetail: (id = ":evaluationId") => `/avaliacao/${id}`,
     evaluationHistoric: "/avaliacoes",
   
@@ -23,6 +24,7 @@ export const ROUTES = {
     adminEditUser: (userId = ":userId") => `/admin/users/${userId}`,
     adminUserSchedule: (userId = ":userId") => `/admin/planejamento/${userId}`,
     adminUserEvaluations: (userId = ":userId") => `/admin/avaliacoes/${userId}`,
+    adminFeedbacks: "/admin/feedbacks",
     
     // Rota fallback
     fallback: "*"

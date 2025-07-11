@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, IconButton, List, ListItem, ListItemText, ListItemIcon, Menu, MenuItem, Divider } from '@mui/material';
-import { Bars3Icon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { HomeIcon, CalendarDaysIcon, ClipboardDocumentListIcon, TrophyIcon, StarIcon, DocumentTextIcon, UserIcon, ClipboardDocumentCheckIcon, MegaphoneIcon, Cog6ToothIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, ChatBubbleBottomCenterTextIcon, UserCircleIcon, UsersIcon, HomeIcon, CalendarDaysIcon, ClipboardDocumentListIcon, TrophyIcon, StarIcon, DocumentTextIcon, UserIcon, ClipboardDocumentCheckIcon, MegaphoneIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import footer from "../assets/footer-logo.webp";
 import { useAuth } from 'features/auth/AuthContext';
@@ -9,6 +8,7 @@ import { ROUTES } from 'shared/routes/routes';
 import { useUserData } from 'hooks/useUserData';
 import useIsAdmin from 'hooks/useIsAdmin';
 import ResponsiveUserName from 'shared/components/ResponsiveUserName';
+import usePendingFeedbacks from 'hooks/usePendingFeedbacks';
 
 const Nav = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -19,6 +19,7 @@ const Nav = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
+    const hasPendingFeedbacks = usePendingFeedbacks();
 
     const handleDrawerToggle = () => {
         setOpenDrawer(!openDrawer);
@@ -55,6 +56,16 @@ const Nav = () => {
     const handleSettingsClick = () => {
         handleCloseAccountMenu();
         navigate(ROUTES.adminHome);
+    };
+
+    const handleFeedbackClick = () => {
+        handleCloseAccountMenu();
+
+        if (isAdmin) {
+            navigate(ROUTES.adminFeedbacks);
+        } else {
+            navigate(ROUTES.feedbacks);
+        }
     };
 
     return (
@@ -176,6 +187,18 @@ const Nav = () => {
                     <span className="text-sm text-gray-800 font-medium">Conta</span>
                 </MenuItem>
 
+                <MenuItem onClick={handleFeedbackClick} sx={{ px: 2, py: 1.2 }}>
+                    <div className="flex items-center">
+                        <div className="relative mr-2">
+                            <ChatBubbleBottomCenterTextIcon className="h-5 w-5 text-gray-700" />
+                            {hasPendingFeedbacks && (
+                                <span className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white" />
+                            )}
+                        </div>
+                        <span className="text-sm text-gray-800 font-medium">Feedbacks</span>
+                    </div>
+                </MenuItem>
+
                 {isAdmin && (
                     <>
                         <MenuItem onClick={handleEvaluationClick} sx={{ px: 2, py: 1.2 }}>
@@ -187,8 +210,8 @@ const Nav = () => {
                             <span className="text-sm text-gray-800 font-medium">Avisos</span>
                         </MenuItem>
                         <MenuItem onClick={handleSettingsClick} sx={{ px: 2, py: 1.2 }}>
-                            <Cog6ToothIcon className="h-5 w-5 text-gray-700 mr-2" />
-                            <span className="text-sm text-gray-800 font-medium">Configurações</span>
+                            <UsersIcon className="h-5 w-5 text-gray-700 mr-2" />
+                            <span className="text-sm text-gray-800 font-medium">Usuários</span>
                         </MenuItem>
                     </>
                 )}
