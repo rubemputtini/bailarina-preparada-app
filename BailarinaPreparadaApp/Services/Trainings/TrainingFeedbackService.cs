@@ -66,7 +66,7 @@ public class TrainingFeedbackService : ITrainingFeedbackService
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<FeedbackUserListResponse>> GetUserFeedbacksAsync(string userId)
+    public async Task<IEnumerable<FeedbackUserListResponse>> GetUserFeedbacksAsync(string userId, int page = 1, int pageSize = 5)
     {
         var feedbacks = await _dbContext.TrainingFeedbacks
             .AsNoTracking()
@@ -76,6 +76,8 @@ public class TrainingFeedbackService : ITrainingFeedbackService
                 !f.IsAcknowledgedByUser &&
                 !string.IsNullOrEmpty(f.AdminMessage))
             .OrderBy(f => f.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var response = feedbacks.Select(f => new FeedbackUserListResponse

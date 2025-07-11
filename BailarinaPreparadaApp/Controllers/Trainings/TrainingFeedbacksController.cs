@@ -46,9 +46,10 @@ public class TrainingFeedbacksController : BaseController
     }
 
     [HttpGet("me")]
-    public async Task<ActionResult<IEnumerable<FeedbackUserListResponse>>> GetMyFeedbacks()
+    public async Task<ActionResult<IEnumerable<FeedbackUserListResponse>>> GetMyFeedbacks(
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
     {
-        var feedbacks = await _feedbackService.GetUserFeedbacksAsync(CurrentUserId);
+        var feedbacks = await _feedbackService.GetUserFeedbacksAsync(CurrentUserId, page, pageSize);
         
         return Ok(feedbacks);
     }
