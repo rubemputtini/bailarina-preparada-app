@@ -23,7 +23,7 @@ const RankingRow = ({ user, rank, isCurrentUser, isEven }) => {
 
                 <Box className="flex justify-center mt-2">
                     {user.achievements?.map((a) => (
-                        <AchievementBadge key={a.achievementId} title={a.title} icon={a.icon} />
+                        <AchievementBadge key={a.achievementId} title={a.title} description={a.description} icon={a.icon} />
                     ))}
                 </Box>
             </Box>

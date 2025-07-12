@@ -83,6 +83,15 @@ body {
   scroll-behavior: smooth;
 }
 
+html,
+body,
+#root {
+  min-height: 100vh;
+  overscroll-behavior: none;
+  background-color: #0f0f1a;
+  touch-action: manipulation;
+}
+
 button {
   @apply font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2;
   font-family: var(--secondary-font);
@@ -234,4 +243,22 @@ select {
 
 .form-style .MuiTextField-root .MuiInputLabel-root.Mui-focused {
   color: #4a148c;
+}
+
+input[type="date"]:disabled {
+  background-color: #f3f4f6 !important;
+  color: #000 !important;
+  font-family: "Montserrat", sans-serif !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px;
+  padding-left: 1rem;
+  height: 44px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  color: #000 !important;
+  font-family: "Montserrat", sans-serif !important;
 }

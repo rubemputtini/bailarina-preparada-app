@@ -48,7 +48,9 @@ namespace BailarinaPreparadaApp.Extensions
         private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                    sql => sql.EnableRetryOnFailure().CommandTimeout(180)
+                ));
         }
 
         private static void ConfigureIdentity(this IServiceCollection services)
@@ -100,6 +102,17 @@ namespace BailarinaPreparadaApp.Extensions
                             QueueLimit = 0
                         }));
 
+                options.AddPolicy("HealthPolicy", context =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 10,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = 0
+                        }));
+                
                 options.OnRejected = async (context, token) =>
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
@@ -133,7 +146,7 @@ namespace BailarinaPreparadaApp.Extensions
 
             services.AddTransient<ITokenService, TokenService>();
         }
-        
+
         private static void ConfigureExternalServices(this IServiceCollection services,
             IConfiguration configuration)
         {

@@ -4,7 +4,7 @@ import { handleError } from 'shared/services/handleError';
 
 export const login = async (email, password) => {
     try {
-      const response = await api.post('/api/v1/account/login', { email, password });
+      const response = await api.post('/api/v1/account/login', { email, password }, { timeout: 15000 });
 
       return response.data;
 
@@ -31,7 +31,9 @@ export const register = async (formData) => {
             dateOfBirth: formData.dateOfBirth,
             latitude: formData.latitude,
             longitude: formData.longitude
-        });
+        },
+        { timeout: 15000 }
+    );
 
         const { token, message } = response.data;
       

@@ -46,7 +46,7 @@ const TopRankingCard = ({ user, index, getMedalColor }) => {
                     sx={{ display: "flex", justifyContent: "center", gap: 1 }}
                 >
                     {achievements.map((a) => (
-                        <AchievementBadge key={a.achievementId} title={a.title} icon={a.icon} />
+                        <AchievementBadge key={a.achievementId} title={a.title} description={a.description} icon={a.icon} />
                     ))}
                 </Box>
             </Card>

@@ -8,6 +8,8 @@ builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -44,5 +46,8 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health")
+    .RequireRateLimiting("HealthPolicy");
 
 app.Run();

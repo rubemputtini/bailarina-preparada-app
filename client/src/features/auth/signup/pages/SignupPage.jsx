@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "features/account/services/accountService";
 import Header from "layouts/Header";
@@ -6,12 +6,17 @@ import Footer from "layouts/Footer";
 import SignupStepper from "../SignupStepper";
 import { useAuth } from "features/auth/AuthContext";
 import { ROUTES } from "shared/routes/routes";
+import { pingHealthCheck } from "shared/services/healthService";
 
 const SignupPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        pingHealthCheck();
+    }, []);
 
     const handleRegister = async (formData) => {
         setLoading(true);

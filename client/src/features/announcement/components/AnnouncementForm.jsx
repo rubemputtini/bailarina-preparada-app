@@ -44,7 +44,7 @@ const AnnouncementForm = ({ onPreviewChange, onSuccess }) => {
                 ? dayjs.tz(formData.expiresAt, tz).utc().toISOString()
                 : null,
             isVisible: formData.isVisibleNow,
-            link: formData.link,
+            link: formData.link?.trim() === "" ? null : formData.link?.trim(),
             category: formData.category
         };
 
