@@ -3,7 +3,7 @@ import PageLayout from 'layouts/PageLayout';
 import SuccessDialog from 'shared/dialogs/SuccessDialog';
 import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog';
 import FeedbackReplyDialog from '../components/FeedbackReplyDialog';
-import { acknowledgeFeedback, getPendingFeedbacks, replyToFeedback } from '../services/feedbackService';
+import { getPendingFeedbacks, markAsResolved, replyToFeedback } from '../services/feedbackService';
 import FeedbackAdminList from '../components/FeedbackAdminList';
 import PageTitle from 'layouts/PageTitle';
 import LoadingCard from 'shared/ui/LoadingCard';
@@ -53,7 +53,7 @@ const FeedbackAdminPage = () => {
 
     const handleConfirmResolve = async () => {
         setResolveLoading(true);
-        await acknowledgeFeedback(feedbackToResolve);
+        await markAsResolved(feedbackToResolve);
         setSuccessMessage("Feedback resolvido com sucesso!");
         setShowSuccess(true);
         setFeedbackToResolve(null);
