@@ -71,6 +71,8 @@ const TrainingDayDialog = ({ open, onClose, selectedDate, onTrainingChanged }) =
                     color: "#ffffff",
                     maxWidth: 400,
                     width: "90%",
+                    maxHeight: "85vh",
+                    overflowY: "auto",
                     position: "absolute",
                     top: "50%",
                     left: "50%",
@@ -126,10 +128,9 @@ const TrainingDayDialog = ({ open, onClose, selectedDate, onTrainingChanged }) =
 
                                 {description && (
                                     <Box sx={{
-                                        pl: 3,
+                                        px: 3,
                                         borderLeft: "3px solid rgba(0,0,0,0.2)",
                                         ml: 0.5,
-                                        mb: 1,
                                     }}>
                                         <Typography
                                             variant="body2"
@@ -137,6 +138,7 @@ const TrainingDayDialog = ({ open, onClose, selectedDate, onTrainingChanged }) =
                                                 fontSize: "13.5px",
                                                 color: "#2e2e2e",
                                                 fontStyle: "italic",
+                                                my: 1
                                             }}
                                         >
                                             "{description}"
@@ -144,6 +146,41 @@ const TrainingDayDialog = ({ open, onClose, selectedDate, onTrainingChanged }) =
                                     </Box>
                                 )}
 
+                                {training.feedbackMessage && (
+                                    <Box
+                                        sx={{
+                                            ml: 0.5,
+                                            mt: 1,
+                                            pl: 3,
+                                            borderLeft: "3px solid #6a1b9a",
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                fontSize: "13px",
+                                                color: "#323232",
+                                                fontWeight: 500,
+                                                lineHeight: 1.6,
+                                                mt: 1
+                                            }}
+                                        >
+                                            “{training.feedbackMessage}”
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                display: "block",
+                                                textAlign: "right",
+                                                mr: 1,
+                                                color: "#6a1b9a",
+                                                fontWeight: 600,
+                                            }}
+                                        >
+                                            — Bella
+                                        </Typography>
+                                    </Box>
+                                )}
                                 <IconButton
                                     onClick={() => setConfirmingDelete(trainingId)}
                                     disabled={deleting === trainingId}
@@ -162,7 +199,9 @@ const TrainingDayDialog = ({ open, onClose, selectedDate, onTrainingChanged }) =
                 )}
 
                 <Box sx={{ mt: 3, textAlign: "center" }}>
-                    <DialogButton onClick={onClose} fullWidthOnMobile={false}>FECHAR</DialogButton>
+                    <DialogButton onClick={onClose} fullWidthOnMobile={false} variant="secondary">
+                        FECHAR
+                    </DialogButton>
                 </Box>
 
                 {!!confirmingDelete && (

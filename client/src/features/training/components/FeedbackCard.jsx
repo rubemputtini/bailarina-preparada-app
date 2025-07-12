@@ -33,7 +33,7 @@ const FeedbackCard = ({ feedback, onAcknowledge }) => {
                 </p>
 
                 <p className="text-[15px] text-gray-900 leading-relaxed mt-2">
-                    <span className="font-semibold text-gray-900">Isabella:</span>{" "}
+                    <span className="font-semibold text-gray-900">Bella:</span>{" "}
                     <span className="italic text-[16px] text-gray-800/90 tracking-tight">
                         “{feedback.message}”
                     </span>

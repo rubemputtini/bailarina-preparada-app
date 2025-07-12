@@ -124,13 +124,20 @@ namespace BailarinaPreparadaApp.Services.Trainings
             var trainings = await _dbContext.Trainings
                 .AsNoTracking()
                 .Where(t => t.UserId == userId && t.Date.Date == date.Date && t.IsCompleted)
-                .OrderBy(t => t.TrainingId)
-                .Select(t => new TrainingResponse
+                .GroupJoin(
+                    _dbContext.TrainingFeedbacks,
+                    t => t.TrainingId,
+                    f => f.TrainingId,
+                    (training, feedbacks) => new { training, feedback = feedbacks.FirstOrDefault() }
+                )
+                .OrderBy(t => t.training.TrainingId)
+                .Select(tf => new TrainingResponse
                 {
-                    TrainingId = t.TrainingId,
-                    Date = t.Date,
-                    Category = t.Category,
-                    Description = t.Description
+                    TrainingId = tf.training.TrainingId,
+                    Date = tf.training.Date,
+                    Category = tf.training.Category,
+                    Description = tf.training.Description,
+                    FeedbackMessage = tf.feedback != null ? tf.feedback.AdminMessage : null
                 })
                 .ToListAsync();
 
