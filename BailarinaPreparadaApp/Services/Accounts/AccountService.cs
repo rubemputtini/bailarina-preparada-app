@@ -129,36 +129,21 @@ namespace BailarinaPreparadaApp.Services.Accounts
 
         public async Task<(bool Success, string Message)> DeleteUserAsync(DeleteUserRequest request)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var user = await _userManager.FindByIdAsync(request.Id);
 
-            try
+            if (user == null)
             {
-                var user = await _userManager.FindByIdAsync(request.Id);
-
-                if (user == null)
-                {
-                    return (false, "Usuário não encontrado");
-                }
-
-                var result = await _userManager.DeleteAsync(user);
-
-                if (!result.Succeeded)
-                {
-                    await transaction.RollbackAsync();
-
-                    return (false, "Não foi possível excluir o usuário.");
-                }
-
-                await transaction.CommitAsync();
-
-                return (true, "Usuário excluído com sucesso.");
+                return (false, "Usuário não encontrado");
             }
-            catch (Exception ex)
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
             {
-                await transaction.RollbackAsync();
-
-                return (false, $"Erro interno: {ex.Message}");
+                return (false, "Não foi possível excluir o usuário.");
             }
+
+            return (true, "Usuário excluído com sucesso.");
         }
 
         public async Task<(bool Success, string Message)> ForgotPasswordAsync(ForgotPasswordRequest request)
