@@ -25,7 +25,7 @@ namespace BailarinaPreparadaApp.Services.Rankings
             var selectedMonth = month;
             var cacheMonth = selectedMonth ?? 0;
 
-            var cacheKey = CacheKeys.Ranking(cacheMonth, selectedYear);
+            var cacheKey = CacheKeys.Ranking(cacheMonth, selectedYear, limit ?? int.MaxValue);
             
             if (_memoryCache.TryGetValue(cacheKey, out IEnumerable<RankingResponse> cachedRanking))
                 return cachedRanking;

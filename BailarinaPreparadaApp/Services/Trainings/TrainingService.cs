@@ -199,6 +199,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
 
         private void InvalidateRankingCache(int month, int year)
         {
+            _memoryCache.Remove(CacheKeys.Ranking(month, year, 5));
             _memoryCache.Remove(CacheKeys.Ranking(month, year));
             _memoryCache.Remove(CacheKeys.RankingAnnual(year));
         }

@@ -38,8 +38,8 @@ public static class CacheKeys
     public static string TrainingsByDate(string userId, DateTime date) =>
         $"trainings_by_date_{userId}_{date:yyyyMMdd}";
 
-    public static string Ranking(int month, int year) =>
-        $"ranking_{month}_{year}";
+    public static string Ranking(int month, int year, int limit = int.MaxValue) =>
+        $"ranking_{month}_{year}_limit_{limit}";
 
     public static string RankingAnnual(int year) =>
         $"ranking_0_{year}";
