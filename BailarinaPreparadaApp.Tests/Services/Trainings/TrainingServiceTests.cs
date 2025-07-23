@@ -84,8 +84,8 @@ public class TrainingServiceTests
         var monthEnd = monthStart.AddMonths(1).AddDays(-1);
         memoryCache.Verify(c => c.Remove(CacheKeys.CalendarSummary(_userId, monthStart, monthEnd)), Times.Once);
 
-        memoryCache.Verify(c => c.Remove(CacheKeys.Ranking(date.Month, date.Year)), Times.Once);
-        memoryCache.Verify(c => c.Remove(CacheKeys.RankingAnnual(date.Year)), Times.Once);
+        memoryCache.Verify(c => c.Remove(CacheKeys.Ranking(date.Month, date.Year, int.MaxValue)), Times.Once);
+        memoryCache.Verify(c => c.Remove(CacheKeys.Ranking(0, date.Year, int.MaxValue)), Times.Once);
     }
 
     [Fact]

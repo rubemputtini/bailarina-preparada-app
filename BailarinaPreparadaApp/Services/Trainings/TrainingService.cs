@@ -201,7 +201,7 @@ namespace BailarinaPreparadaApp.Services.Trainings
         {
             _memoryCache.Remove(CacheKeys.Ranking(month, year, 5));
             _memoryCache.Remove(CacheKeys.Ranking(month, year));
-            _memoryCache.Remove(CacheKeys.RankingAnnual(year));
+            _memoryCache.Remove(CacheKeys.Ranking(0, year));
         }
     }
 }

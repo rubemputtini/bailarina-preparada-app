@@ -41,9 +41,6 @@ public static class CacheKeys
     public static string Ranking(int month, int year, int limit = int.MaxValue) =>
         $"ranking_{month}_{year}_limit_{limit}";
 
-    public static string RankingAnnual(int year) =>
-        $"ranking_0_{year}";
-
     public static string RecentBirthDays(int rangeInDays) =>
         $"birthdays_{rangeInDays}";
 }
