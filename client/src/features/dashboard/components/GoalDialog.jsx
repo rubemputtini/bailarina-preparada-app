@@ -8,7 +8,7 @@ const GoalDialog = ({ open, onClose, currentGoal, onSave }) => {
 
     useEffect(() => {
         if (open) {
-            setGoal(currentGoal || "");
+            setGoal(currentGoal || "156");
         }
     }, [open, currentGoal]);
 
