@@ -15,9 +15,11 @@ Through this platform, members can log completed workouts, view evaluation resul
 - **Email Service:** SMTP2GO
 - **Database Hosting:** Azure
 
-## Access
+## Preview
+<div align="center">
 
-This project is currently under development and not yet publicly accessible. If you're interested in contributing or learning more, please feel free to contact me at: rubem.staciariniputtini@gmail.com.
+https://github.com/user-attachments/assets/b65d2af0-ab3e-4cf9-a9eb-40074b1623f2
+</div>
 
 **Note: This system is exclusively designed for the Bailarina Preparada Club community and partners. It is focused on end-user needs, allowing only the visualization of pre-configured data by the administrator.**
 
